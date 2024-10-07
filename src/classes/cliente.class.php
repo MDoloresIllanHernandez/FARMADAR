@@ -16,18 +16,18 @@ class Cliente extends Database
 	 * Array con los campos de la tabla que se pueden usar como filtro para recuperar registros
 	 */
 	private $allowedConditions_get = array(
-		'Id_Cliente',
-		'Telefono',
+		'id',
+		'telefono',
 	);
 
 	/**
 	 * Array con los campos de la tabla que se pueden proporcionar para insertar registros
 	 */
 	private $allowedConditions_insert = array(
-		'Id_Cliente',
-		'Nombre',
-		'Telefono',
-		'Email',
+		'id',
+		'nombre',
+		'telefono',
+		'email',
 		
 	);
 
@@ -36,7 +36,7 @@ class Cliente extends Database
 	 */
 	private function validate($data){
 		
-		if(!isset($data['Telefono']) || empty($data['Telefono'])){
+		if(!isset($data['telefono']) || empty($data['telefono'])){
 			$response = array(
 				'result' => 'error',
 				'details' => 'El campo teléfono es obligatorio'
