@@ -12,7 +12,7 @@ class Database
 	private $results_page = 50;
 
 	public function __construct(){
-		$this->connection = new mysqli('localhost', 'root', '', 'farmaciadb', '3306');
+		$this->connection = new mysqli('localhost', 'root', '', 'farmadardb', '3306');
 
 		if($this->connection->connect_errno){
 			echo 'Error de conexión a la base de datos';

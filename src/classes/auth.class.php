@@ -52,7 +52,7 @@ class Authentication extends AuthModel
 			'iat' => time(),
 			'data' => array(
 				'id' => $result[0]['id'],
-				'nombres' => $result[0]['nombres']
+				'nombre' => $result[0]['nombre']
 			)
 		);
 

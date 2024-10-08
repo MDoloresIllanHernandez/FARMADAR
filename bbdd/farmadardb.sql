@@ -94,10 +94,10 @@ CREATE TABLE `reserva_items` (
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `usuarios`
+-- Estructura de tabla para la tabla `usuario`
 --
 
-CREATE TABLE `usuarios` (
+CREATE TABLE `usuario` (
   `id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` varchar(200) NOT NULL,
@@ -107,10 +107,10 @@ CREATE TABLE `usuarios` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
--- Volcado de datos para la tabla `usuarios`
+-- Volcado de datos para la tabla `usuario`
 --
 
-INSERT INTO `usuarios` (`id`, `username`, `password`, `token`, `nombre`, `disponible`) VALUES
+INSERT INTO `usuario` (`id`, `username`, `password`, `token`, `nombre`, `disponible`) VALUES
 (100, 'prueba', '655e786674d9d3e77bc05ed1de37b4b6bc89f788829f9f3c679e7687b410c89b', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE2NzY4MjE5OTQsImRhdGEiOnsiaWQiOiIxMDAiLCJub21icmVzIjoiVXN1YXJpbyBkZSBQcnVlYmEifX0.FkZ6NkKu9pLhkDHNjDPhLh4Lt-6Y9yb4r4hqZAhuRcE', 'Usuario de Prueba', 1);
 
 -- --------------------------------------------------------

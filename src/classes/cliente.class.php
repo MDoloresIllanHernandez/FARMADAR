@@ -1,6 +1,6 @@
 <?php
 /**
- * Clase para el modelo que representa a la tabla "cliente".
+ * Clase para el modelo que representa a la tabla "clientes".
  */
 require_once 'src/response.php';
 require_once 'src/database.php';
@@ -10,7 +10,7 @@ class Cliente extends Database
 	/**
 	 * Atributo que indica la tabla asociada a la clase del modelo
 	 */
-	private $table = 'cliente';
+	private $table = 'clientes';
 
 	/**
 	 * Array con los campos de la tabla que se pueden usar como filtro para recuperar registros

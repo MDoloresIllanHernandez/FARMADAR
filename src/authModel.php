@@ -8,7 +8,7 @@ class AuthModel
 	private $connection;
 	
 	public function __construct(){
-		$this->connection = new mysqli('localhost', 'root', '', 'farmaciadb', '3306');
+		$this->connection = new mysqli('localhost', 'root', '', 'farmadardb', '3306');
 
 		if($this->connection->connect_errno){
 			echo 'Error de conexión a la base de datos';
@@ -21,7 +21,7 @@ class AuthModel
 	 */
 	public function login($username, $password)
 	{
-		$query = "SELECT id, nombres, username FROM usuario WHERE username = '$username' AND password = '$password'";
+		$query = "SELECT id, nombre, username FROM usuario WHERE username = '$username' AND password = '$password'";
 
 		$results = $this->connection->query($query);
 
