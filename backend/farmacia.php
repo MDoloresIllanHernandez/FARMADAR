@@ -1,16 +1,16 @@
 <?php
 /**
- *	Script que se usa en los endpoints para trabajar con registros de la tabla CLIENTE
- *	La clase "cliente.class.php" es la clase del modelo, que representa a un jugador de la tabla
+ *	Script que se usa en los endpoints para trabajar con registros de la tabla FARMACIAS
+ *	La clase "farmacia.class.php" es la clase del modelo, que representa a una farmacia de la tabla
 */
 require_once 'src/response.php';
-require_once 'src/classes/cliente.class.php';
+require_once 'src/classes/farmacia.class.php';
 require_once 'src/classes/auth.class.php';
 
 $auth = new Authentication();
 $auth->verify();
 
-$cliente = new Cliente();
+$farmacia = new Farmacia();
 
 /**
  * Se mira el tipo de petición que ha llegado a la API y dependiendo de ello se realiza una u otra accción
