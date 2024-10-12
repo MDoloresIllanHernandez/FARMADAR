@@ -5,7 +5,13 @@ export default {
     "./src/**/*.{vue,js,ts,jsx,tsx}",
   ],
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        primary: {"verde":"#BEED80","turquesa":"#59D999","azul":"#31ADA1","violeta":"#51647A","oscuro":"#453C5C"},
+      },
+    }, fontFamily:{
+      'body': ['Montserrat']
+    },
   },
   plugins: [],
 }
