@@ -1,33 +1,35 @@
 <?php
 /**
- * Clase para el modelo que representa a la tabla "clientes".
+ * Clase para el modelo que representa a la tabla "productos".
  */
 require_once 'src/response.php';
 require_once 'src/database.php';
 
-class Cliente extends Database
+class Producto extends Database
 {
 	/**
 	 * Atributo que indica la tabla asociada a la clase del modelo
 	 */
-	private $table = 'clientes';
+	private $table = 'productos';
 
 	/**
 	 * Array con los campos de la tabla que se pueden usar como filtro para recuperar registros
 	 */
 	private $allowedConditions_get = array(
-		'dni',
-		'telefono',
+		'id',
+		'id_farm',
+		'nombre',
 	);
 
 	/**
 	 * Array con los campos de la tabla que se pueden proporcionar para insertar registros
 	 */
 	private $allowedConditions_insert = array(
-		'dni',
+		'id',
+		'id_farm',
 		'nombre',
-		'telefono',
-		'email',
+		'precio',
+		'stock',
 		
 	);
 
@@ -36,45 +38,67 @@ class Cliente extends Database
 	 */
 	private function validate($data){
 		
-		if(!isset($data['dni']) || empty($data['dni']) ){
+		if(!isset($data['id']) || empty($data['id'])){
 			$response = array(
 				'result' => 'error',
-				'details' => 'El campo dni es obligatorio'
+				'details' => 'El campo id es obligatorio'
 			);
 
 			Response::result(400, $response);
 			exit;
 		}
+		if(!isset($data['id_farm']) || empty($data['id_farm'])){
+			$response = array(
+				'result' => 'error',
+				'details' => 'El campo id_farm es obligatorio'
+			);
 
+			Response::result(400, $response);
+			exit;
+		}
 		if(!isset($data['nombre']) || empty($data['nombre'])){
 			$response = array(
 				'result' => 'error',
-				'details' => 'El campo nombre no puede estar vacío'
+				'details' => 'El campo nombre es obligatorio'
 			);
 
 			Response::result(400, $response);
 			exit;
 		}
 
-		if(!isset($data['telefono']) || empty($data['telefono']) ){
+		//pendiente controlar que el precio sea positivo
+		if(!isset($data['precio']) || empty($data['precio'])){
 			$response = array(
 				'result' => 'error',
-				'details' => 'El campo teléfono es obligatorio'
+				'details' => 'El campo precio es obligatorio'
 			);
 
 			Response::result(400, $response);
 			exit;
 		}
+
+		//pendiente controlar que el stock sea positivo
+		if(!isset($data['stock']) || empty($data['stock'])){
+			$response = array(
+				'result' => 'error',
+				'details' => 'El campo stock es obligatorio'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+
+		if(count($this->getByParams('id', $data['id'], 'id_farm', $data['id_farm']))>0){
+			$response = array(
+				'result' => 'error',
+				'details' => 'Esta farmacia ya tiene ese producto'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+
 		
-		if(count($this->getByParams('dni', $data['dni']))>0){
-			$response = array(
-				'result' => 'error',
-				'details' => 'Ese cliente ya existe en la base de datos'
-			);
-
-			Response::result(400, $response);
-			exit;
-		}
 		return true;
 	}
 
@@ -83,15 +107,26 @@ class Cliente extends Database
 	 */
 	private function validateUpdate($data){
 		
-		if(isset($data['dni']) && empty($data['dni'])){
+		if(isset($data['id']) && empty($data['id'])){
 			$response = array(
 				'result' => 'error',
-				'details' => 'El campo dni no puede estar vacío'
+				'details' => 'El campo id no puede estar vacío'
 			);
 
 			Response::result(400, $response);
 			exit;
 		}
+
+		if(isset($data['id_farm']) && empty($data['id_farm'])){
+			$response = array(
+				'result' => 'error',
+				'details' => 'El campo id_farm no puede estar vacío'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+
 		if(isset($data['nombre']) && empty($data['nombre'])){
 			$response = array(
 				'result' => 'error',
@@ -101,15 +136,29 @@ class Cliente extends Database
 			Response::result(400, $response);
 			exit;
 		}
-		if(isset($data['telefono']) && empty($data['telefono'])){
+
+		//pendiente controlar que el precio sea positivo
+		if(isset($data['precio']) && empty($data['precio'])){
 			$response = array(
 				'result' => 'error',
-				'details' => 'El campo teléfono no puede estar vacío'
+				'details' => 'El campo precio no puede estar vacío'
 			);
 
 			Response::result(400, $response);
 			exit;
 		}
+
+		//pendiente controlar que el stock sea positivo
+		if(isset($data['stock']) && empty($data['stock'])){
+			$response = array(
+				'result' => 'error',
+				'details' => 'El campo stock no puede estar vacío'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+		
 		return true;
 	}
 
@@ -130,18 +179,18 @@ class Cliente extends Database
 			}
 		}
 
-		$clientes = parent::getDB($this->table, $params);
+		$productos = parent::getDB($this->table, $params);
 
-		return $clientes;
+		return $productos;
 	}
 
 	/**
-	 * Método para recuperar registros por un parametro-valor (dni, 00000000X)
+	 * Método para recuperar registros por un parametro-valor
 	 */
-	public function getByParams($params, $value){
+	public function getByParams($params1, $value1, $params2, $value2 ){
 		
 
-		$clientes = parent::getDB($this->table, array($params=>$value));
+		$clientes = parent::getDB($this->table, array($params1=>$value1, $params2=>$value2));
 
 		return $clientes;
 	}

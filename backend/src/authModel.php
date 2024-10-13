@@ -1,7 +1,7 @@
 <?php
 /**
- * Clase del modelo para la tabla de usuarios
- * Representa un registro de la tabla de usuarios y permite hacer el login, obtener un token de un usuario y actualizar el token de un usuario
+ * Clase del modelo para la tabla de usuario
+ * Representa un registro de la tabla de usuario y permite hacer el login, obtener un token de un usuario y actualizar el token de un usuario
  */
 class AuthModel
 {

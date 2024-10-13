@@ -22,11 +22,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
 	case 'GET':
 		$params = $_GET;
 
-		$usuarios = $cliente->get($params);
+		$farmacias = $farmacia->get($params);
 
 		$response = array(
 			'result' => 'ok',
-			'usuarios' => $usuarios
+			'farmacias' => $farmacias
 		);
 
 		Response::result(200, $response);
@@ -50,18 +50,18 @@ switch ($_SERVER['REQUEST_METHOD']) {
 		}
 
 
-		$insert_id = $cliente->insert($params);
+		$insert_id = $farmacia->insert($params);
 
 		$response = array(
 			'result' => 'ok',
-			'insert_id' => $insert_id
+			'farmacia' => $params
 		);
 
 		Response::result(201, $response);
 		break;
 
 	/**
-	 * Cuando es PUT, comprobamos si la petición lleva el id del jugador que hay que actualizar. En caso afirmativo se usa el método update() del modelo.
+	 * Cuando es PUT, comprobamos si la petición lleva el id de la farmacia que hay que actualizar. En caso afirmativo se usa el método update() del modelo.
 	 */
 	case 'PUT':
 		$params = json_decode(file_get_contents('php://input'), true);
@@ -76,7 +76,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 			exit;
 		}
 
-		$cliente->update($_GET['id'], $params);
+		$farmacia->update($_GET['id'], $params);
 
 		$response = array(
 			'result' => 'ok'
@@ -86,7 +86,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 		break;
 
 	/**
-	 * Cuando se solicita un DELETE se comprueba que se envíe un id de jugador. En caso afirmativo se utiliza el método delete() del modelo.
+	 * Cuando se solicita un DELETE se comprueba que se envíe un id de farmacia. En caso afirmativo se utiliza el método delete() del modelo.
 	 */
 	case 'DELETE':
 		if(!isset($_GET['id']) || empty($_GET['id'])){
@@ -99,7 +99,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 			exit;
 		}
 
-		$cliente->delete($_GET['id']);
+		$farmacia->delete($_GET['id']);
 
 		$response = array(
 			'result' => 'ok'

@@ -1,6 +1,6 @@
 <?php
 /**
- * Clase para el modelo que representa a la tabla "clientes".
+ * Clase para el modelo que representa a la tabla "farmacias".
  */
 require_once 'src/response.php';
 require_once 'src/database.php';
@@ -16,7 +16,7 @@ class Farmacia extends Database
 	 * Array con los campos de la tabla que se pueden usar como filtro para recuperar registros
 	 */
 	private $allowedConditions_get = array(
-		'id',
+		'cif',
 		'nombre',
 		'telefono',
 	);
@@ -25,7 +25,7 @@ class Farmacia extends Database
 	 * Array con los campos de la tabla que se pueden proporcionar para insertar registros
 	 */
 	private $allowedConditions_insert = array(
-		'id',
+		'cif',
 		'nombre',
 		'direccion',
 		'telefono',
@@ -37,11 +37,38 @@ class Farmacia extends Database
 	 * Método para validar los datos que se mandan para insertar un registro, comprobar campos obligatorios, valores válidos, etc.
 	 */
 	private function validate($data){
-		
-		if(!isset($data['telefono']) || empty($data['telefono'])){
+		if(!isset($data['cif']) || empty($data['cif']) ){
+			$response = array(
+				'result' => 'error',
+				'details' => 'El campo cif es obligatorio'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+
+		if(!isset($data['nombre']) || empty($data['nombre'])){
+			$response = array(
+				'result' => 'error',
+				'details' => 'El campo nombre no puede estar vacío'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+		if(isset($data['telefono']) || empty($data['telefono'])){
 			$response = array(
 				'result' => 'error',
 				'details' => 'El campo teléfono es obligatorio'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+		if(count($this->getByParams('cif', $data['cif']))>0){
+			$response = array(
+				'result' => 'error',
+				'details' => 'Ese cliente ya existe en la base de datos'
 			);
 
 			Response::result(400, $response);
@@ -51,6 +78,45 @@ class Farmacia extends Database
 		return true;
 	}
 
+	/**
+	 * Método para validar que al modificar un registro, los campos obligatorios están cumplimentados
+	 */
+
+	private function validateUpdate($data){
+
+		if(isset($data['cif']) && empty($data['cif'])){
+			$response = array(
+				'result' => 'error',
+				'details' => 'El campo cif no puede estar vacío'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+
+		if(isset($data['nombre']) && empty($data['nombre'])){
+			$response = array(
+				'result' => 'error',
+				'details' => 'El campo nombre no puede estar vacío'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+		
+		if(isset($data['telefono']) && empty($data['telefono'])){
+			$response = array(
+				'result' => 'error',
+				'details' => 'El campo teléfono no puede estar vacío'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+		
+		return true;
+	}
+	
 	/**
 	 * Método para recuperar registros, pudiendo indicar algunos filtros 
 	 */
@@ -68,10 +134,22 @@ class Farmacia extends Database
 			}
 		}
 
-		$clientes = parent::getDB($this->table, $params);
+		$farmacias = parent::getDB($this->table, $params);
+
+		return $farmacias;
+	}
+
+	/**
+	 * Método para recuperar registros por un parametro-valor (cif, B00000000) 
+	 */
+	public function getByParams($params, $value){
+		
+
+		$clientes = parent::getDB($this->table, array($params=>$value));
 
 		return $clientes;
 	}
+
 
 	/**
 	 * Método para guardar un registro en la base de datos, recibe como parámetro el JSON con los datos a insertar
@@ -114,7 +192,7 @@ class Farmacia extends Database
 			}
 		}
 
-		if($this->validate($params)){
+		if($this->validateUpdate($params)){
 			$affected_rows = parent::updateDB($this->table, $id, $params);
 
 			if($affected_rows==0){
