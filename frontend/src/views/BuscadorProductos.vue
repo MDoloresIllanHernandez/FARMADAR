@@ -5,7 +5,7 @@
 
     <div class="relative isolate px-6 pt-14 lg:px-8">
       <div class="mx-auto max-w-6xl py-32 sm:py-32 lg:py-32">
-        <h1 class="text-4xl py-4 font-bold sm:text-4xl text-primary-azul">Productos</h1>
+        <h1 class="h1-vistas">Productos</h1>
         <p class="text-xl sm:text-xl text-primary-oscuro">¿Qué productos desea buscar?</p>
         <div class="mt-6 flex gap-x-4 pb-8">
           <label for="productos" class="sr-only">Productos</label>
@@ -13,10 +13,7 @@
             placeholder="Introduce el nombre del producto..."
             class="min-w-0 flex-auto p-2 border border-primary-oscuro rounded" />
 
-          <button @click="searchProducts"
-            class="flex-none rounded-md bg-primary-azul px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-turquesa hover:text-primary-oscuro focus-visible:outline-primary-oscuro">
-            Buscar
-          </button>
+          <button @click="searchProducts" class="boton-buscar"> Buscar </button>
         </div>
         <div v-if="hasSearched">
           <div v-if="products.length">
@@ -31,6 +28,7 @@
           </div>
         </div>
       </div>
+      
     </div>
     <Footer />
   </div>
@@ -39,6 +37,7 @@
 <script>
 import Navbar from './../components/Navbar.vue';
 import Footer from './../components/Footer.vue';
+import CardBuscador from './../components/CardBuscador.vue';
 
 export default {
   data() {
@@ -67,7 +66,8 @@ export default {
   },
   components: {
     Navbar,
-    Footer
+    Footer,
+    CardBuscador
   }
 
 };
