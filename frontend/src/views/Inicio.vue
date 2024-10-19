@@ -5,7 +5,7 @@
         <img class="p-10" src="../assets/logo1.png" alt="logo">
         <p class="text-xl font-bold sm:text-xl text-primary-oscuro">Tu buscador de medicamentos de confianza</p>
         <div class="mt-10 flex items-center justify-center gap-x-6">
-          <a href="/productos" class="rounded-md bg-primary-azul px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-turquesa">Comenzar</a>
+          <a href="/buscador-productos" class="rounded-md bg-primary-azul px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-turquesa">Comenzar</a>
         </div>
 
       </div>
