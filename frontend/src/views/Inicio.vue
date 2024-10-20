@@ -1,3 +1,4 @@
+
 <template>
   <div class="bg-white">
     <Navbar />
@@ -11,6 +12,7 @@
             <a href="/buscador-productos"
               class="rounded-md bg-primary-azul px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-turquesa hover:text-primary-oscuro">Comenzar</a>
           </div>
+         
         </div>
       </div>
     </div>
@@ -19,6 +21,7 @@
 </template>
 
 <script setup>
+
 import Navbar from './../components/Navbar.vue';
 import Footer from './../components/Footer.vue';
 </script>

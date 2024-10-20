@@ -2,7 +2,8 @@
 /**
  * Clase para trabajar con la autentificación en la API
  * Hace uso de las clases implementadas en la carpeta "jwt" para realizar la autentificación mediante token
- * El token se genera a partir del id del usuario, por lo que cada usuario tendrá siempre un token distinto. Además del id, para generar el token se hace uso de una clave secreta que es un atributo de la clase
+ * El token se genera a partir del id del usuario, por lo que cada usuario tendrá siempre un token distinto. 
+ * Además del id, para generar el token se hace uso de una clave secreta que es un atributo de la clase
  */
 require_once 'jwt/JWT.php';
 require_once 'src/authModel.php';
@@ -69,28 +70,29 @@ class Authentication extends AuthModel
 	 */
 	public function verify()
     {
+		
         if(!isset($_SERVER['HTTP_API_KEY'])){
-    
+  
             $response = array(
                 'result' => 'error',
                 'details' => 'Usted no tiene los permisos para esta solicitud'
             );
-        
+			
             Response::result(403, $response);
             exit;
         }
-
+		
         $jwt = $_SERVER['HTTP_API_KEY'];
-
+	
         try {
             $data = JWT::decode($jwt, $this->key, array('HS256'));
-
+			
 			$user = parent::getById($data->data->id);
-
+			
 			if($user[0]['token'] != $jwt){
 				throw new Exception();
 			}
-			
+		
             return $data;
         } catch (\Throwable $th) {
             

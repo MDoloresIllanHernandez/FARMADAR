@@ -21,9 +21,9 @@
         <div v-if="hasSearched">
           <div v-if="products.length">
             <div v-for="product in products" :key="product.id" class="card mb-4 p-4 border border-gray-300 rounded">
-              <h2 class="text-xl font-bold">{{ product.name }}</h2>
+              <h2 class="text-xl font-bold">{{ product.nombre }}</h2>
               <p>{{ product.description }}</p>
-              <p class="text-gray-500">{{ product.price | currency }}</p>
+              <p class="text-gray-500">{{ currency(product.precio) }}</p>
             </div>
           </div>
           <div v-else>
@@ -39,6 +39,8 @@
 <script>
 import Navbar from './../components/Navbar.vue';
 import Footer from './../components/Footer.vue';
+import apiClient from '../scripts/axios.js';
+import axios from 'axios';
 
 export default {
   data() {
@@ -49,27 +51,25 @@ export default {
     };
   },
   methods: {
-    searchProducts() {
-      // Aquí deberías realizar la búsqueda de productos.
-      // Este es un ejemplo estático, reemplázalo con tu lógica de búsqueda.
-      this.products = [
-        { id: 1, name: 'Producto 1', description: 'Descripción del producto 1', price: 100 },
-        { id: 2, name: 'Producto 2', description: 'Descripción del producto 2', price: 200 }
-      ].filter(product => product.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
+    async searchProducts() {
+      const response = await apiClient.get('/producto');
+        if (response.data.result == 'ok' && response.data.productos) {
+          this.products = response.data.productos.filter(product => product.nombre.toLowerCase().includes(this.searchQuery.toLowerCase()));
 
-      this.hasSearched = true;
-    }
-  },
-  filters: {
+          this.hasSearched = true;
+        }
+    },
     currency(value) {
-      return `$${value.toFixed(2)}`;
+      if (!value || isNaN(value)) return '0.00€';
+      return `${parseFloat(value).toFixed(2)}€`;
     }
   },
+
+
   components: {
     Navbar,
     Footer
   }
-
 };
 </script>
 

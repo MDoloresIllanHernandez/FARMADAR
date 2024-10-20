@@ -15,7 +15,7 @@
 
 <script>
 // Importa la lógica del formulario desde el archivo externo
-import { submitFormulario } from '../scripts/FormularioInicio.js';
+import { authUser } from '../scripts/auth.js';
 
 export default {
   data() {
@@ -28,9 +28,17 @@ export default {
     async submitForm() {
       // Llama a la función que está en el archivo externo
       try {
-        const responseData = await submitFormulario(this.username, this.password);
+        const responseData = await authUser(this.username, this.password);
         // Aquí puedes manejar la respuesta, como mostrar un mensaje de éxito o redirigir
         console.log('Datos recibidos:', responseData);
+        if(responseData.result == 'ok' && responseData.token){
+          localStorage.setItem('token', responseData.token);
+          this.$router.push('/inicio');
+        }else{
+          // Aquí puedes manejar el error, como mostrar un mensaje de error
+          console.log('Error en la respuesta:', responseData);
+        }
+        this.$router.push('/inicio');
       } catch (error) {
         console.error('Error al enviar el formulario:', error);
       }
