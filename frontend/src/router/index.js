@@ -5,9 +5,11 @@ import Productos from '../views/Productos.vue';
 import Reservas from '../views/Reservas.vue';
 import NotFound from '../views/NotFound.vue';
 import Inicio from '../views/Inicio.vue';
+import BuscadorProductos from '../views/BuscadorProductos.vue';
 
 const routes = [
-  {path: '/', component: Inicio},
+  { path: '/', component: Inicio},
+  { path: '/buscador-productos', component: BuscadorProductos },
   { path: '/farmacias', component: Farmacias },
   { path: '/clientes', component: Clientes },
   { path: '/productos', component: Productos },

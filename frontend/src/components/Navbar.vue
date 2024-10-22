@@ -55,6 +55,7 @@
   
   const navigation = [
     { name: 'Inicio', href: '/' },
+    { name: 'Buscador FARMADAR', href: '/buscador-productos' },
     { name: 'Productos', href: '/productos' },
     { name: 'Farmacias', href: '/farmacias' },
     { name: 'Clientes', href: '/clientes' },
