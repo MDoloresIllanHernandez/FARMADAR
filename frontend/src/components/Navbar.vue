@@ -59,8 +59,11 @@
     { name: 'Productos', href: '/productos' },
     { name: 'Farmacias', href: '/farmacias' },
     { name: 'Clientes', href: '/clientes' },
-    { name: 'Reservas', href: '/reservas' }
+    { name: 'Reservas', href: '/reservas' },
+    { name: 'CerrarSesion', href: '/cerrar-sesion' }
   ]
   
   const mobileMenuOpen = ref(false)
   </script>
+
+
