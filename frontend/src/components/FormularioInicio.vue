@@ -13,9 +13,7 @@
 </template>
 
 <script>
-import { ref } from 'vue';
 import axios from 'axios';
-import router from './../router/index.js';
 
 export default {
   data() {
@@ -29,10 +27,12 @@ export default {
       try {
         const data = {
           username: this.username,
-          password: this.password
+          password: this.password,
         };
 
         // Llamada POST a auth.php
+        // Las llamadas POST cogen tres parámetros axios.post(url, data, headers)
+        // Si es GET, axios.get(url, headers)
         const response = await axios.post('http://localhost/dwes/FARMADAR-1/backend/auth.php', data);
 
         // Si la respuesta es exitosa
@@ -40,9 +40,11 @@ export default {
           alert('Inicio de sesión exitoso');
 
           // Redirige a la página de inicio
-          this.$router.push('/')
+          this.$router.push('/inicio');
 
           console.log('token:', response.data.token);
+
+          localStorage.setItem('farmaToken', response.data.token)
 
 
         } else {
