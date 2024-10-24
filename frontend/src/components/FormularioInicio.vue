@@ -33,13 +33,15 @@ export default {
         };
 
         // Llamada POST a auth.php
-        // Las llamadas POST cogen tres parámetros axios.post(url, data, headers)
-        // Si es GET, axios.get(url, headers)
         const response = await axios.post('http://localhost/dwes/FARMADAR-1/backend/auth.php', data);
+
+        //IMPORTANTE PARA LAS LLAMADAS:
+        // Las llamadas POST (nuevo) cogen tres parámetros axios.post(url, data, headers)
+        // Si es GET, axios.get(url, headers)     .... etc.
 
         // Si la respuesta es exitosa
         if (response.data.result === 'ok') {
-          alert('Inicio de sesión exitoso');
+          alert('Inicio de sesión correcto');
 
           // Redirige a la página de inicio
           this.$router.push('/inicio');
