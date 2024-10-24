@@ -54,7 +54,7 @@
   import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
   
   const navigation = [
-    { name: 'Inicio', href: '/' },
+    { name: 'Inicio', href: '/inicio' },
     { name: 'Buscador FARMADAR', href: '/buscador-productos' },
     { name: 'Productos', href: '/productos' },
     { name: 'Farmacias', href: '/farmacias' },
