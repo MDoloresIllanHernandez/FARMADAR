@@ -31,9 +31,9 @@ export default {
           username: this.username,
           password: this.password,
         };
-
+      
         // Llamada POST a auth.php
-        const response = await axios.post('http://localhost/dwes/FARMADAR-1/backend/auth.php', data);
+        const response = await axios.post('http://localhost/FARMADAR/backend/auth.php', data);
 
         //IMPORTANTE PARA LAS LLAMADAS:
         // Las llamadas POST (nuevo) cogen tres parámetros axios.post(url, data, headers)
