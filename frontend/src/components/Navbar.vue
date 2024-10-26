@@ -18,7 +18,7 @@
             <a v-for="item in navigation" :key="item.name" :href="item.href" class="rounded-lg p-2 text-xl font-semibold leading-6 text-primary-oscuro hover:bg-gray-50">{{ item.name }}</a>
           </div>
           <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="" class="text-sm font-semibold leading-6 text-gray-900">Cerrar Sesión </a>
+            <a :href="cerrarSesion.href" class="text-sm font-semibold leading-6 text-gray-900">Cerrar Sesión </a>
           </div>
         </nav>
 
@@ -41,6 +41,10 @@
                 <div class="space-y-2 py-6">
                   <a v-for="item in navigation" :key="item.name" :href="item.href" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-primary-oscuro hover:bg-gray-50">{{ item.name }}</a>
                 </div>
+                <div class="space-y-2 py-6">
+                  <a :href="cerrarSesion.href" class="text-sm font-semibold leading-6 text-gray-900">Cerrar Sesión </a>
+                </div>
+               
               </div>
             </div>
           </DialogPanel>
@@ -53,6 +57,7 @@
   import { Dialog, DialogPanel } from '@headlessui/vue'
   import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
   
+  // Navigation links
   const navigation = [
     { name: 'Buscador FARMADAR', href: '/buscador-productos' },
     { name: 'Productos', href: '/productos' },
@@ -60,6 +65,8 @@
     { name: 'Clientes', href: '/clientes' },
     { name: 'Reservas', href: '/reservas' }
   ]
+
+  const cerrarSesion = { name: 'Cerrar Sesión', href: '/cerrar-sesion' }
 
   const mobileMenuOpen = ref(false)
   
