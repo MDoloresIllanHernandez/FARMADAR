@@ -9,9 +9,15 @@ require_once 'src/response.php';
 // Las siguientes dos líneas son para evitar errores de CORS
 // Permite solicitudes desde cualquier origen
 header("Access-Control-Allow-Origin: *");
-
+header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 // Si la solicitud incluye cabeceras personalizadas
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
+
+// Manejo de la solicitud preflight (OPTIONS)
+if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
+    http_response_code(200);
+    exit();
+}
 
 $auth = new Authentication();
 
@@ -21,12 +27,21 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
 		$token = $auth->signIn($user);
 
-		$response = array(
-			'result' => 'ok',
-			'token' => $token
-		);
-
-		Response::result(201, $response);
-
-		break;
+		if ($token) {
+            // Si la autenticación es exitosa
+            $response = array(
+                'result' => 'ok',
+                'token' => $token
+            );
+            Response::result(201, $response);
+        } else {
+            // Si las credenciales son incorrectas
+            $response = array(
+                'result' => 'error',
+                'message' => 'Credenciales incorrectas'
+            );
+            Response::result(401, $response); // Usamos el código de estado 401 Unauthorized
+        }
+        break;
 }
+		
