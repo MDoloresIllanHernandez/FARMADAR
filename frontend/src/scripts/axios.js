@@ -12,11 +12,11 @@ const apiClient = axios.create({
 // Agregar un interceptor para inyectar el token en cada petición
 apiClient.interceptors.request.use((config) => {
   // Obtener el token desde el localStorage o donde lo tengas guardado
-  const token = localStorage.getItem('token');
+  const token = localStorage.getItem('farmaToken');
 
   if (token) {
-    // Si existe un token, lo agregamos al encabezado de autorización
-    //config.headers['Authorization'] = `Bearer ${token}`;
+    // Si existe un token, lo agregamos al encabezado de api-key
+   
     config.headers['api-key'] = `${token}`;
   }
 

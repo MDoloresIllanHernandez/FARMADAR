@@ -42,7 +42,7 @@
 import Navbar from './../components/Navbar.vue';
 import Footer from './../components/Footer.vue';
 import apiClient from '../scripts/axios.js';
-import axios from 'axios';
+
 
 export default {
   data() {

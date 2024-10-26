@@ -14,7 +14,8 @@
 </template>
 
 <script>
-import axios from 'axios';
+// Importa la lógica del formulario desde el archivo externo
+import { authUser } from '../scripts/auth.js';
 
 export default {
   data() {
@@ -27,35 +28,17 @@ export default {
     async submitForm() {
       // Llama a la función que está en el archivo externo
       try {
-        const data = {
-          username: this.username,
-          password: this.password,
-        };
-      
-        // Llamada POST a auth.php
-        const response = await axios.post('http://localhost/FARMADAR/backend/auth.php', data);
-
-        //IMPORTANTE PARA LAS LLAMADAS:
-        // Las llamadas POST (nuevo) cogen tres parámetros axios.post(url, data, headers)
-        // Si es GET, axios.get(url, headers)     .... etc.
-
-        // Si la respuesta es exitosa
-        if (response.data.result === 'ok') {
-          alert('Inicio de sesión correcto');
-
-          // Redirige a la página de inicio
+        const responseData = await authUser(this.username, this.password);
+        // Aquí puedes manejar la respuesta, como mostrar un mensaje de éxito o redirigir
+        console.log('Datos recibidos:', responseData);
+        if(responseData.result == 'ok' && responseData.token){
+          localStorage.setItem('farmaToken', responseData.token);
           this.$router.push('/inicio');
-
-          console.log('token:', response.data.token);
-
-          localStorage.setItem('farmaToken', response.data.token)
-
-
-        } else {
-          // Manejo de respuestas con result no esperado
-          alert('Respuesta inesperada del servidor');
+        }else{
+          // Aquí puedes manejar el error, como mostrar un mensaje de error
+          console.log('Error en la respuesta:', responseData);
         }
-        this.$router.push('/inicio');
+      
       } catch (error) {
         console.error('Error al enviar el formulario:', error);
       }

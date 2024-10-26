@@ -16,9 +16,7 @@
           <div class="hidden lg:flex lg:gap-x-12">
             <a v-for="item in navigation" :key="item.name" :href="item.href" class="rounded-lg p-2 text-xl font-semibold leading-6 text-primary-oscuro hover:bg-gray-50">{{ item.name }}</a>
           </div>
-          <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="#" class="rounded-lg p-2 text-sm font-semibold leading-6 text-primary-oscuro hover:bg-gray-50">Cerrar sesión </a>
-          </div>
+       
         </nav>
         <Dialog class="lg:hidden" @close="mobileMenuOpen = false" :open="mobileMenuOpen">
           <div class="fixed inset-0 z-50" />
@@ -38,9 +36,7 @@
                 <div class="space-y-2 py-6">
                   <a v-for="item in navigation" :key="item.name" :href="item.href" class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-primary-oscuro hover:bg-gray-50">{{ item.name }}</a>
                 </div>
-                <div class="py-6">
-                  <a href="#" class="-mx-3 block rounded-lg px-3 py-2.5 text-base font-semibold leading-7 text-primary-oscuro hover:bg-gray-50">Cerrar sesión</a>
-                </div>
+                
               </div>
             </div>
           </DialogPanel>

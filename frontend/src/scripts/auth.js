@@ -15,9 +15,7 @@ export async function authUser(username, password) {
       username: username,
       password: password
     });
-    console.log('Respuesta del servidor:', response.data);
-    
-    // Aquí puedes agregar la lógica de éxito (ej. redirección o notificación)
+    console.log('Respuesta del servidor:', response.data);  
     return response.data;
   } catch (error) {
     console.error('Error en la petición:', error);
