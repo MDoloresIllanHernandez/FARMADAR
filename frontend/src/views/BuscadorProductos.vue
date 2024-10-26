@@ -22,8 +22,10 @@
           <div v-if="products.length">
             <div v-for="product in products" :key="product.id" class="card mb-4 p-4 border border-gray-300 rounded">
               <h2 class="text-xl font-bold">{{ product.nombre }}</h2>
-              <p>{{ product.description }}</p>
-              <p class="text-gray-500">{{ currency(product.precio) }}</p>
+              <p>Stock: {{ product.stock }}</p>
+              <p>id: {{ product.id }}</p>
+              <p>Farmacia: {{ product.id_farm }}</p>
+              <p class="text-gray-500">Precio: {{ currency(product.precio) }}</p>
             </div>
           </div>
           <div v-else>
