@@ -20,13 +20,11 @@
         </div>
         <div v-if="hasSearched">
           <div v-if="products.length">
-            <div v-for="product in products" :key="product.id" class="card mb-4 p-4 border border-gray-300 rounded">
-              <h2 class="text-xl font-bold">{{ product.nombre }}</h2>
-              <p>Stock: {{ product.stock }}</p>
-              <p>id: {{ product.id }}</p>
-              <p>Farmacia: {{ product.id_farm }}</p>
-              <p class="text-gray-500">Precio: {{ currency(product.precio) }}</p>
-            </div>
+            <ProductCard 
+              v-for="product in products" 
+              :key="product.id" 
+              :product="product"
+              @reserve="handleReserve" />
           </div>
           <div v-else>
             <p>No se encontraron productos.</p>
@@ -41,6 +39,7 @@
 <script>
 import Navbar from './../components/Navbar.vue';
 import Footer from './../components/Footer.vue';
+import ProductCard from './../components/Card.vue';
 import apiClient from '../scripts/axios.js';
 import axios from 'axios';
 
@@ -56,7 +55,8 @@ export default {
     async searchProducts() {
       const response = await apiClient.get('/producto');
         if (response.data.result == 'ok' && response.data.productos) {
-          this.products = response.data.productos.filter(product => product.nombre.toLowerCase().includes(this.searchQuery.toLowerCase()));
+          this.products = response.data.productos.filter(product => 
+          product.nombre.toLowerCase().includes(this.searchQuery.toLowerCase()));
 
           this.hasSearched = true;
         }
@@ -70,14 +70,9 @@ export default {
 
   components: {
     Navbar,
-    Footer
+    Footer,
+    ProductCard
   }
 };
 </script>
 
-<style scoped>
-.card {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-</style>
