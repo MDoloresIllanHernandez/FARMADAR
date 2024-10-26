@@ -23,7 +23,7 @@
         </div>
         <div v-if="hasSearched">
           <div v-if="products.length">
-            <ProductCard v-for="product in products" :key="product.id" :product="product" @reserve="handleReserve" />
+            <CardReservas v-for="product in products" :key="product.id" :product="product" @reserve="handleReserve" />
           </div>
           <div v-else>
             <p>No se encontraron productos.</p>
@@ -38,7 +38,7 @@
 <script>
 import Navbar from './../components/Navbar.vue';
 import Footer from './../components/Footer.vue';
-import ProductCard from './../components/Card.vue';
+import CardReservas from '../components/CardReservas.vue';
 import apiClient from '../scripts/axios.js';
 import axios from 'axios';
 
@@ -98,7 +98,7 @@ export default {
   components: {
     Navbar,
     Footer,
-    ProductCard
+    CardReservas
   }
 };
 </script>

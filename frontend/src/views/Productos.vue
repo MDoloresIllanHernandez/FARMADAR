@@ -20,12 +20,19 @@
         </div>
         <div v-if="hasSearched">
           <div v-if="products.length">
-            <div v-for="product in products" :key="product.id"
-              class="card mb-4 p-4 border border-gray-300 rounded">
-              <h2 class="text-xl font-bold">{{ product.nombre }}</h2>
-              <p>{{ product.description }}</p>
-              <p class="text-gray-500">{{ currency(product.precio) }}</p>
-            </div>
+            <GenericCard
+              v-for="product in products"
+              :key="product.id"
+              :title="product.nombre"
+              :detail1="'Id: ' + product.id"
+              :detail2="'Stock: ' + product.stock"
+              :detail3="'Farmacia: ' + product.id_farm"
+              :detail4="'Precio: ' + currency(product.precio)"
+              :price="currency(product.precio)"
+              :data="product"
+              @edit="editProduct"
+              @delete="deleteProduct"
+            />
           </div>
           <div v-else>
             <p>No se encontraron productos.</p>
@@ -37,12 +44,11 @@
   </div>
 </template>
 
-
 <script>
 import Navbar from './../components/Navbar.vue';
 import Footer from './../components/Footer.vue';
+import GenericCard from './../components/GenericCard.vue';
 import apiClient from '../scripts/axios.js';
-
 
 export default {
   data() {
@@ -55,29 +61,33 @@ export default {
   methods: {
     async searchProducts() {
       const response = await apiClient.get('/producto');
-        if (response.data.result == 'ok' && response.data.productos) {
-          this.products = response.data.productos.filter(product => product.nombre.toLowerCase().includes(this.searchQuery.toLowerCase()));
-
-          this.hasSearched = true;
-        }
+      if (response.data.result == 'ok' && response.data.productos) {
+        this.products = response.data.productos.filter(product => 
+          product.nombre.toLowerCase().includes(this.searchQuery.toLowerCase())
+        );
+        this.hasSearched = true;
+      }
+    },
+    addProduct() {
+      // Lógica para añadir un producto
+    },
+    editProduct(product) {
+      // Lógica para editar el producto
+      console.log("Editando producto:", product);
+    },
+    deleteProduct(product) {
+      // Lógica para eliminar el producto
+      console.log("Eliminando producto:", product);
     },
     currency(value) {
       if (!value || isNaN(value)) return '0.00€';
       return `${parseFloat(value).toFixed(2)}€`;
     }
   },
-
-
   components: {
     Navbar,
-    Footer
+    Footer,
+    GenericCard
   }
 };
 </script>
-
-<style scoped>
-.card {
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-</style>
