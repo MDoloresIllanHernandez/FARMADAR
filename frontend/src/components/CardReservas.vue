@@ -6,11 +6,13 @@
       <p class="text-lg text-primary-azul font-semibold mt-2">Precio: {{ currency(product.precio) }}</p>
       
       <!-- Botón de reserva -->
+       <div class="flex justify-end gap-2 mt-4">
       <button 
         @click="reserveProduct"
         class="mt-4 bg-primary-azul text-white font-semibold py-2 px-4 rounded hover:bg-primary-turquesa transition-colors">
         Reservar
       </button>
+       </div>
     </div>
   </template>
   
