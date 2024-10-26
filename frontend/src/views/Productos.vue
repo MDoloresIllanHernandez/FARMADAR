@@ -19,7 +19,7 @@
           </button>
         </div>
         <div v-if="hasSearched">
-          <div v-if="products.length">
+          <div v-if="products.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             <GenericCard
               v-for="product in products"
               :key="product.id"

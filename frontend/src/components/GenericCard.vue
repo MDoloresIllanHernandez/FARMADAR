@@ -7,11 +7,11 @@
     <p class="text-gray-600">{{ detail4 }}</p>
 
     <!-- Botones de acción -->
-    <div class="flex justify-end gap-2 mt-4">
-      <button @click="editItem" class="bg-primary-azul text-white font-semibold py-2 px-4 rounded hover:bg-gray-500 transition-colors">
+    <div class="flex gap-2 mt-4">
+      <button @click="editItem" class="flex-none rounded-md bg-primary-azul px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-turquesa hover:text-primary-oscuro focus-visible:outline-primary-oscuro">
         Editar
       </button>
-      <button @click="deleteItem" class="bg-red-500 text-white font-semibold py-2 px-4 rounded hover:bg-red-600 transition-colors">
+      <button @click="deleteItem" class="flex-none rounded-md bg-primary-violeta px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-turquesa hover:text-primary-oscuro focus-visible:outline-primary-oscuro">
         Eliminar
       </button>
     </div>
