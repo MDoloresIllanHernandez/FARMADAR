@@ -5,8 +5,11 @@
 
     <div class="relative isolate px-6 pt-14 lg:px-8">
       <div class="mx-auto max-w-6xl py-32 sm:py-32 lg:py-32">
-        <h1 class="text-4xl py-4 font-bold sm:text-4xl text-primary-azul">Productos</h1>
-        <p class="text-xl sm:text-xl text-primary-oscuro">¿Qué productos desea buscar?</p>
+        <div class="flex items-center space-x-4">
+          <h1 class="text-4xl py-4 font-bold sm:text-4xl text-primary-azul">Buscador FARMADAR</h1>
+          <img class="h-8 w-auto" src="/icono.png" alt="Icono FARMADAR" />
+        </div>
+        <p class="text-xl sm:text-xl text-primary-oscuro">¿Qué productos deseas reservar?</p>
         <div class="mt-6 flex gap-x-4 pb-8">
           <label for="productos" class="sr-only">Productos</label>
           <input id="productos" v-model="searchQuery" @keyup.enter="searchProducts" type="text"
