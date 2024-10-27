@@ -9,22 +9,22 @@
             <input id="farmacias" v-model="searchQuery" @keyup.enter="searchProducts" type="text"
               placeholder="Introduce el nombre de la farmacia..."
               class="min-w-0 flex-auto p-2 border border-primary-oscuro rounded" />
-            <button @click="searchProducts"
+            <button @click="searchFarmacia"
               class="flex-none rounded-md bg-primary-azul px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-turquesa hover:text-primary-oscuro focus-visible:outline-primary-oscuro">
               Buscar
             </button>
-            <button @click="addProduct"
+            <button @click="addFarmacia"
               class="flex-none rounded-md bg-primary-violeta px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-turquesa hover:text-primary-oscuro focus-visible:outline-primary-oscuro">
               Añadir farmacia
             </button>
           </div>
           <div v-if="hasSearched">
-            <div v-if="filteredProducts.length">
-              <div v-for="product in filteredProducts" :key="product.id"
+            <div v-if="farmacias.length">
+              <div v-for="farmacia in farmacias" :key="farmacia.cif"
                 class="card mb-4 p-4 border border-gray-300 rounded">
-                <h2 class="text-xl font-bold">{{ product.name }}</h2>
-                <p>{{ product.description }}</p>
-                <p class="text-gray-500">{{ product.price | currency }}</p>
+                <h2 class="text-xl font-bold">{{ farmacia.nombre }}</h2>
+                <p>{{ farmacia.direccion }}</p>
+                <p>{{ farmacia.telefono }}</p>
               </div>
             </div>
             <div v-else>
@@ -39,13 +39,31 @@
 <script>
 import Navbar from './../components/Navbar.vue';
 import Footer from './../components/Footer.vue';
+import apiClient from '../scripts/axios.js';
 
 export default {
-components: {
+  data() {
+    return {
+      searchQuery: '',
+      farmacias: [],
+      hasSearched: false
+    };
+  },
+  methods: {
+    async searchFarmacia() {
+      const response = await apiClient.get('/farmacia');
+        if (response.data.result == 'ok' && response.data.farmacias) {
+          this.farmacias = response.data.farmacias.filter(farmacia => farmacia.nombre.toLowerCase().includes(this.searchQuery.toLowerCase()));
+        }
+        this.hasSearched = true;
+    }
+  },
+  components: {
     Navbar,
     Footer
+  }
 }
-}
+
 </script>
 
 <style>

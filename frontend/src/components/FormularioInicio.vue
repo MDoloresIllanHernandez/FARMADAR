@@ -25,13 +25,14 @@ export default {
     };
   },
   methods: {
+    // Llama a la función que está en el archivo externo axios
     async submitForm() {
-      // Llama a la función que está en el archivo externo
       try {
         const responseData = await authUser(this.username, this.password);
         // Aquí puedes manejar la respuesta, como mostrar un mensaje de éxito o redirigir
         console.log('Datos recibidos:', responseData);
         if(responseData.result == 'ok' && responseData.token){
+          //Guardamos el token en localStorage
           localStorage.setItem('farmaToken', responseData.token);
           this.$router.push('/inicio');
         }else{

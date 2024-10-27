@@ -5,10 +5,11 @@ import {URL_API} from '../constants/constants'
 export async function authUser(username, password) {
   // Lógica para manejar la solicitud del formulario
   if (!username || !password) {
+
     console.error('Por favor, completa ambos campos.');
+
     return;
   }
-
   try {
     // Enviar la solicitud POST a la API
     const response = await axios.post(`${URL_API}/auth`, {
