@@ -9,7 +9,7 @@ const routes = [
   { path: '/productos', component: () => import('../views/Productos.vue') },
   { path: '/reservas', component: () => import('../views/Reservas.vue') },
   { path: '/cerrar-sesion', component: () => import('../views/CerrarSesion.vue') },
-  { path: '/:pathMatch(.*)*', component: () => import('../views/NotFound.vue') }, // Ruta para 404
+  { path: '/:pathMatch(.*)*', component: () => import('../views/Login.vue') }, // Ruta para 404
 ];
 
 const router = createRouter({
