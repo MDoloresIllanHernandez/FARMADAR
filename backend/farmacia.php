@@ -7,6 +7,26 @@ require_once 'src/response.php';
 require_once 'src/classes/farmacia.class.php';
 require_once 'src/classes/auth.class.php';
 
+// Permite solicitudes desde cualquier origen (esto es más amplio y no recomendable en producción)
+header("Access-Control-Allow-Origin: *");
+
+// O permitir solicitudes solo desde un origen específico
+// header("Access-Control-Allow-Origin: http://localhost:5173");
+
+// Permite los métodos que se pueden usar en las solicitudes
+header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+
+// Permite los encabezados personalizados
+header("Access-Control-Allow-Headers: Content-Type, Authorization, Api-Key");
+
+
+// Maneja la solicitud preflight (OPTIONS) antes de ejecutar cualquier lógica de verificación
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    // Devuelve una respuesta vacía con código 200 para que el navegador permita la solicitud real
+    http_response_code(200);
+    exit();
+}
+
 $auth = new Authentication();
 $auth->verify();
 

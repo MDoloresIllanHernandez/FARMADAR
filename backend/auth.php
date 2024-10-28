@@ -6,9 +6,10 @@
 require_once 'src/classes/auth.class.php';
 require_once 'src/response.php';
 
-// Las siguientes dos líneas son para evitar errores de CORS
+// Las siguientes líneas son para evitar errores de CORS
 // Permite solicitudes desde cualquier origen
 header("Access-Control-Allow-Origin: *");
+// Permite solicitudes con los métodos GET, POST y OPTIONS
 header("Access-Control-Allow-Methods: POST, GET, OPTIONS");
 // Si la solicitud incluye cabeceras personalizadas
 header("Access-Control-Allow-Headers: Content-Type, Authorization");

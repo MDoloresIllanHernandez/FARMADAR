@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-10-2024 a las 13:45:15
+-- Tiempo de generación: 27-10-2024 a las 11:00:41
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -66,7 +66,8 @@ CREATE TABLE `farmacias` (
 INSERT INTO `farmacias` (`cif`, `nombre`, `direccion`, `telefono`, `email`, `id`) VALUES
 ('B30785629', 'Farmacia La Merced', 'Calle Ceuta, 2, 30003 Murcia', '968239428', 'lamerced@gmail.com', 1),
 ('B73669911', 'Farmacia Catedral', 'Calle Traperia, 1, 30001 Murcia', '968212829', 'catedral@gmail.com', 2),
-('B30884526', 'Farmacia Vistabella', 'Plz. de los Patos, 5, 30003 Murcia', '968258523', 'vistabella@gmail.com', 3);
+('B30884526', 'Farmacia Vistabella', 'Plz. de los Patos, 5, 30003 Murcia', '968258523', 'vistabella@gmail.com', 3),
+('B74962244', 'Farmacia Puxmarina', 'Plaza Puxmarina, 5, 30004 Murcia', '968213226', 'puxmarina@gmail.com', 4);
 
 -- --------------------------------------------------------
 
@@ -88,7 +89,9 @@ CREATE TABLE `productos` (
 
 INSERT INTO `productos` (`id`, `id_farm`, `nombre`, `precio`, `stock`) VALUES
 ('30001234', 1, 'Paracetamol', 2.36, 5),
+('30001234', 3, 'Paracetamol', 1.50, 2),
 ('30005678', 2, 'Aspirina', 3.50, 8),
+('30005678', 4, 'Aspirina', 3.40, 7),
 ('30007732', 3, 'Ibuprofeno', 4.70, 20);
 
 -- --------------------------------------------------------
@@ -140,7 +143,7 @@ CREATE TABLE `usuario` (
 --
 
 INSERT INTO `usuario` (`id`, `username`, `password`, `token`, `nombre`, `disponible`) VALUES
-(100, 'prueba', '655e786674d9d3e77bc05ed1de37b4b6bc89f788829f9f3c679e7687b410c89b', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3Mjg4MTQxODMsImRhdGEiOnsiaWQiOiIxMDAiLCJub21icmUiOiJVc3VhcmlvIGRlIFBydWViYSJ9fQ.soWfd9gla2PlOD8_oz5RCyYijMV0R4NcPZPJjd3uM3A', 'Usuario de Prueba', 1);
+(100, 'prueba', '655e786674d9d3e77bc05ed1de37b4b6bc89f788829f9f3c679e7687b410c89b', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzAwMTg1MzAsImRhdGEiOnsiaWQiOiIxMDAiLCJub21icmUiOiJVc3VhcmlvIGRlIFBydWViYSJ9fQ.zMaoG5V67lsOyE3Ua5d1Ph3kIm583Kq1JAH0I6997mM', 'Usuario de Prueba', 1);
 
 -- --------------------------------------------------------
 
@@ -187,7 +190,7 @@ ALTER TABLE `farmacias`
 -- Indices de la tabla `productos`
 --
 ALTER TABLE `productos`
-  ADD PRIMARY KEY (`id`),
+  ADD PRIMARY KEY (`id`,`id_farm`),
   ADD KEY `id_farm` (`id_farm`) USING BTREE;
 
 --
@@ -235,7 +238,7 @@ ALTER TABLE `clientes`
 -- AUTO_INCREMENT de la tabla `farmacias`
 --
 ALTER TABLE `farmacias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- Restricciones para tablas volcadas

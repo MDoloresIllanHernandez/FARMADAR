@@ -26,7 +26,7 @@
               :title="product.nombre"
               :detail1="'Id: ' + product.id"
               :detail2="'Stock: ' + product.stock"
-              :detail3="'Farmacia: ' + product.id_farm"
+              :detail3="'Farmacia: ' + product.nombre_farmacia"
               :detail4="'Precio: ' + currency(product.precio)"
               :price="currency(product.precio)"
               :data="product"
@@ -60,16 +60,39 @@ export default {
   },
   methods: {
     async searchProducts() {
-      const response = await apiClient.get('/producto');
-      if (response.data.result == 'ok' && response.data.productos) {
-        this.products = response.data.productos.filter(product => 
-          product.nombre.toLowerCase().includes(this.searchQuery.toLowerCase())
-        );
-        this.hasSearched = true;
+      try {
+        //Consultar productos
+        const response = await apiClient.get('/producto');
+        if (response.data.result == 'ok' && response.data.productos) {
+          this.products = response.data.productos.filter(product => 
+            product.nombre.toLowerCase().includes(this.searchQuery.toLowerCase())
+          );
+        
+        //Consultar farmacias
+        const pharmaciesResponse = await apiClient.get('/farmacia');
+        if (pharmaciesResponse.data.result === 'ok' && pharmaciesResponse.data.farmacias) {
+          const farmacias = pharmaciesResponse.data.farmacias;
+
+          // Asociar el nombre de la farmacia al producto correspondiente
+          this.products = this.products.map(product => {
+            const farmacia = farmacias.find(f => f.id === product.id_farm);
+            return {
+              ...product,
+              nombre_farmacia: farmacia ? farmacia.nombre : 'Desconocido'
+            };
+          });
+        }
+
+          this.hasSearched = true;
+        }
+      } catch (error) {
+        console.error('Error al obtener los productos o farmacias:', error);
       }
-    },
-    addProduct() {
-      // Lógica para añadir un producto
+    },      
+    // Método para añadir un producto
+    async addProduct() {
+      const response = await apiClient.post('/producto');
+      
     },
     editProduct(product) {
       // Lógica para editar el producto

@@ -59,22 +59,22 @@ export default {
           this.products = productsResponse.data.productos.filter(product =>
             product.nombre.toLowerCase().includes(this.searchQuery.toLowerCase())
           );
-/*
-          // Consultar farmacias
-          const pharmaciesResponse = await apiClient.get('/farmacia');
-          if (pharmaciesResponse.data.result === 'ok' && pharmaciesResponse.data.farmacias) {
-            const farmacias = pharmaciesResponse.data.farmacias;
 
-            // Asociar el nombre de la farmacia al producto correspondiente
-            this.products = this.products.map(product => {
-              const farmacia = farmacias.find(f => f.id === product.id_farm);
-              return {
-                ...product,
-                nombre_farmacia: farmacia ? farmacia.nombre : 'Desconocido'
-              };
-            });
-          }
-*/
+        // Consultar farmacias
+        const pharmaciesResponse = await apiClient.get('/farmacia');
+        if (pharmaciesResponse.data.result === 'ok' && pharmaciesResponse.data.farmacias) {
+          const farmacias = pharmaciesResponse.data.farmacias;
+
+          // Asociar el nombre de la farmacia al producto correspondiente
+          this.products = this.products.map(product => {
+            const farmacia = farmacias.find(f => f.id === product.id_farm);
+            return {
+              ...product,
+              nombre_farmacia: farmacia ? farmacia.nombre : 'Desconocido'
+            };
+          });
+        }
+
           this.hasSearched = true;
         }
       } catch (error) {

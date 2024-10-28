@@ -16,11 +16,10 @@ apiClient.interceptors.request.use((config) => {
 
   if (token) {
     // Si existe un token, lo agregamos al encabezado de api-key
-   
     config.headers['api-key'] = `${token}`;
   }
-
   return config;
+  
 }, (error) => {
   // Manejo de errores en la petición
   return Promise.reject(error);
