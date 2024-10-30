@@ -4,10 +4,10 @@ import Footer from '../components/Footer.vue';
 import router from '../router';
 
 
-//Aquí cogemos el token del localStorage. Y si está, hacemos que en Login vaya directamente a Inicio, sin 
+//Aquí cogemos el token del sessionStorage. Y si está, hacemos que en Login vaya directamente a Inicio, sin 
 //necesidad de volver a loguearse.
-const token = localStorage.getItem('farmaToken')
-//localStorage.removeItem('farmaToken')
+const token = sessionStorage.getItem('farmaToken')
+//sessionStorage.removeItem('farmaToken')
 if(token){
     router.push('/inicio')
 }

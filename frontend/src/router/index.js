@@ -9,7 +9,7 @@ const routes = [
   { path: '/productos', component: () => import('../views/Productos.vue') },
   { path: '/reservas', component: () => import('../views/Reservas.vue') },
   { path: '/cerrar-sesion', component: () => import('../views/CerrarSesion.vue') },
-  { path: '/:pathMatch(.*)*', component: () => import('../views/NotFound.vue') }, // Ruta para 404
+  { path: '/:pathMatch(.*)*', component: () => import('../views/Login.vue') }, // Ruta para 404
 ];
 
 const router = createRouter({
@@ -26,8 +26,8 @@ router.beforeEach((to, from, next) => {
   // ['login', 'inicio', etc.])
   const esRutaPublica = rutasPublicas.includes(to.path);
 
-  // Obtenemos el token desde localStorage
-  const token = localStorage.getItem('farmaToken');
+  // Obtenemos el token desde sessionStorage
+  const token = sessionStorage.getItem('farmaToken');
 
   // Si no hay token y la ruta no es pública, redirigir a Login
   if (!token && !esRutaPublica) {

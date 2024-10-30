@@ -33,7 +33,7 @@ export default {
         console.log('Datos recibidos:', responseData);
         if(responseData.result == 'ok' && responseData.token){
           //Guardamos el token en localStorage
-          localStorage.setItem('farmaToken', responseData.token);
+          sessionStorage.setItem('farmaToken', responseData.token);
           this.$router.push('/inicio');
         }else{
           // Aquí puedes manejar el error, como mostrar un mensaje de error
