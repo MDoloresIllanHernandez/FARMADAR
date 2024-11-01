@@ -7,11 +7,7 @@
       
       <!-- Botón de reserva -->
        <div class="flex justify-end gap-2 mt-4">
-      <button 
-        @click="reserveProduct"
-        class="mt-4 bg-primary-azul text-white font-semibold py-2 px-4 rounded hover:bg-primary-turquesa transition-colors">
-        Reservar
-      </button>
+      <button   @click="reserveProduct" class="boton-buscar">Reservar </button>
        </div>
     </div>
   </template>

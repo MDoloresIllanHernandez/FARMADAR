@@ -1,14 +1,16 @@
 <template>
 <form @submit.prevent="submitForm" class="space-y-4 md:space-y-6 " action="#">
     <div>
-        <label for="username" class="block mb-2 text-sm font-medium text-primary-oscuro dark:text-white">Usuario</label>
-        <input type="text" v-model="username" name="username" id="username" class="bg-gray-50 border border-gray-300 text-primary-oscuro rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" placeholder="usuario" required="">
+        <label for="username" >Usuario</label>
+        <input type="text" v-model="username" name="username" id="username"  placeholder="usuario" required=""
+        class="bg-gray-50 border border-gray-300 text-primary-oscuro rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
     </div>
     <div>
-        <label for="password" class="block mb-2 text-sm font-medium text-primary-oscuro dark:text-white">Contraseña</label>
-        <input type="password"  v-model="password" name="password" id="password" placeholder="••••••••" class="bg-gray-50 border border-gray-300 text-primary-oscuro rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 " required="">
+        <label for="password" >Contraseña</label>
+        <input type="password"  v-model="password" name="password" id="password" placeholder="••••••••" required=""
+        class="bg-gray-50 border border-gray-300 text-primary-oscuro rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
     </div>
-    <button type="submit" class="w-full rounded-md bg-primary-azul px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-turquesa focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-violeta">Iniciar</button>
+    <button type="submit" class="w-full boton-buscar">Iniciar</button>
 </form>
 
 </template>
@@ -28,8 +30,9 @@ export default {
     // Llama a la función que está en el archivo externo axios
     async submitForm() {
       try {
+        // Envía los datos del formulario a la API
         const responseData = await authUser(this.username, this.password);
-        // Aquí puedes manejar la respuesta, como mostrar un mensaje de éxito o redirigir
+        // Manejamos la respuesta con un console.log y un if
         console.log('Datos recibidos:', responseData);
         if(responseData.result == 'ok' && responseData.token){
           //Guardamos el token en localStorage

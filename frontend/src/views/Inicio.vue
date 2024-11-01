@@ -1,4 +1,3 @@
-
 <template>
   <div class="bg-white">
     <Navbar />
@@ -10,9 +9,8 @@
           <p class="text-xl font-bold sm:text-xl text-primary-oscuro">Tu buscador de medicamentos de confianza</p>
           <div class="mt-10 flex items-center justify-center gap-x-6">
             <a href="/buscador-productos"
-              class="rounded-md bg-primary-azul px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-turquesa hover:text-primary-oscuro">Comenzar</a>
+              class="boton-buscar">Comenzar</a>
           </div>
-         
         </div>
       </div>
     </div>
