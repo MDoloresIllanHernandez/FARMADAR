@@ -3,11 +3,11 @@
     <Navbar />
     <div class="relative isolate px-6 pt-14 lg:px-8">
       <div class="mx-auto max-w-6xl py-32 sm:py-32 lg:py-32">
-        <h1>Nuevo Producto</h1>
+        <h1>Nuevo producto</h1>
         <GenericForm
-          :fields="productFields"
+          :fields="itemFields"
           submitButtonText="Guardar Producto"
-          @submit="handleProductSubmit"
+          @submit="handleItemSubmit"
         />
       </div>
     </div>
@@ -24,7 +24,7 @@ export default {
   components: { Navbar, Footer, GenericForm },
   data() {
     return {
-      productFields: [
+      itemFields: [
         { name: "id", label: "Id del producto", type: "number", error: "*Id requerido" },
         { name: "nombre", label: "Nombre del producto", type: "text", error: "*Nombre requerido" },
         { name: "precio", label: "Precio", type: "number", error: "*Fecha requerida" },
@@ -34,7 +34,7 @@ export default {
     };
   },
   methods: {
-    handleProductSubmit(formData) {
+    handleItemSubmit(formData) {
       // Lógica para manejar el envío del formulario de producto
       console.log("Producto enviado:", formData);
     }

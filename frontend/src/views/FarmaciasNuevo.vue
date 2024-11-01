@@ -3,7 +3,7 @@
       <Navbar />
       <div class="relative isolate px-6 pt-14 lg:px-8">
         <div class="mx-auto max-w-6xl py-32 sm:py-32 lg:py-32">
-          <h1>Nueva Farmacia</h1>
+          <h1>Nueva farmacia</h1>
           <GenericForm
             :fields="productFields"
             submitButtonText="Guardar Farmacia"
