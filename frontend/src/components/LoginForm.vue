@@ -10,7 +10,7 @@
       <input type="password" v-model="password" name="password" id="password" placeholder="••••••••" required=""
         class="bg-gray-50 border border-gray-300 text-primary-oscuro rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5">
     </div>
-    <button type="submit" class="w-full boton-buscar">Iniciar</button>
+    <button type="submit" class="w-full boton-claro">Iniciar</button>
   </form>
 </template>
 

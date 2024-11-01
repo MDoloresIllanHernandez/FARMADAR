@@ -84,8 +84,12 @@ export default {
     },      
     // Método para añadir un producto
     async addProduct() {
-      const response = await apiClient.post('/producto');
+      // Lógica para añadir un producto
+      console.log("Añadiendo producto");
       
+      // Redirigir a la vista nuevo producto
+      this.$router.push({ name: 'ProductosNuevo' });
+
     },
     editProduct(product) {
       // Lógica para editar el producto

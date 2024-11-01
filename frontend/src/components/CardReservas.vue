@@ -5,6 +5,9 @@
     <p class="text-gray-600">Stock: {{ product.stock }}</p>
     <p class="text-lg text-primary-azul font-semibold mt-2">Precio: {{ currency(product.precio) }}</p>
 
+    <p hidden>Product ID: {{ product.id }}</p>
+    <p hidden>Farm ID: {{ product.id_farm }}</p>
+
     <!-- Botón de reserva -->
     <div class="flex justify-end gap-2 mt-4">
       <button @click="reserveProduct" class="boton-claro">Reservar </button>
@@ -26,7 +29,8 @@ export default {
       return `${parseFloat(value).toFixed(2)}€`;
     },
     reserveProduct() {
-      this.$emit('reserve', this.product);
+       // Redirigir a la vista de reservas
+       this.$router.push({ name: 'Reserva', params: { productId: this.product.id, farmId: this.product.id_farm } });
     }
   }
 };

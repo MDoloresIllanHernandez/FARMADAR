@@ -68,7 +68,11 @@ export default {
     },
     // Método para añadir una farmacia
     async addFarmacia() {
-      const response = await apiClient.post('/farmacia');
+      // Lógica para añadir una farmacia
+      console.log("Añadiendo farmacia");
+
+      //Redirigir a la vista de nueva farmacia
+      this.$router.push({ name: 'FarmaciasNuevo' });
     },
     editFarmacia(farmacia) {
       // Lógica para editar la farmacia

@@ -1,5 +1,5 @@
 <script setup>
-import FormularioInicio from '../components/FormularioInicio.vue';
+import FormularioInicio from '../components/LoginForm.vue';
 import Footer from '../components/Footer.vue';
 import router from '../router';
 
