@@ -8,8 +8,8 @@
           <label for="productos" class="sr-only">Productos</label>
           <input id="productos" v-model="searchQuery" @keyup.enter="searchProducts" type="text"
             placeholder="Introduce el nombre del producto..." />
-          <button @click="searchProducts" class="boton-buscar"> Buscar </button>
-          <button @click="addProduct" class="boton-add"> Añadir Producto</button>
+          <button @click="searchProducts" class="boton-claro"> Buscar </button>
+          <button @click="addProduct" class="boton-oscuro"> Añadir Producto</button>
         </div>
         <div v-if="hasSearched">
           <div v-if="products.length" class="grid div-cards">
@@ -84,8 +84,12 @@ export default {
     },      
     // Método para añadir un producto
     async addProduct() {
-      const response = await apiClient.post('/producto');
+      // Lógica para añadir un producto
+      console.log("Añadiendo producto");
       
+      // Redirigir a la vista nuevo producto
+      this.$router.push({ name: 'ProductosNuevo' });
+
     },
     editProduct(product) {
       // Lógica para editar el producto

@@ -8,15 +8,20 @@
           <label for="farmacias" class="sr-only">farmacias</label>
           <input id="farmacias" v-model="searchQuery" @keyup.enter="searchFarmacias" type="text"
             placeholder="Introduce el nombre de la farmacia..." />
-          <button @click="searchFarmacias" class="boton-buscar"> Buscar </button>
-          <button @click="addFarmacia" class="boton-add"> Añadir farmacia </button>
+          <button @click="searchFarmacias" class="boton-claro"> Buscar </button>
+          <button @click="addFarmacia" class="boton-oscuro"> Añadir farmacia </button>
         </div>
         <div v-if="hasSearched">
           <div v-if="farmacias.length" class="grid div-cards">
-            <GenericCard v-for="farmacia in farmacias" :key="farmacia.id" :title="farmacia.nombre"
-              :detail2="'Dirección: ' + farmacia.direccion" :detail3="'Teléfono: ' + farmacia.telefono"
-              :detail4="'Email: ' + farmacia.email" :detail1="'CIF: ' + farmacia.cif" :data="farmacia"
-              @edit="editFarmacia" @delete="deleteFarmacia" />
+            <GenericCard v-for="farmacia in farmacias" 
+            :key="farmacia.id" 
+            :title="farmacia.nombre"
+            :detail1="'CIF: ' + farmacia.cif" :data="farmacia"
+            :detail2="'Dirección: ' + farmacia.direccion" 
+            :detail3="'Teléfono: ' + farmacia.telefono"
+            :detail4="'Email: ' + farmacia.email" 
+            @edit="editFarmacia" 
+            @delete="deleteFarmacia" />
           </div>
           <div v-else>
             <p>No se encontraron farmacias.</p>
@@ -59,29 +64,29 @@ export default {
       } catch (error) {
         console.error('Error al obtener las farmacias:', error);
       }
-  
-  },
-  // Método para añadir una farmacia
-  async addFarmacia() {
-    const response = await apiClient.post('/farmacia');
 
+    },
+    // Método para añadir una farmacia
+    async addFarmacia() {
+      // Lógica para añadir una farmacia
+      console.log("Añadiendo farmacia");
+
+      //Redirigir a la vista de nueva farmacia
+      this.$router.push({ name: 'FarmaciasNuevo' });
+    },
+    editFarmacia(farmacia) {
+      // Lógica para editar la farmacia
+      console.log("Editando farmacia:", farmacia);
+    },
+    deleteFarmacia(farmacia) {
+      // Lógica para eliminar la farmacia
+      console.log("Eliminando farmacia:", farmacia);
+    }
   },
-  editFarmacia(farmacia) {
-    // Lógica para editar la farmacia
-    console.log("Editando farmacia:", farmacia);
-  },
-  deleteFarmacia(farmacia) {
-    // Lógica para eliminar la farmacia
-    console.log("Eliminando farmacia:", farmacia);
-  }
-},
-components: {
-  Navbar,
+  components: {
+    Navbar,
     Footer,
     GenericCard
+  }
 }
-}
-
 </script>
-
-<style></style>

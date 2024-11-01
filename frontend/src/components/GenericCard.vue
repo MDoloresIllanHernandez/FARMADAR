@@ -8,12 +8,8 @@
 
     <!-- Botones de acción -->
     <div class="flex gap-2 mt-4">
-      <button @click="editItem" class="flex-none rounded-md bg-primary-azul px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-turquesa hover:text-primary-oscuro focus-visible:outline-primary-oscuro">
-        Editar
-      </button>
-      <button @click="deleteItem" class="flex-none rounded-md bg-primary-violeta px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-turquesa hover:text-primary-oscuro focus-visible:outline-primary-oscuro">
-        Eliminar
-      </button>
+      <button @click="editItem" class="boton-claro"> Editar </button>
+      <button @click="deleteItem" class="boton-oscuro"> Eliminar </button>
     </div>
   </div>
 </template>

@@ -66,9 +66,9 @@
     { name: 'Reservas', href: '/reservas' }
   ]
 
-  const cerrarSesion = { name: 'Cerrar Sesión', href: '/cerrar-sesion' }
+  const cerrarSesion = { href: '/cerrar-sesion' }
 
-  const buscadorProductos = { name: 'Buscador FARMADAR', href: '/buscador-productos' }
+  const buscadorProductos = { href: '/buscador-productos' }
 
   const mobileMenuOpen = ref(false)
   
