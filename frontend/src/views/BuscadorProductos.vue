@@ -1,8 +1,6 @@
 <template>
   <div class="bg-white">
-
     <Navbar />
-
     <div class="relative isolate px-6 pt-14 lg:px-8">
       <div class="mx-auto max-w-6xl py-32 sm:py-32 lg:py-32">
         <div class="flex items-center space-x-4">
@@ -14,7 +12,7 @@
           <label for="productos" class="sr-only">Productos</label>
           <input id="productos" v-model="searchQuery" @keyup.enter="searchProducts" type="text"
             placeholder="Introduce el nombre del producto..."/>
-          <button @click="searchProducts" class="boton-buscar"> Buscar </button>
+          <button @click="searchProducts" class="boton-claro"> Buscar </button>
         </div>
         <div v-if="hasSearched">
           <div v-if="products.length">

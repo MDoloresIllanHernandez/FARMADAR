@@ -8,8 +8,8 @@
           <label for="productos" class="sr-only">Productos</label>
           <input id="productos" v-model="searchQuery" @keyup.enter="searchProducts" type="text"
             placeholder="Introduce el nombre del producto..." />
-          <button @click="searchProducts" class="boton-buscar"> Buscar </button>
-          <button @click="addProduct" class="boton-add"> Añadir Producto</button>
+          <button @click="searchProducts" class="boton-claro"> Buscar </button>
+          <button @click="addProduct" class="boton-oscuro"> Añadir Producto</button>
         </div>
         <div v-if="hasSearched">
           <div v-if="products.length" class="grid div-cards">

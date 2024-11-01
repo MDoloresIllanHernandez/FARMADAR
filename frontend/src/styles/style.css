@@ -2,12 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-.boton-buscar{
+.boton-claro{
     @apply flex-none rounded-md bg-primary-azul px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-turquesa hover:text-primary-oscuro focus-visible:outline-primary-oscuro;
 
 }
 
-.boton-add{
+.boton-oscuro{
     @apply flex-none rounded-md bg-primary-violeta px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-turquesa hover:text-primary-oscuro focus-visible:outline-primary-oscuro;
 }
 
