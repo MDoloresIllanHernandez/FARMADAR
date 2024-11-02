@@ -9,6 +9,7 @@
           :type="field.type"
           v-model="formData[field.name]"
           :readonly="field.readonly"
+          :max="field.max"
           class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:ring-blue-200"
         />
         <textarea

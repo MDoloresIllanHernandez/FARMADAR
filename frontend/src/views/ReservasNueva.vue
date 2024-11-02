@@ -34,7 +34,7 @@ export default {
                 { name: "id_farm", label: "Id de la farmacia", type: "text", readonly: true },
                 { name: "fecha", label: "Fecha", type: "date", error: "*Fecha requerida" },
                 { name: "hora_inicio", label: "Hora inicio", type: "time", error: "*Hora requerida" },
-                { name: "hora_fin", label: "Hora fin", type: "time" },
+                { name: "hora_fin", label: "Hora fin", type: "time", max:"20:00", error: "*Hora requerida" },
                 { name: "cantidad", label: "Cantidad", type: "number", error: "*Cantidad requerida" },
                 { name: "cliente", label: "Datos del cliente(nombre, teléfono)", type: "texarea", error: "*Datos del cliente requerido" },
 
