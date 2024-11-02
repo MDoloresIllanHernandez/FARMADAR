@@ -34,8 +34,8 @@ router.beforeEach((to, from, next) => {
   // ['login', 'inicio', etc.])
   const esRutaPublica = rutasPublicas.includes(to.path);
 
-  // Obtenemos el token desde localStorage
-  const token = localStorage.getItem('farmaToken');
+  // Obtenemos el token desde sessionStorage
+  const token = sessionStorage.getItem('farmaToken');
 
   // Si no hay token y la ruta no es pública, redirigir a Login
   if (!token && !esRutaPublica) {
