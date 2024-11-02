@@ -9,16 +9,9 @@
           <input id="reservas" v-model="searchQuery" @keyup.enter="searchProducts" type="text"
             placeholder="Introduce el nombre de la reserva..."
             class="min-w-0 flex-auto p-2 border border-primary-oscuro rounded" />
-          <button @click="searchProducts"
-            class="flex-none rounded-md bg-primary-azul px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-turquesa hover:text-primary-oscuro focus-visible:outline-primary-oscuro">
-            Buscar
-          </button>
-          <button @click="addProduct"
-            class="flex-none rounded-md bg-primary-violeta px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-turquesa hover:text-primary-oscuro focus-visible:outline-primary-oscuro">
-            Añadir reserva
-          </button>
+          <button @click="searchProducts" class="boton-claro"> Buscar </button>
+          <button @click="addProduct" class="boton-oscuro"> Añadir reserva </button>
         </div>
-
       </div>
     </div>
     <Footer />

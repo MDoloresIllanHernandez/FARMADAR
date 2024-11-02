@@ -8,6 +8,7 @@
             :fields="itemFields"
             :initialData="existingItemData"
             submitButtonText="Actualizar Producto"
+            cancelRoute="Productos"
             @submit="handleItemSubmit"
           />
         </div>
