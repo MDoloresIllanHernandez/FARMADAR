@@ -3,23 +3,16 @@
     <Navbar />
     <div class="relative isolate px-6 pt-14 lg:px-8">
       <div class="mx-auto max-w-6xl py-32 sm:py-32 lg:py-32">
-        <h1 class="text-4xl py-4 font-bold sm:text-4xl text-primary-azul">Lista de productos</h1>
+        <h1>Lista de productos</h1>
         <div class="mt-6 flex gap-x-4 pb-8">
           <label for="productos" class="sr-only">Productos</label>
           <input id="productos" v-model="searchQuery" @keyup.enter="searchProducts" type="text"
-            placeholder="Introduce el nombre del producto..."
-            class="min-w-0 flex-auto p-2 border border-primary-oscuro rounded" />
-          <button @click="searchProducts"
-            class="flex-none rounded-md bg-primary-azul px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-turquesa hover:text-primary-oscuro focus-visible:outline-primary-oscuro">
-            Buscar
-          </button>
-          <button @click="addProduct"
-            class="flex-none rounded-md bg-primary-violeta px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-turquesa hover:text-primary-oscuro focus-visible:outline-primary-oscuro">
-            Añadir Producto
-          </button>
+            placeholder="Introduce el nombre del producto..." />
+          <button @click="searchProducts" class="boton-claro"> Buscar </button>
+          <button @click="addProduct" class="boton-oscuro"> Añadir Producto</button>
         </div>
         <div v-if="hasSearched">
-          <div v-if="products.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div v-if="products.length" class="grid div-cards">
             <GenericCard
               v-for="product in products"
               :key="product.id"
@@ -91,8 +84,12 @@ export default {
     },      
     // Método para añadir un producto
     async addProduct() {
-      const response = await apiClient.post('/producto');
+      // Lógica para añadir un producto
+      console.log("Añadiendo producto");
       
+      // Redirigir a la vista nuevo producto
+      this.$router.push({ name: 'ProductosNuevo' });
+
     },
     editProduct(product) {
       // Lógica para editar el producto
@@ -112,5 +109,5 @@ export default {
     Footer,
     GenericCard
   }
-};
+}
 </script>
