@@ -15,6 +15,7 @@ const routes = [
   { path: '/farmacias/nuevo', name: 'FarmaciasNuevo', component: () => import('../views/FarmaciasNuevo.vue')},
   { path: '/productos/editar/:id', name: 'ProductosEditar', component: () => import('../views/ProductosEditar.vue')},
   { path: '/farmacias/editar/:id', name: 'FarmaciasEditar', component: () => import('../views/FarmaciasEditar.vue')},
+  { path: '/usuarios', name: 'Usuarios', component: () => import('../views/Usuarios.vue')},
 ];
 
 const router = createRouter({
