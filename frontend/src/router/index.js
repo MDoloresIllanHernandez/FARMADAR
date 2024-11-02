@@ -15,6 +15,9 @@ const routes = [
   { path: '/farmacias/nuevo', name: 'FarmaciasNuevo', component: () => import('../views/FarmaciasNuevo.vue')},
   { path: '/productos/editar/:id', name: 'ProductosEditar', component: () => import('../views/ProductosEditar.vue')},
   { path: '/farmacias/editar/:id', name: 'FarmaciasEditar', component: () => import('../views/FarmaciasEditar.vue')},
+  { path: '/usuarios', name: 'Usuarios', component: () => import('../views/Usuarios.vue')},
+  { path: '/usuarios/nuevo', name: 'UsuariosNuevo', component: () => import('../views/UsuariosNuevo.vue')},
+  { path: '/usuarios/editar/:id', name: 'UsuariosEditar', component: () => import('../views/UsuariosEditar.vue')},
 ];
 
 const router = createRouter({
@@ -31,8 +34,8 @@ router.beforeEach((to, from, next) => {
   // ['login', 'inicio', etc.])
   const esRutaPublica = rutasPublicas.includes(to.path);
 
-  // Obtenemos el token desde localStorage
-  const token = localStorage.getItem('farmaToken');
+  // Obtenemos el token desde sessionStorage
+  const token = sessionStorage.getItem('farmaToken');
 
   // Si no hay token y la ruta no es pública, redirigir a Login
   if (!token && !esRutaPublica) {

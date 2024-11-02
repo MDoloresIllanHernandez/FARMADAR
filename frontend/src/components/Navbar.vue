@@ -60,10 +60,10 @@
   // Navigation links
   const navigation = [
     { name: 'Buscador FARMADAR', href: '/buscador-productos' },
+    { name: 'Reservas', href: '/reservas' },
     { name: 'Productos', href: '/productos' },
     { name: 'Farmacias', href: '/farmacias' },
-    { name: 'Clientes', href: '/clientes' },
-    { name: 'Reservas', href: '/reservas' }
+    { name: 'Usuarios', href: '/usuarios' },
   ]
 
   const cerrarSesion = { href: '/cerrar-sesion' }

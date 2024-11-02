@@ -7,6 +7,7 @@
         <GenericForm
           :fields="itemFields"
           submitButtonText="Guardar Producto"
+          cancelRoute="Productos"
           @submit="handleItemSubmit"
         />
       </div>
