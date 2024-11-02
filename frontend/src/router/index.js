@@ -3,13 +3,18 @@ import { createRouter, createWebHistory } from 'vue-router';
 const routes = [
   { path: '/login', component: () => import('../views/Login.vue') },
   { path: '/inicio', component: () => import('../views/Inicio.vue')},
-  { path: '/buscador-productos', component: () => import('../views/BuscadorProductos.vue') },
-  { path: '/farmacias', component: () => import('../views/Farmacias.vue') },
+  { path: '/buscador-productos', name:'Buscador', component: () => import('../views/BuscadorProductos.vue') },
+  { path: '/farmacias', name:'Farmacias', component: () => import('../views/Farmacias.vue') },
   { path: '/clientes', component: () => import('../views/Clientes.vue')},
-  { path: '/productos', component: () => import('../views/Productos.vue') },
-  { path: '/reservas', component: () => import('../views/Reservas.vue') },
+  { path: '/productos', name:'Productos', component: () => import('../views/Productos.vue') },
+  { path: '/reservas', name:'Reservas', component: () => import('../views/Reservas.vue') },
   { path: '/cerrar-sesion', component: () => import('../views/CerrarSesion.vue') },
-  { path: '/:pathMatch(.*)*', component: () => import('../views/NotFound.vue') }, // Ruta para 404
+  { path: '/:pathMatch(.*)*', component: () => import('../views/Login.vue') },
+  { path: '/reservas/nueva/:productId/:farmId', name: 'Reserva', component: () => import('../views/ReservasNueva.vue') },
+  { path: '/productos/nuevo', name: 'ProductosNuevo', component: () => import('../views/ProductosNuevo.vue')},
+  { path: '/farmacias/nuevo', name: 'FarmaciasNuevo', component: () => import('../views/FarmaciasNuevo.vue')},
+  { path: '/productos/editar/:id', name: 'ProductosEditar', component: () => import('../views/ProductosEditar.vue')},
+  { path: '/farmacias/editar/:id', name: 'FarmaciasEditar', component: () => import('../views/FarmaciasEditar.vue')},
 ];
 
 const router = createRouter({

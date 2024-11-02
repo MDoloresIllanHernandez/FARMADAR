@@ -1,3 +1,35 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.boton-claro{
+    @apply flex-none rounded-md bg-primary-azul px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-turquesa hover:text-primary-oscuro focus-visible:outline-primary-oscuro;
+
+}
+
+.boton-oscuro{
+    @apply flex-none rounded-md bg-primary-violeta px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-turquesa hover:text-primary-oscuro focus-visible:outline-primary-oscuro;
+}
+
+.boton-navbar{
+    @apply rounded-lg p-2 text-xl font-semibold leading-6 text-primary-oscuro hover:bg-gray-50;
+}
+
+.boton-navbar-movil{
+    @apply -mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-primary-oscuro hover:bg-gray-50;
+}
+h1{
+    @apply text-4xl py-4 font-bold sm:text-4xl text-primary-azul;
+}
+
+input{
+    @apply min-w-0 flex-auto p-2 border border-primary-oscuro rounded
+}
+
+.div-cards{
+    @apply grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4;
+}
+
+label{
+    @apply block mb-2 text-sm font-medium text-primary-oscuro dark:text-white;
+}
