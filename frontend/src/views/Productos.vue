@@ -13,6 +13,10 @@
             class="flex-none rounded-md bg-primary-azul px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-turquesa hover:text-primary-oscuro focus-visible:outline-primary-oscuro">
             Buscar
           </button>
+          <!-- <button v-if="role=='admin' " @click="addProduct"
+            class="flex-none rounded-md bg-primary-violeta px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-turquesa hover:text-primary-oscuro focus-visible:outline-primary-oscuro">
+            Añadir Producto
+          </button> -->
           <button @click="addProduct"
             class="flex-none rounded-md bg-primary-violeta px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-primary-turquesa hover:text-primary-oscuro focus-visible:outline-primary-oscuro">
             Añadir Producto
@@ -53,11 +57,21 @@ import apiClient from '../scripts/axios.js';
 export default {
   data() {
     return {
+      //role : null,
       searchQuery: '',
       products: [],
       hasSearched: false
     };
   },
+  // created() {
+  //   // Intenta obtener el valor de role desde localStorage cuando se crea el componente
+  //   const storedRole = localStorage.getItem('role');
+  //   if (storedRole) {
+  //     this.role = storedRole; // Asigna el valor si está disponible
+  //   } else {
+  //     this.role = 'defaultRole'; // O establece un valor por defecto si no existe en localStorage
+  //   }
+  // },
   methods: {
     async searchProducts() {
       try {
@@ -82,7 +96,6 @@ export default {
             };
           });
         }
-
           this.hasSearched = true;
         }
       } catch (error) {
@@ -94,8 +107,20 @@ export default {
       const response = await apiClient.post('/producto');
       
     },
-    editProduct(product) {
+    async editProduct(product) {
       // Lógica para editar el producto
+      const response = await apiClient.put(`/producto/${product.id}`, {
+        nombre: product.nombre,
+        stock: product.stock,
+        precio: product.precio
+      });
+      if (response.data.result === 'ok') {
+        console.log('Producto editado correctamente:', response.data.producto);
+      } else {
+        console.error('Error al editar el producto:', response.data.error);
+      }
+    
+
       console.log("Editando producto:", product);
     },
     deleteProduct(product) {
