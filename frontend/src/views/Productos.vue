@@ -103,19 +103,23 @@ export default {
     },
     async editProduct(product) {
       // Lógica para editar el producto
-      const response = await apiClient.put(`/producto/${product.id}`, {
-        nombre: product.nombre,
-        stock: product.stock,
-        precio: product.precio
-      });
-      if (response.data.result === 'ok') {
-        console.log('Producto editado correctamente:', response.data.producto);
-      } else {
-        console.error('Error al editar el producto:', response.data.error);
-      }
-    
+      this.$router.push({ name: `ProductosEditar`, params: { id: product.id } });
+      // try {
+      //   const response = await apiClient.put(`/producto?id=${product.id}`, {
+      //     nombre: product.nombre,
+      //     stock: product.stock,
+      //     precio: product.precio
+      //   });
+      //   if (response.data.result === 'ok') {
+      //     console.log('Producto editado correctamente:', response.data.producto);
+      //   } else {
+      //     console.error('Error al editar el producto:', response.data.error);
+      //   }
+      // } catch (error) {
+      //   console.error('Error al editar el producto:', error);
+      // }  
 
-      console.log("Editando producto:", product);
+      //console.log("Editando producto:", product);
     },
     deleteProduct(product) {
       // Lógica para eliminar el producto
