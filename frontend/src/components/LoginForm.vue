@@ -34,8 +34,10 @@ export default {
         // Manejamos la respuesta con un console.log y un if
         console.log('Datos recibidos:', responseData);
         if (responseData.result == 'ok' && responseData.token) {
-          //Guardamos el token en localStorage
+          //Guardamos el token en sessionStorage
           sessionStorage.setItem('farmaToken', responseData.token);
+          //Guardamos el usuario en sessionStorage
+          sessionStorage.setItem('user', JSON.stringify(responseData.user));
           //Guardamos el rol en localStorage
           //localStorage.setItem('role', 'noadmin');
           this.$router.push('/inicio');

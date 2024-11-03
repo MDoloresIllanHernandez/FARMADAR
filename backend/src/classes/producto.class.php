@@ -237,11 +237,11 @@ class Producto extends Database
 		}
 
 		if($this->validateUpdate($params)){
-			$affected_rows = parent::updateDB($this->table, $id, $params);
+			$affected_rows = parent::updateProductDB($this->table, $id, $params);
 
 			if($affected_rows==0){
 				$response = array(
-					'result' => 'error',
+					'result' => 'ok',
 					'details' => 'No hubo cambios'
 				);
 
@@ -260,7 +260,7 @@ class Producto extends Database
 
 		if($affected_rows==0){
 			$response = array(
-				'result' => 'error',
+				'result' => 'ok',
 				'details' => 'No hubo cambios'
 			);
 

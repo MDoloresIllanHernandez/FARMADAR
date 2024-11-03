@@ -17,7 +17,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 
 // Permite los encabezados personalizados
-header("Access-Control-Allow-Headers: Content-Type, Authorization, Api-Key");
+header("Access-Control-Allow-Headers: Content-Type, Authorization, Api-Key, Farma-User");
 
 
 // Maneja la solicitud preflight (OPTIONS) antes de ejecutar cualquier lógica de verificación

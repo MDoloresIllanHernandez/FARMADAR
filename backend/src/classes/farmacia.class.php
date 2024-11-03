@@ -197,7 +197,7 @@ class Farmacia extends Database
 
 			if($affected_rows==0){
 				$response = array(
-					'result' => 'error',
+					'result' => 'ok',
 					'details' => 'No hubo cambios'
 				);
 
@@ -216,7 +216,7 @@ class Farmacia extends Database
 
 		if($affected_rows==0){
 			$response = array(
-				'result' => 'error',
+				'result' => 'ok',
 				'details' => 'No hubo cambios'
 			);
 

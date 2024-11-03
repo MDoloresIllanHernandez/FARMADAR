@@ -61,7 +61,7 @@ class Authentication extends AuthModel
 
 		parent::update($result[0]['id'], $jwt);
 
-		return $jwt;
+		return array('token' => $jwt, 'user' => $result[0]);
 	}
 
 	/**
@@ -83,7 +83,7 @@ class Authentication extends AuthModel
         }
 		
         $jwt = $_SERVER['HTTP_API_KEY'];
-	
+		
         try {
             $data = JWT::decode($jwt, $this->key, array('HS256'));
 			

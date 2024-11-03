@@ -80,7 +80,30 @@ class Database
 
 		return $this->connection->insert_id;
 	}
+	/**
+	 * Método para actualizar un producto de la BD controlando el id de la farmacia
+	 * Hay que indicar el registro mediante un campo que sea clave primaria y que debe llamarse "id"
+	 */
+	public function updateProductDB($table, $id, $data)
+	{	
+		$query = "UPDATE $table SET ";
+		foreach ($data as $key => $value) {
+			$query .= "$key = '$value'";
+			if(sizeof($data) > 1 && $key != array_key_last($data)){
+				$query .= " , ";
+			}
+		}
+		$id_farm = $data['id_farm'];
+		$query .= ' WHERE id = ' . $id . ' AND id_farm = ' . $id_farm;
+		
+		$this->connection->query($query);
 
+		if(!$this->connection->affected_rows){
+			return 0;
+		}
+
+		return $this->connection->affected_rows;
+	}
 	/**
 	 * Método para actualizar un registro de la BD
 	 * Hay que indicar el registro mediante un campo que sea clave primaria y que debe llamarse "id"

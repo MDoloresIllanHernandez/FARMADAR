@@ -6,6 +6,7 @@
 require_once 'src/classes/auth.class.php';
 require_once 'src/response.php';
 
+
 // Las siguientes líneas son para evitar errores de CORS
 // Permite solicitudes desde cualquier origen
 header("Access-Control-Allow-Origin: *");
@@ -22,17 +23,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 $auth = new Authentication();
 
+
 switch ($_SERVER['REQUEST_METHOD']) {
 	case 'POST':
 		$user = json_decode(file_get_contents('php://input'), true);
 
-		$token = $auth->signIn($user);
+		$userToken = $auth->signIn($user);
 
-		if ($token) {
+		if ($userToken) {
             // Si la autenticación es exitosa
             $response = array(
                 'result' => 'ok',
-                'token' => $token
+                'token' => $userToken['token'],
+                'user' => $userToken['user'] 
             );
             Response::result(201, $response);
         } else {

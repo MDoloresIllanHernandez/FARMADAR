@@ -14,6 +14,9 @@
             placeholder="Introduce el nombre del producto..."/>
           <button @click="searchProducts" class="boton-claro"> Buscar </button>
         </div>
+        <div v-if="loading" class="loading-overlay">
+          <div class="spinner"></div>
+        </div>
         <div v-if="hasSearched">
           <div v-if="products.length">
             <CardReservas v-for="product in products" :key="product.id" :product="product" @reserve="handleReserve" />
@@ -36,15 +39,20 @@ import apiClient from '../scripts/axios.js';
 import axios from 'axios';
 
 export default {
-  data() {
+  components: {
+    Navbar, Footer, CardReservas},
+  
+    data() {
     return {
       searchQuery: '',
       products: [],
-      hasSearched: false
+      hasSearched: false,
+      loading: false,
     };
   },
   methods: {
     async searchProducts() {
+      this.loading = true;
       try {
         // Consultar productos
         const productsResponse = await apiClient.get('/producto');
@@ -67,11 +75,12 @@ export default {
             };
           });
         }
-
           this.hasSearched = true;
         }
       } catch (error) {
         console.error('Error al obtener los productos o farmacias:', error);
+      } finally {
+        this.loading = false; // Stop loading
       }
     },
     // Método para formatear el precio a moneda
@@ -86,12 +95,36 @@ export default {
       // Aquí se podría realizar una llamada API o cualquier lógica adicional para gestionar la reserva
     }
   },  
-
-
-  components: {
-    Navbar,
-    Footer,
-    CardReservas
-  }
-};
+}
 </script>
+<style>
+/* Spinner styles */
+.spinner {
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Overlay styles */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8); /* Slight overlay background */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* Ensure it’s above other elements */
+}
+</style>
