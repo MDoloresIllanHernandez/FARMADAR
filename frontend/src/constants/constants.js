@@ -1,5 +1,5 @@
 // Definir las constantes
-const  URL_API = 'http://localhost/farmadar/backend';
+const  URL_API = 'http://localhost/FARMADAR/backend';
 
 
 // Exportar las constantes
