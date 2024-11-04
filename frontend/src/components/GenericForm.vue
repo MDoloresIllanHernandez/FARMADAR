@@ -106,12 +106,11 @@ export default {
     handleCancel() {
       // Lógica para manejar la cancelación del formulario
       console.log("Formulario cancelado");
+      // Emitir un evento de cancelación del modal
       this.$emit("cancel");
+      //Redirigir a la ruta de cancelación en las vistas
+      this.$router.push({ name: this.cancelRoute });
     }
   }
 };
 </script>
-
-<style scoped>
-/* Opcional: agrega estilos personalizados */
-</style>
