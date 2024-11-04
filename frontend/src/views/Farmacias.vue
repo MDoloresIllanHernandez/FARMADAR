@@ -9,7 +9,7 @@
           <input id="farmacias" v-model="searchQuery" @keyup.enter="searchFarmacias" type="text"
             placeholder="Introduce el nombre de la farmacia..." />
           <button @click="searchFarmacias" class="boton-claro"> Buscar </button>
-          <button @click="addFarmacia" class="boton-oscuro"> Añadir farmacia </button>
+          <button v-if="!isUsu" @click="addFarmacia" class="boton-oscuro"> Añadir farmacia </button>
         </div>
         <div v-if="hasSearched">
           <div v-if="farmacias.length" class="grid div-cards">
@@ -45,6 +45,12 @@ export default {
       farmacias: [],
       hasSearched: false
     };
+  },
+  computed: {
+    // Computed property para verificar si el usuario es admin
+    isUsu() {
+      return sessionStorage.getItem('role') == 'usu';
+    }
   },
   methods: {
     async searchFarmacias() {

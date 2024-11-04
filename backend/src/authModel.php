@@ -21,7 +21,7 @@ class AuthModel
 	 */
 	public function login($username, $password)
 	{
-		$query = "SELECT id, nombre, username FROM usuario WHERE username = '$username' AND password = '$password'";
+		$query = "SELECT id, nombre, username, role FROM usuario WHERE username = '$username' AND password = '$password'";
 
 		$results = $this->connection->query($query);
 
@@ -35,6 +35,7 @@ class AuthModel
 
 		return $resultArray;
 	}
+
 
 	/**
 	 * Método para actualizar el token de un usuario con un determinado id

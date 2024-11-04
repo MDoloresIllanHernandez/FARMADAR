@@ -9,7 +9,7 @@
           <input id="productos" v-model="searchQuery" @keyup.enter="searchProducts" type="text"
             placeholder="Introduce el nombre del producto..." />
           <button @click="searchProducts" class="boton-claro"> Buscar</button>
-          <button @click="addProduct" class="boton-oscuro"> Añadir Producto </button>
+          <button v-if="!isUsu" @click="addProduct" class="boton-oscuro"> Añadir Producto </button>
           <!-- <button v-if="role=='admin' " @click="addProduct" class="boton-oscuro"> Añadir Producto </button> -->
         </div>
         <div v-if="hasSearched">
@@ -52,6 +52,12 @@ export default {
       products: [],
       hasSearched: false
     };
+  },
+  computed: {
+    // Computed property para verificar si el usuario es admin
+    isUsu() {
+      return sessionStorage.getItem('role') == 'usu';
+    }
   },
   // created() {
   //   // Intenta obtener el valor de role desde localStorage cuando se crea el componente

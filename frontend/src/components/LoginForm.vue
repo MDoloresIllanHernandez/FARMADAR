@@ -33,9 +33,12 @@ export default {
         const responseData = await authUser(this.username, this.password);
         // Manejamos la respuesta con un console.log y un if
         console.log('Datos recibidos:', responseData);
-        if (responseData.result == 'ok' && responseData.token) {
+        if (responseData.result == 'ok' && responseData.token && responseData.role) {
           //Guardamos el token en localStorage
           sessionStorage.setItem('farmaToken', responseData.token);
+
+          sessionStorage.setItem('role', responseData.role);
+
           //Guardamos el rol en localStorage
           //localStorage.setItem('role', 'noadmin');
           this.$router.push('/inicio');

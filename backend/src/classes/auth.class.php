@@ -49,6 +49,8 @@ class Authentication extends AuthModel
 			exit;
 		}
 
+		$userRole = $result[0]['role'];
+
 		$dataToken = array(
 			'iat' => time(),
 			'data' => array(
@@ -61,7 +63,9 @@ class Authentication extends AuthModel
 
 		parent::update($result[0]['id'], $jwt);
 
-		return $jwt;
+		return array(
+			'token' => $jwt,
+			'role' => $userRole);
 	}
 
 	/**

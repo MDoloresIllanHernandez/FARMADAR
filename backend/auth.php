@@ -26,13 +26,14 @@ switch ($_SERVER['REQUEST_METHOD']) {
 	case 'POST':
 		$user = json_decode(file_get_contents('php://input'), true);
 
-		$token = $auth->signIn($user);
+		$authResult = $auth->signIn($user);
 
-		if ($token) {
+		if ($authResult && isset($authResult['token']) && isset($authResult['role'])) {
             // Si la autenticación es exitosa
             $response = array(
                 'result' => 'ok',
-                'token' => $token
+                'token' => $authResult['token'],
+                'role' => $authResult['role']
             );
             Response::result(201, $response);
         } else {

@@ -10,7 +10,7 @@
             placeholder="Introduce el nombre del usuario..."
             class="min-w-0 flex-auto p-2 border border-primary-oscuro rounded" />
           <button @click="searchUsers" class="boton-claro"> Buscar </button>
-          <button @click="addUser" class="boton-oscuro"> Añadir usuario </button>
+          <button v-if="!isUsu" @click="addUser" class="boton-oscuro"> Añadir usuario </button>
         </div>
         <div v-if="hasSearched">
           <div v-if="users.length" class="grid div-cards">
@@ -54,6 +54,9 @@ export default {
   computed: {
     filteredUsers() {
       return this.users.filter(user => user.name.toLowerCase().includes(this.searchQuery.toLowerCase()));
+    },
+    isUsu() {
+      return sessionStorage.getItem('role') == 'usu';
     }
   },
   methods: {
