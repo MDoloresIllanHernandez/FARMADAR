@@ -47,7 +47,3 @@ components: {
 }
 }
 </script>
-
-<style>
-
-</style>
