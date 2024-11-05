@@ -8,6 +8,7 @@ import router from '../router';
 //necesidad de volver a loguearse.
 const token = sessionStorage.getItem('farmaToken')
 //sessionStorage.removeItem('farmaToken')
+
 if(token){
     router.push('/inicio')
 }

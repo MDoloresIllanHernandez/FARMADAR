@@ -13,10 +13,12 @@ const apiClient = axios.create({
 apiClient.interceptors.request.use((config) => {
   // Obtener el token desde el localStorage o donde lo tengas guardado
   const token = sessionStorage.getItem('farmaToken');
-
+ 
   if (token) {
     // Si existe un token, lo agregamos al encabezado de api-key
+    const user = JSON.parse(sessionStorage.getItem('user')); 
     config.headers['api-key'] = `${token}`;
+    config.headers['farma-user'] = `${user.id}`;
   }
   return config;
   

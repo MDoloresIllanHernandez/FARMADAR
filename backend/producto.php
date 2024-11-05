@@ -17,7 +17,7 @@ header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 
 // Permitir los encabezados personalizados
-header("Access-Control-Allow-Headers: Content-Type, Authorization, Api-Key");
+header("Access-Control-Allow-Headers: Content-Type, Authorization, Api-Key, Farma-User");
 
 
 // Manejar la solicitud preflight (OPTIONS) antes de ejecutar cualquier lógica de verificación
@@ -28,6 +28,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 $auth = new Authentication();
+
 $auth->verify();
 
 $producto = new Producto();
@@ -42,7 +43,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 	 */
 	case 'GET':
 		$params = $_GET;
-
+		
 		$productos = $producto->get($params);
 
 		$response = array(

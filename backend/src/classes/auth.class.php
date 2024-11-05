@@ -87,7 +87,7 @@ class Authentication extends AuthModel
         }
 		
         $jwt = $_SERVER['HTTP_API_KEY'];
-	
+		
         try {
             $data = JWT::decode($jwt, $this->key, array('HS256'));
 			

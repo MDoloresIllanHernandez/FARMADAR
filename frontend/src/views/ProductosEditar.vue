@@ -27,15 +27,16 @@
     data() {
       return {
         itemFields: [
-          { name: "id", label: "Id del producto", type: "number", error: "*Id requerido" },
-          { name: "nombre", label: "Nombre del producto", type: "text", error: "*Nombre requerido" },
+          { name: "id", label: "Id producto", type: "number", error: "*Id requerido", readonly: true },
+          { name: "producto", label: "Nombre producto", type: "text", error: "*Nombre requerido" },
           { name: "precio", label: "Precio", type: "number", error: "*Fecha requerida" },
           { name: "stock", label: "Stock", type: "number", error: "*Stock requerido" },
           { name: "id_farm", label: "Farmacia", type: "number", error: "*Id de la farmacia requerido" },
         ],
         existingItemData: {
           id: 1,
-          nombre: "Producto de prueba",
+          producto: "Producto de prueba",
+          farmacia: "Farmacia de prueba",
           precio: 10.5,
           stock: 100,
           id_farm: 1
