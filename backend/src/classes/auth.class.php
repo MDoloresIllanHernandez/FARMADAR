@@ -10,7 +10,7 @@ require_once 'src/authModel.php';
 require_once 'src/response.php';
 use Firebase\JWT\JWT;
 
-class Authentication extends AuthModel
+class Authentication extends AuthModel 
 {
 	/**
 	 * Tabla donde estarán los usuarios
@@ -109,4 +109,6 @@ class Authentication extends AuthModel
             exit;
         }
     }
+
+
 }

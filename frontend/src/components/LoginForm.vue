@@ -34,13 +34,11 @@ export default {
         // Manejamos la respuesta con un console.log y un if
         console.log('Datos recibidos:', responseData);
         if (responseData.result == 'ok' && responseData.token && responseData.role) {
-          //Guardamos el token en localStorage
+          //Guardamos el token en sessionStorage
           sessionStorage.setItem('farmaToken', responseData.token);
 
           sessionStorage.setItem('role', responseData.role);
 
-          //Guardamos el rol en localStorage
-          //localStorage.setItem('role', 'noadmin');
           this.$router.push('/inicio');
         } else {
           // Aquí puedes manejar el error, como mostrar un mensaje de error

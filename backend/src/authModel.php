@@ -73,4 +73,6 @@ class AuthModel
 
 		return $resultArray;
 	}
+
+	
 }
