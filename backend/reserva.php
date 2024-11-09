@@ -95,7 +95,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 			);
 
 			Response::result(400, $response);
-			exit;
+			exit();
 		}
 
 		$reserva->update($_GET['id'], $params);
@@ -118,7 +118,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 			);
 
 			Response::result(400, $response);
-			exit;
+			exit();
 		}
 
 		$reserva->delete($_GET['id']);

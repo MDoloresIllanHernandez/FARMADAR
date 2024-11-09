@@ -19,6 +19,7 @@ class Reserva extends Database
 		'id',
 		'id_prod',
 		'id_farm',
+		'nombre'
 	);
 
 	/**
@@ -32,7 +33,8 @@ class Reserva extends Database
 		'hora_inicio',
 		'hora_fin',
 		'cantidad',
-		'datos_cliente',
+		'nombre',
+		'otros_datos',
 		'estado'
 		
 	);
@@ -111,10 +113,20 @@ class Reserva extends Database
 		}
 
 
-		if(!isset($data['datos_cliente']) || empty($data['datos_cliente'])){
+		if(!isset($data['nombre']) || empty($data['nombre'])){
 			$response = array(
 				'result' => 'error',
 				'details' => 'El campo datos_cliente es obligatorio'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+
+		if(!isset($data['otros_datos']) || empty($data['otros_datos'])){
+			$response = array(
+				'result' => 'error',
+				'details' => 'El campo otros_datos es obligatorio'
 			);
 
 			Response::result(400, $response);
@@ -211,10 +223,20 @@ class Reserva extends Database
 			exit;
 		}
 
-		if(isset($data['datos_cliente']) && empty($data['datos_cliente'])){
+		if(isset($data['nombre']) && empty($data['nombre'])){
 			$response = array(
 				'result' => 'error',
 				'details' => 'El campo datos_cliente no puede estar vacío'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+
+		if(isset($data['otros_datos']) && empty($data['otros_datos'])){
+			$response = array(
+				'result' => 'error',
+				'details' => 'El campo otros_datos no puede estar vacío'
 			);
 
 			Response::result(400, $response);
