@@ -18,7 +18,6 @@ apiClient.interceptors.request.use((config) => {
     // Si existe un token, lo agregamos al encabezado de api-key
     const user = JSON.parse(sessionStorage.getItem('user')); 
     config.headers['api-key'] = `${token}`;
-    config.headers['farma-user'] = `${user.id}`;
   }
   return config;
   

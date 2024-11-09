@@ -1,7 +1,7 @@
 <template>
     <div v-if="isVisible" class="modal-overlay">
       <div class="modal-content">
-        <h2 class="text-lg font-bold mb-4">¿Estás seguro de que deseas eliminar este producto?</h2>
+        <h2 class="text-lg font-bold mb-4">¿Estás seguro de que deseas eliminar esta farmacia?</h2>
         <p>Esta acción no se puede deshacer.</p>
         
         <div class="flex justify-end gap-2 mt-6">
@@ -18,10 +18,6 @@
       isVisible: {
         type: Boolean,
         required: true,
-      },
-      product: {
-      type: Object,
-      required: true,
       },
     },
     methods: {

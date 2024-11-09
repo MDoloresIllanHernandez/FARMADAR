@@ -10,15 +10,13 @@
             placeholder="Introduce el nombre del producto..." />
           <button @click="searchProducts" class="boton-claro"> Buscar</button>
           <button @click="openCreateModal" class="boton-oscuro"> Añadir Producto </button>
-          <!-- <button v-if="role=='admin' " @click="addProduct" class="boton-oscuro"> Añadir Producto </button> -->
         </div>
         <div v-if="loading" class="loading-overlay">
           <div class="spinner"></div>
         </div>
         <div v-if="hasSearched">
           <div v-if="products.length" class="grid div-cards">
-            <GenericCard
-              v-for="product in products"
+            <GenericCard v-for="product in products"
               :key="product.id"
               :title="product.nombre"
               :detail1="'Id: ' + product.id"
@@ -74,8 +72,8 @@ import Navbar from './../components/Navbar.vue';
 import Footer from './../components/Footer.vue';
 import GenericCard from './../components/GenericCard.vue';
 import apiClient from '../scripts/axios.js';
-import ModalEditar from '../components/modal/modalEditarProductos.vue';
 import ModalCreate from '../components/modal/modalCreateProductos.vue';
+import ModalEditar from '../components/modal/modalEditarProductos.vue';
 import ModalDelete from '../components/modal/modalDeleteProductos.vue';
 
 export default {
@@ -84,7 +82,6 @@ export default {
 
   data() {
     return {
-      //role : null,
       searchQuery: '',
       products: [],
       farmacias: [],
@@ -96,15 +93,6 @@ export default {
       selectedProduct: null, // Almacena el producto seleccionado para editar
     };
   },
-  // created() {
-  //   // Intenta obtener el valor de role desde localStorage cuando se crea el componente
-  //   const storedRole = localStorage.getItem('role');
-  //   if (storedRole) {
-  //     this.role = storedRole; // Asigna el valor si está disponible
-  //   } else {
-  //     this.role = 'defaultRole'; // O establece un valor por defecto si no existe en localStorage
-  //   }
-  // },
   methods: {
     async openEditModal(product) {
       // Copiar el producto para no modificar la referencia original
@@ -183,14 +171,14 @@ export default {
           id_farm: formData.id_farm
         });
         if (response.data.result === 'ok') {
-          console.log('Producto añadido correctamente:', response.data.producto);
+          console.log('Producto añadido correctamente');
           await this.searchProducts();
         }
       } catch (error) {
         console.error('Error al añadir el producto:', error);
       } finally {
       this.loading = false; // Stop loading
-    }
+      }
       this.isModalCreateVisible = false;
     },
     // Método para editar un producto
@@ -204,7 +192,7 @@ export default {
           id_farm: product.id_farm
         });
         if (response.data.result === 'ok') {
-          console.log('Producto editado correctamente:', response.data.producto);
+          console.log('Producto editado correctamente');
           await this.searchProducts(); // Actualizar la lista de productos
         } 
       } catch (error) {
@@ -225,7 +213,7 @@ export default {
         }
       } catch (error) {
         console.error('Error al eliminar el producto:', error);
-      }finally {
+      } finally {
       this.loading = false; // Stop loading
     }
       this.isModalDeleteVisible = false;  
