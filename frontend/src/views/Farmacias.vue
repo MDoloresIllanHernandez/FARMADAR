@@ -70,9 +70,6 @@ export default {
     async addFarmacia() {
       // Lógica para añadir una farmacia
       console.log("Añadiendo farmacia");
-
-      //Redirigir a la vista de nueva farmacia
-      this.$router.push({ name: 'FarmaciasNuevo' });
     },
     editFarmacia(farmacia) {
       // Lógica para editar la farmacia
