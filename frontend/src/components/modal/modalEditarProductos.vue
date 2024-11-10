@@ -82,7 +82,7 @@ export default {
   background: white;
   padding: 20px;
   border-radius: 8px;
-  width: 300px;
+  width: 100%;
   position: relative; /* Asegúrate de que el contenido del modal esté posicionado */
 }
 

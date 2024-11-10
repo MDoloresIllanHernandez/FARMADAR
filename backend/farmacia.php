@@ -86,7 +86,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 	case 'PUT':
 		$params = json_decode(file_get_contents('php://input'), true);
 
-		if(!isset($params) || !isset($_GET['id']) || empty($_GET['id'])){
+		if(!isset($params) || !isset($_GET['cif']) || empty($_GET['cif'])){
 			$response = array(
 				'result' => 'error',
 				'details' => 'Error en la solicitud'
@@ -96,7 +96,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 			exit;
 		}
 
-		$farmacia->update($_GET['id'], $params);
+		$farmacia->update($_GET['cif'], $params);
 
 		$response = array(
 			'result' => 'ok'
@@ -109,7 +109,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 	 * Cuando se solicita un DELETE se comprueba que se envíe un id de farmacia. En caso afirmativo se utiliza el método delete() del modelo.
 	 */
 	case 'DELETE':
-		if(!isset($_GET['id']) || empty($_GET['id'])){
+		if(!isset($_GET['cif']) || empty($_GET['cif'])){
 			$response = array(
 				'result' => 'error',
 				'details' => 'Error en la solicitud'
@@ -119,7 +119,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 			exit;
 		}
 
-		$farmacia->delete($_GET['id']);
+		$farmacia->delete($_GET['cif']);
 
 		$response = array(
 			'result' => 'ok'
