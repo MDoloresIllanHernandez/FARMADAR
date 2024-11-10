@@ -102,15 +102,7 @@ export default {
       return sessionStorage.getItem('role') == 'usu';
     }
   },
-  // created() {
-  //   // Intenta obtener el valor de role desde localStorage cuando se crea el componente
-  //   const storedRole = localStorage.getItem('role');
-  //   if (storedRole) {
-  //     this.role = storedRole; // Asigna el valor si está disponible
-  //   } else {
-  //     this.role = 'defaultRole'; // O establece un valor por defecto si no existe en localStorage
-  //   }
-  // },
+  
   methods: {
     async openEditModal(product) {
       // Copiar el producto para no modificar la referencia original
