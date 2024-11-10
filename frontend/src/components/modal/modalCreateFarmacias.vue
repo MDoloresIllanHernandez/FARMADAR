@@ -3,12 +3,12 @@
     <div class="modal-content">
       <div class="relative isolate px-6 pt-14 lg:px-8">
         <div class="mx-auto max-w-6xl py-32 sm:py-32 lg:py-32">
-          <h1>Nuevo producto</h1>
+          <h1>Nueva farmacia</h1>
           <GenericForm
             :fields="itemFields"
             :dataSelect="dataSelect"
-            submitButtonText="Guardar Producto"
-            cancelRoute="Productos"
+            submitButtonText="Guardar Farmacia"
+            cancelRoute="Farmacias"
             @submit="saveChanges"
             @cancel="closeModal" 
             @error="errorForm"
@@ -38,14 +38,16 @@ export default {
   data() {
       return {
         itemFields: [
-          { name: "id", label: "Id producto", type: "number", error: "*Id requerido"},
-          { name: "producto", label: "Nombre", type: "text", error: "*Nombre requerido" },
-          { name: "precio", label: "Precio", type: "text", error: "*Precio requerida" },
-          { name: "stock", label: "Stock", type: "number", error: "*Stock requerido" },
+          { name: "cif", label: "CIF", type: "text", error: "*CIF requerido" },
+          { name: "nombre", label: "Nombre", type: "text", error: "*Nombre requerido" },
+          { name: "direccion", label: "Dirección", type: "text", error: "*Dirección requerida" },
+          { name: "telefono", label: "Teléfono", type: "tel", error: "*Teléfono requerido" },
+          { name: "email", label: "Email", type: "email", error: "*Email requerido" },
         ],
         dataSelect: [
-          { name: "id_farm", label: "Farmacia", type: "select", error: "*Farmacia requerida", data:this.farmacias },
+         
         ],
+        requiredFields: ["cif", "nombre", "direccion", "telefono", "email"],
       };
     },
   methods: {
@@ -57,7 +59,21 @@ export default {
       this.$emit('close'); // Emitir el evento para cerrar el modal
     },
     saveChanges(formData) {
-      if (formData.id) {
+      // Este if es para evitar que lo envíe dos veces
+      if(formData.type){
+        return
+      }
+      let error = false;
+      let errorField = "";
+      this.requiredFields.forEach((field) => {
+        if (formData[field] == null || formData[field].trim() === "") {
+          error = true;
+          errorField=field
+        }
+      });
+      if (error) {
+        this.$emit('errorForm', errorField)
+      } else {
         this.$emit('save', formData); // Emitir el evento para guardar cambios
       }
     },
