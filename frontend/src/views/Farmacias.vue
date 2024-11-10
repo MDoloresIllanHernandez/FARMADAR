@@ -23,7 +23,6 @@
             :detail2="'Dirección: ' + farmacia.direccion" 
             :detail3="'Teléfono: ' + farmacia.telefono"
             :detail4="'Email: ' + farmacia.email" 
-            
             @edit="openEditModal(farmacia)" 
             @delete="openDeleteModal(farmacia)" />
           </div>
@@ -41,7 +40,8 @@
       :farmacias="farmacias"
       @save="addFarmacia"
       @close="closeModalCreate"
-     
+      @errorForm="mostrarError"
+
     />
     <!-- Modal para editar farmacia -->
     <ModalEditar
@@ -51,6 +51,7 @@
       :farmacias="farmacias"
       @save="editFarmacia"
       @close="isModalEditarVisible = false"
+      @errorForm="mostrarError"
       
     />
     <!-- Modal para eliminar farmacia -->
@@ -73,6 +74,7 @@ import apiClient from '../scripts/axios.js';
 import ModalCreate from './../components/modal/modalCreateFarmacias.vue';
 import ModalEditar from './../components/modal/modalEditarFarmacias.vue';
 import ModalDelete from './../components/modal/modalDeleteFarmacias.vue';
+
 
 
 export default {
@@ -107,10 +109,17 @@ export default {
       // Cerrar el modal
       this.isModalCreateVisible = false; 
     },
+    // Método para mostrar un error
+    mostrarError(errorField) {
+      this.$swal.fire({
+          icon: "error",
+          title: `El campo ${errorField} es obligatorio`,
+          showConfirmButton: true,
+          });
+    },
     async searchFarmacias() {
       this.loading = true;
       this.farmacia = [];
-     
       try {
         // Consultar farmacias
         const response = await apiClient.get('/farmacia');
@@ -177,7 +186,7 @@ export default {
           this.isModalEditarVisible = false;
           this.$swal.fire({
               icon: "success",
-              title: "Farmacia modificada correctamente",
+              title: "Farmacia editada correctamente",
               showConfirmButton: false,
               timer: 2000
             });
@@ -201,16 +210,27 @@ export default {
       try {
         const response = await apiClient.delete(`/farmacia?cif=${this.selectedFarmacia.cif}`);
         if (response.data.result === 'ok') {
-          console.log('Farmacia eliminada correctamente:', response.data.farmacia);
+          this.isModalDeleteVisible = false;
+          this.$swal.fire({
+              icon: "success",
+              title: "Farmacia eliminada correctamente",
+              showConfirmButton: false,
+              timer: 2000
+            });
           await this.searchFarmacias(); // Actualizar la lista de farmacias
         }
       } catch (error) {
-        console.error('Error al eliminar la farmacia:', error);
+        this.$swal.fire({
+          icon: "error",
+          title: `Error al eliminar la farmacia: ${error.response?.data?.details}`,
+          showConfirmButton: true,
+          });   
+        await this.searchFarmacias();
       } finally {
         this.loading = false; // Stop loading
       }
-        this.isModalDeleteVisible = false;
-    }
+        //this.isModalDeleteVisible = false;
+    },
   },
 }
 </script>

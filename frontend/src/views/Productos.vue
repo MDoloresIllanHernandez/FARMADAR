@@ -152,11 +152,10 @@ export default {
           });
         }
           this.hasSearched = true;
-        
       } catch (error) {
         console.error('Error al obtener los productos', error);
       } finally {
-      this.loading = false; // Stop loading
+        this.loading = false; // Stop loading
       }
     },      
     // Método para añadir un producto
@@ -177,7 +176,7 @@ export default {
       } catch (error) {
         console.error('Error al añadir el producto:', error);
       } finally {
-      this.loading = false; // Stop loading
+        this.loading = false; // Stop loading
       }
       this.isModalCreateVisible = false;
     },

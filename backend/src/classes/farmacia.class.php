@@ -50,7 +50,7 @@ class Farmacia extends Database
 		if(!isset($data['nombre']) || empty($data['nombre'])){
 			$response = array(
 				'result' => 'error',
-				'details' => 'El campo nombre no puede estar vacío'
+				'details' => 'El campo nombre es obligatorio'
 			);
 
 			Response::result(400, $response);
@@ -68,7 +68,7 @@ class Farmacia extends Database
 		if(count($this->getByParams('cif', $data['cif']))>0){
 			$response = array(
 				'result' => 'error',
-				'details' => 'Ese cliente ya existe en la base de datos'
+				'details' => 'Esa farmacia ya existe en la base de datos'
 			);
 
 			Response::result(400, $response);
