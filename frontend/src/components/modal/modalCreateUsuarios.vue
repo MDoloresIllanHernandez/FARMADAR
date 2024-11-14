@@ -38,14 +38,15 @@ export default {
   data() {
       return {
         itemFields: [
-          { name: "id", label: "Id usuario", type: "number", error: "*Id requerido"},
-          { name: "nombre", label: "Nombre usuario", type: "text", error: "*Nombre requerido" },
+          { name: "nombre", label: "Nombre", type: "text", error: "*Nombre requerido" },
           { name: "username", label: "Username", type: "text", error: "*Username requerido" },
-          { name: "role", label: "Role", type: "text", error: "*Rol requerido" },
+          { name: "password", label: "Password", type: "password", error: "*Password requerida" },
+          { name: "role", label: "Rol", type: "text", error: "*Rol requerido" },
         ],
         dataSelect: [
-          { name: "id_farm", label: "Farmacia", type: "select", error: "*Farmacia requerida", data:this.farmacias },
+        { name: "id_farm", label: "Farmacia", type: "select", error: "*Farmacia requerida", data:this.farmacias },
         ],
+        requiredFields: ["nombre", "username", "password", "role", "id_farm"],
       };
     },
   methods: {
@@ -57,7 +58,21 @@ export default {
       this.$emit('close'); // Emitir el evento para cerrar el modal
     },
     saveChanges(formData) {
-      if (formData.id) {
+      // Este if es para evitar que lo envíe dos veces
+      if(formData.type){
+        return
+      }
+      let error = false;
+      let errorField = "";
+      this.requiredFields.forEach((field) => {
+        if (formData[field] == null || formData[field].trim() === "") {
+          error = true;
+          errorField=field
+        }
+      });
+      if (error) {
+        this.$emit('errorForm', errorField)
+      } else {
         this.$emit('save', formData); // Emitir el evento para guardar cambios
       }
     },

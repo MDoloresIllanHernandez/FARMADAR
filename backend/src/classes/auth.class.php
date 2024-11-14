@@ -50,6 +50,7 @@ class Authentication extends AuthModel
 		}
 
 		$userRole = $result[0]['role'];
+		$id_farm = $result[0]['id_farm'];
 
 		$dataToken = array(
 			'iat' => time(),
@@ -65,7 +66,8 @@ class Authentication extends AuthModel
 
 		return array(
 			'token' => $jwt,
-			'role' => $userRole);
+			'role' => $userRole,
+			'id_farm' => $id_farm);
 	}
 
 	/**

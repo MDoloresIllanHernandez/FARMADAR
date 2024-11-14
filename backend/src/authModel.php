@@ -21,7 +21,7 @@ class AuthModel
 	 */
 	public function login($username, $password)
 	{
-		$query = "SELECT id, nombre, username, role FROM usuario WHERE username = '$username' AND password = '$password'";
+		$query = "SELECT id, nombre, username, id_farm, role FROM usuario WHERE username = '$username' AND password = '$password'";
 
 		$results = $this->connection->query($query);
 

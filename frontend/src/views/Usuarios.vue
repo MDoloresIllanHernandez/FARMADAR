@@ -10,7 +10,10 @@
             placeholder="Introduce el nombre del usuario..."
             class="min-w-0 flex-auto p-2 border border-primary-oscuro rounded" />
           <button @click="searchUsers" class="boton-claro"> Buscar </button>
-          <button v-if="!isUsu" @click="addUser" class="boton-oscuro"> Añadir usuario </button>
+          <button @click="openCreateModal" class="boton-oscuro"> Añadir usuario </button>
+        </div>
+        <div v-if="loading" class="loading-overlay">
+          <div class="spinner"></div>
         </div>
         <div v-if="hasSearched">
           <div v-if="users.length" class="grid div-cards">
@@ -21,6 +24,7 @@
               :detail1="'Username: ' + user.username"
               :detail2="'Farmacia: ' + user.nombre_farmacia"
               :detail3="'Rol: ' + user.role"
+              :detail4="''"
               :data="user"
               @edit="openEditModal(user)"
               @delete="openDeleteModal(user)"
@@ -163,9 +167,9 @@ export default {
       this.loading = true;
       try {
         const response = await apiClient.post('/usuario', {
-          id: formData.id,
           nombre: formData.nombre,
           username: formData.username,
+          password: formData.password,
           role: formData.role,
           id_farm: formData.id_farm
         });

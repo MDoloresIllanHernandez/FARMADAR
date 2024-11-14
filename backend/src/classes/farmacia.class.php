@@ -50,13 +50,13 @@ class Farmacia extends Database
 		if(!isset($data['nombre']) || empty($data['nombre'])){
 			$response = array(
 				'result' => 'error',
-				'details' => 'El campo nombre no puede estar vacío'
+				'details' => 'El campo nombre es obligatorio'
 			);
 
 			Response::result(400, $response);
 			exit;
 		}
-		if(isset($data['telefono']) || empty($data['telefono'])){
+		if(!isset($data['telefono']) || empty($data['telefono'])){
 			$response = array(
 				'result' => 'error',
 				'details' => 'El campo teléfono es obligatorio'
@@ -68,7 +68,7 @@ class Farmacia extends Database
 		if(count($this->getByParams('cif', $data['cif']))>0){
 			$response = array(
 				'result' => 'error',
-				'details' => 'Ese cliente ya existe en la base de datos'
+				'details' => 'Esa farmacia ya existe en la base de datos'
 			);
 
 			Response::result(400, $response);
@@ -144,7 +144,6 @@ class Farmacia extends Database
 	 */
 	public function getByParams($params, $value){
 		
-
 		$clientes = parent::getDB($this->table, array($params=>$value));
 
 		return $clientes;
@@ -168,7 +167,22 @@ class Farmacia extends Database
 				exit;
 			}
 		}
+		$id = null;
+		if($this->getByParams('cif', $params["cif"])){
+			//Recuperamos el id de la farmacia
+			$id = $this->getByParams('cif', $params["cif"])[0]['id'];
+		}
+		
+		//Si existe la farmacia
+		if($id != null){
+			$response = array(
+				'result' => 'error',
+				'details' => 'Esa farmacia ya existe'
+			);
 
+			Response::result(400, $response);
+			exit;
+		}
 		if($this->validate($params)){
 			return parent::insertDB($this->table, $params);
 		}
@@ -177,7 +191,7 @@ class Farmacia extends Database
 	/**
 	 * Método para actualizar un registro en la base de datos, se indica el id del registro que se quiere actualizar
 	 */
-	public function update($id, $params)
+	public function update($cif, $params)
 	{
 		foreach ($params as $key => $parm) {
 			if(!in_array($key, $this->allowedConditions_insert)){
@@ -190,6 +204,18 @@ class Farmacia extends Database
 				Response::result(400, $response);
 				exit;
 			}
+		}
+		//Recuperamos el id de la farmacia
+		$id = $this->getByParams('cif', $cif)[0]['id'];
+		//Si no existe la farmacia
+		if($id==null){
+			$response = array(
+				'result' => 'error',
+				'details' => 'Esa farmacia no existe'
+			);
+
+			Response::result(400, $response);
+			exit;
 		}
 
 		if($this->validateUpdate($params)){
@@ -210,8 +236,21 @@ class Farmacia extends Database
 	/**
 	 * Método para borrar un registro de la base de datos, se indica el id del registro que queremos eliminar
 	 */
-	public function delete($id)
+	public function delete($cif)
 	{
+		//Recuperamos el id de la farmacia
+		$id = $this->getByParams('cif', $cif)[0]['id'];
+		//Si no existe la farmacia
+		if($id==null){
+			$response = array(
+				'result' => 'error',
+				'details' => 'Esa farmacia no existe'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+		
 		$affected_rows = parent::deleteDB($this->table, $id);
 
 		if($affected_rows==0){

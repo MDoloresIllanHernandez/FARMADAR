@@ -45,7 +45,7 @@ export default {
           { name: "id", label: "Id usuario", type: "number", error: "*Id requerido", readonly: true },
           { name: "nombre", label: "Nombre usuario", type: "text", error: "*Nombre requerido" },
           { name: "username", label: "Username", type: "text", error: "*Username requerido" },
-          { name: "role", label: "Role", type: "text", error: "*Rol requerido" },
+          { name: "role", label: "Rol", type: "text", error: "*Rol requerido" },
         ],
         dataSelect: [
           { name: "id_farm", label: "Farmacia", type: "select", error: "*Farmacia requerida", data:this.farmacias, readonly: true },

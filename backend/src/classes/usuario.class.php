@@ -4,6 +4,8 @@
  */
 require_once 'src/response.php';
 require_once 'src/database.php';
+use \Firebase\JWT\JWT;
+
 
 class Usuario extends Database
 {
@@ -12,11 +14,13 @@ class Usuario extends Database
 	 */
 	private $table = 'usuario';
 
+	private $key = 'clave_secreta';
+
+
 	/**
 	 * Array con los campos de la tabla que se pueden usar como filtro para recuperar registros
 	 */
 	private $allowedConditions_get = array(
-		'id',
 		'id_farm',
 		'username',
 	);
@@ -25,12 +29,11 @@ class Usuario extends Database
 	 * Array con los campos de la tabla que se pueden proporcionar para insertar registros
 	 */
 	private $allowedConditions_insert = array(
-		'id',
-		'id_farm',
+		'nombre',
 		'username',
 		'password',
-		'nombre',
-		'rol'
+		'role',
+		'id_farm'
 	);
 
 	/**
@@ -38,15 +41,6 @@ class Usuario extends Database
 	 */
 	private function validate($data){
 		
-		if(!isset($data['id']) || empty($data['id'])){
-			$response = array(
-				'result' => 'error',
-				'details' => 'El campo id es obligatorio'
-			);
-
-			Response::result(400, $response);
-			exit;
-		}
 		if(!isset($data['id_farm']) || empty($data['id_farm'])){
 			$response = array(
 				'result' => 'error',
@@ -130,7 +124,7 @@ class Usuario extends Database
 		if(isset($data['username']) && empty($data['username'])){
 			$response = array(
 				'result' => 'error',
-				'details' => 'El campo nombre no puede estar vacío'
+				'details' => 'El campo username no puede estar vacío'
 			);
 
 			Response::result(400, $response);
@@ -141,7 +135,7 @@ class Usuario extends Database
 		if(isset($data['nombre']) && empty($data['nombre'])){
 			$response = array(
 				'result' => 'error',
-				'details' => 'El campo precio no puede estar vacío'
+				'details' => 'El campo nombre no puede estar vacío'
 			);
 
 			Response::result(400, $response);
@@ -149,10 +143,10 @@ class Usuario extends Database
 		}
 
 		//pendiente controlar que el stock sea positivo
-		if(isset($data['password']) && empty($data['password'])){
+		if(isset($data['role']) && empty($data['role'])){
 			$response = array(
 				'result' => 'error',
-				'details' => 'El campo stock no puede estar vacío'
+				'details' => 'El campo rol no puede estar vacío'
 			);
 
 			Response::result(400, $response);
@@ -195,28 +189,50 @@ class Usuario extends Database
 		return $usuarios;
 	}
 
+	
 	/**
 	 * Método para guardar un registro en la base de datos, recibe como parámetro el JSON con los datos a insertar
 	 */
 	public function insert($params)
 	{
+		// Validar campos permitidos
 		foreach ($params as $key => $param) {
-			if(!in_array($key, $this->allowedConditions_insert)){
+			if (!in_array($key, $this->allowedConditions_insert)) {
 				unset($params[$key]);
 				$response = array(
 					'result' => 'error',
 					'details' => 'Error en la solicitud'
 				);
-	
 				Response::result(400, $response);
 				exit;
 			}
 		}
-
-		if($this->validate($params)){
+	
+		// Codificar el password con hash 'sha256'
+		if (isset($params['password'])) {
+			$params['password'] = hash('sha256', $params['password']);
+		}
+	
+		// Crear el token JWT
+		$dataToken = array(
+			'iat' => time(),
+			'data' => array(
+				'username' => $params['username'],
+				'nombre' => $params['nombre']
+			)
+		);
+		$jwt = JWT::encode($dataToken, $this->key); 
+	
+		// Añadir el token a los parámetros
+		$params['token'] = $jwt;
+	
+		// Validar e insertar en la base de datos
+		if ($this->validate($params)) {
 			return parent::insertDB($this->table, $params);
 		}
 	}
+
+
 
 	/**
 	 * Método para actualizar un registro en la base de datos, se indica el id del registro que se quiere actualizar
@@ -237,7 +253,7 @@ class Usuario extends Database
 		}
 
 		if($this->validateUpdate($params)){
-			$affected_rows = parent::updateProductDB($this->table, $id, $params);
+			$affected_rows = parent::updateDB($this->table, $id, $params);
 
 			if($affected_rows==0){
 				$response = array(

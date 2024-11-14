@@ -72,18 +72,18 @@ switch ($_SERVER['REQUEST_METHOD']) {
 		}
 
 
-		$insert_id = $producto->insert($params);
+		$insert_id = $usuario->insert($params);
 
 		$response = array(
 			'result' => 'ok',
-			'producto' => $params
+			'usuario' => $params
 		);
 
 		Response::result(201, $response);
 		break;
 
 	/**
-	 * Cuando es PUT, comprobamos si la petición lleva el id del producto que hay que actualizar. En caso afirmativo se usa el método update() del modelo.
+	 * Cuando es PUT, comprobamos si la petición lleva el id del usuario que hay que actualizar. En caso afirmativo se usa el método update() del modelo.
 	 */
 	case 'PUT':
 		$params = json_decode(file_get_contents('php://input'), true);
@@ -98,7 +98,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 			exit;
 		}
 
-		$producto->update($_GET['id'], $params);
+		$usuario->update($_GET['id'], $params);
 
 		$response = array(
 			'result' => 'ok'
@@ -121,7 +121,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 			exit;
 		}
 
-		$producto->delete($_GET['id']);
+		$usuario->delete($_GET['id']);
 
 		$response = array(
 			'result' => 'ok'
