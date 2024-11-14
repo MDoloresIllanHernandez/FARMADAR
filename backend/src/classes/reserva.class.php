@@ -1,24 +1,25 @@
 <?php
 /**
- * Clase para el modelo que representa a la tabla "productos".
+ * Clase para el modelo que representa a la tabla "reservas".
  */
 require_once 'src/response.php';
 require_once 'src/database.php';
 
-class Usuario extends Database
+class Reserva extends Database
 {
 	/**
 	 * Atributo que indica la tabla asociada a la clase del modelo
 	 */
-	private $table = 'usuario';
+	private $table = 'reservas';
 
 	/**
 	 * Array con los campos de la tabla que se pueden usar como filtro para recuperar registros
 	 */
 	private $allowedConditions_get = array(
 		'id',
+		'id_prod',
 		'id_farm',
-		'username',
+		'nombre'
 	);
 
 	/**
@@ -26,11 +27,16 @@ class Usuario extends Database
 	 */
 	private $allowedConditions_insert = array(
 		'id',
+		'id_prod',
 		'id_farm',
-		'username',
-		'password',
+		'fecha',
+		'hora_inicio',
+		'hora_fin',
+		'cantidad',
 		'nombre',
-		'rol'
+		'otros_datos',
+		'estado'
+		
 	);
 
 	/**
@@ -56,48 +62,87 @@ class Usuario extends Database
 			Response::result(400, $response);
 			exit;
 		}
+		if(!isset($data['id_prod']) || empty($data['id_prod'])){
+			$response = array(
+				'result' => 'error',
+				'details' => 'El campo id_prod es obligatorio'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+		if(!isset($data['fecha']) || empty($data['fecha'])){
+			$response = array(
+				'result' => 'error',
+				'details' => 'El campo fecha es obligatorio'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+
+		if(!isset($data['hora_inicio']) || empty($data['hora_inicio'])){
+			$response = array(
+				'result' => 'error',
+				'details' => 'El campo hora_inicio es obligatorio'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+
+		if(!isset($data['hora_fin']) || empty($data['hora_fin'])){
+			$response = array(
+				'result' => 'error',
+				'details' => 'El campo hora_fin es obligatorio'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+		
+		//pendiente controlar que la cantidad sea positiva
+		if(!isset($data['cantidad']) || empty($data['cantidad'])){
+			$response = array(
+				'result' => 'error',
+				'details' => 'La cantidad es obligatoria'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+
+
 		if(!isset($data['nombre']) || empty($data['nombre'])){
 			$response = array(
 				'result' => 'error',
-				'details' => 'El campo nombre es obligatorio'
+				'details' => 'El campo datos_cliente es obligatorio'
 			);
 
 			Response::result(400, $response);
 			exit;
 		}
 
-		//pendiente controlar que el precio sea positivo
-		if(!isset($data['username']) || empty($data['username'])){
+		if(!isset($data['otros_datos']) || empty($data['otros_datos'])){
 			$response = array(
 				'result' => 'error',
-				'details' => 'El campo username es obligatorio'
+				'details' => 'El campo otros_datos es obligatorio'
 			);
 
 			Response::result(400, $response);
 			exit;
 		}
 
-		//pendiente controlar que el stock sea positivo
-		if(!isset($data['password']) || empty($data['password'])){
+		if(!isset($data['estado']) || empty($data['estado'])){
 			$response = array(
 				'result' => 'error',
-				'details' => 'El password es obligatorio'
+				'details' => 'El campo estado es obligatorio'
 			);
 
 			Response::result(400, $response);
 			exit;
 		}
 
-		//pendiente controlar que el stock sea positivo
-		if(!isset($data['role']) || empty($data['role'])){
-			$response = array(
-				'result' => 'error',
-				'details' => 'El rol es obligatorio'
-			);
-
-			Response::result(400, $response);
-			exit;
-		}
 		
 		return true;
 	}
@@ -127,37 +172,87 @@ class Usuario extends Database
 			exit;
 		}
 
-		if(isset($data['username']) && empty($data['username'])){
+		if(isset($data['id_prod']) && empty($data['id_prod'])){
 			$response = array(
 				'result' => 'error',
-				'details' => 'El campo nombre no puede estar vacío'
+				'details' => 'El campo id_prod no puede estar vacío'
 			);
 
 			Response::result(400, $response);
 			exit;
 		}
 
-		//pendiente controlar que el precio sea positivo
+		if(isset($data['fecha']) && empty($data['fecha'])){
+			$response = array(
+				'result' => 'error',
+				'details' => 'El campo fecha no puede estar vacío'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+
+		if(isset($data['hora_inicio']) && empty($data['hora_inicio'])){
+			$response = array(
+				'result' => 'error',
+				'details' => 'El campo hora_inicio no puede estar vacío'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+
+		if(isset($data['hora_fin']) && empty($data['hora_fin'])){
+			$response = array(
+				'result' => 'error',
+				'details' => 'El campo hora_fin no puede estar vacío'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+
+		//pendiente controlar que la cantidad sea positiva
+		if(isset($data['cantidad']) && empty($data['cantidad'])){
+			$response = array(
+				'result' => 'error',
+				'details' => 'La cantidad es obligatoria'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+
 		if(isset($data['nombre']) && empty($data['nombre'])){
 			$response = array(
 				'result' => 'error',
-				'details' => 'El campo precio no puede estar vacío'
+				'details' => 'El campo datos_cliente no puede estar vacío'
 			);
 
 			Response::result(400, $response);
 			exit;
 		}
 
-		//pendiente controlar que el stock sea positivo
-		if(isset($data['password']) && empty($data['password'])){
+		if(isset($data['otros_datos']) && empty($data['otros_datos'])){
 			$response = array(
 				'result' => 'error',
-				'details' => 'El campo stock no puede estar vacío'
+				'details' => 'El campo otros_datos no puede estar vacío'
 			);
 
 			Response::result(400, $response);
 			exit;
 		}
+
+		if(isset($data['estado']) && empty($data['estado'])){
+			$response = array(
+				'result' => 'error',
+				'details' => 'El campo estado no puede estar vacío'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+
 		
 		return true;
 	}
@@ -179,9 +274,9 @@ class Usuario extends Database
 			}
 		}
 
-		$usuarios = parent::getDB($this->table, $params);
+		$reservas = parent::getDB($this->table, $params);
 
-		return $usuarios;
+		return $reservas;
 	}
 
 	/**
@@ -190,9 +285,9 @@ class Usuario extends Database
 	public function getByParams($params1, $value1, $params2, $value2 ){
 		
 
-		$usuarios = parent::getDB($this->table, array($params1=>$value1, $params2=>$value2));
+		$reservas = parent::getDB($this->table, array($params1=>$value1, $params2=>$value2));
 
-		return $usuarios;
+		return $reservas;
 	}
 
 	/**

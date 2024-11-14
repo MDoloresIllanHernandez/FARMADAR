@@ -9,7 +9,7 @@
           <input id="productos" v-model="searchQuery" @keyup.enter="searchProducts" type="text"
             placeholder="Introduce el nombre del producto..." />
           <button @click="searchProducts" class="boton-claro"> Buscar</button>
-          <button v-if="!isUsu" @click="addProduct" class="boton-oscuro"> Añadir Producto </button>
+          <button @click="openCreateModal" class="boton-oscuro"> Añadir Producto </button>
           <!-- <button v-if="role=='admin' " @click="addProduct" class="boton-oscuro"> Añadir Producto </button> -->
         </div>
         <div v-if="loading" class="loading-overlay">
@@ -96,13 +96,15 @@ export default {
       selectedProduct: null, // Almacena el producto seleccionado para editar
     };
   },
-  computed: {
-    // Computed property para verificar si el usuario es admin
-    isUsu() {
-      return sessionStorage.getItem('role') == 'usu';
-    }
-  },
-  
+  // created() {
+  //   // Intenta obtener el valor de role desde localStorage cuando se crea el componente
+  //   const storedRole = localStorage.getItem('role');
+  //   if (storedRole) {
+  //     this.role = storedRole; // Asigna el valor si está disponible
+  //   } else {
+  //     this.role = 'defaultRole'; // O establece un valor por defecto si no existe en localStorage
+  //   }
+  // },
   methods: {
     async openEditModal(product) {
       // Copiar el producto para no modificar la referencia original

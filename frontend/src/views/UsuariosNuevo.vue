@@ -29,6 +29,7 @@ export default {
         { name: "nombre", label: "Nombre", type: "text", error: "*Nombre requerido" },
         { name: "username", label: "Nombre de usuario", type: "text", error: "*Nombre de usuario requerido" },
         { name: "password", label: "Contraseña", type: "text", error: "*Contreseña requerida" },
+        { name: "id_farm", label: "Farmacia", type: "text", error: "*Farmacia requerida" },
         { name: "rol", label: "Rol", type: "text", error: "*Rol requerido" },
       ],
     };
