@@ -69,7 +69,7 @@ export default {
     },
     dataSelect: {
       type: Array,
-      required: true,
+      required: false,
     },
   },
   data() {

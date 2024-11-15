@@ -4,7 +4,7 @@
         <div class="relative isolate px-6 pt-14 lg:px-8">
             <div class="mx-auto max-w-6xl py-32 sm:py-32 lg:py-32">
                 <h1> Nueva Reserva</h1>
-                <GenericForm :fields="itemFields" 
+                <GenericForm :fields="itemFields"
                 :initialData="existingItemData" 
                 submitButtonText="Reservar"
                 cancelRoute="Buscador"
@@ -30,25 +30,28 @@ export default {
             farmId: null,
 
             itemFields: [
-                { name: "id_producto", label: "Id del producto", type: "text", readonly: true },
+                { name: "id_prod", label: "Id del producto", type: "text", readonly: true },
                 { name: "id_farm", label: "Id de la farmacia", type: "text", readonly: true },
                 { name: "fecha", label: "Fecha", type: "date", error: "*Fecha requerida" },
                 { name: "hora_inicio", label: "Hora inicio", type: "time", error: "*Hora requerida" },
                 { name: "hora_fin", label: "Hora fin", type: "time", max:"20:00", error: "*Hora requerida" },
                 { name: "cantidad", label: "Cantidad", type: "number", error: "*Cantidad requerida" },
-                { name: "cliente", label: "Datos del cliente(nombre, teléfono)", type: "texarea", error: "*Datos del cliente requerido" },
+                { name: "nombre", label: "Nombre del cliente", type: "text", error: "*Nombre del cliente requerido" },
+                { name: "otros_datos", label: "Datos de contacto (teléfono/email)", type: "textarea", error: "*Datos de contacto requeridos" }
 
             ],
             existingItemData: {
-                id_producto: null,
+                id_prod: null,
                 id_farm: null,
                 fecha: null,
                 hora_inicio: null,
                 hora_fin: null,
                 cantidad: null,
-                cliente: null
+                nombre: null,
+                otros_datos: null,
+                estado: "pendiente"
 
-            }
+            },
         };
     },
     created() {
@@ -69,7 +72,7 @@ export default {
         this.existingItemData.hora_fin = this.calculateEndTime(now);
 
         // Asignar los valores de productId y farmId
-        this.existingItemData.id_producto = this.productId;
+        this.existingItemData.id_prod = this.productId;
         this.existingItemData.id_farm = this.farmId;
     },
     methods: {

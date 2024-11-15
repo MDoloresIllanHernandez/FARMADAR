@@ -10,7 +10,7 @@ require_once 'src/authModel.php';
 require_once 'src/response.php';
 use Firebase\JWT\JWT;
 
-class Authentication extends AuthModel
+class Authentication extends AuthModel 
 {
 	/**
 	 * Tabla donde estarán los usuarios
@@ -49,6 +49,9 @@ class Authentication extends AuthModel
 			exit;
 		}
 
+		$userRole = $result[0]['role'];
+		$id_farm = $result[0]['id_farm'];
+
 		$dataToken = array(
 			'iat' => time(),
 			'data' => array(
@@ -61,7 +64,10 @@ class Authentication extends AuthModel
 
 		parent::update($result[0]['id'], $jwt);
 
-		return array('token' => $jwt, 'user' => $result[0]);
+		return array(
+			'token' => $jwt,
+			'role' => $userRole,
+			'id_farm' => $id_farm);
 	}
 
 	/**
@@ -105,4 +111,6 @@ class Authentication extends AuthModel
             exit;
         }
     }
+
+
 }

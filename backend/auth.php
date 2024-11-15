@@ -28,14 +28,15 @@ switch ($_SERVER['REQUEST_METHOD']) {
 	case 'POST':
 		$user = json_decode(file_get_contents('php://input'), true);
 
-		$userToken = $auth->signIn($user);
+		$authResult = $auth->signIn($user);
 
-		if ($userToken) {
+		if ($authResult && isset($authResult['token']) && isset($authResult['role'])) {
             // Si la autenticación es exitosa
             $response = array(
                 'result' => 'ok',
-                'token' => $userToken['token'],
-                'user' => $userToken['user'] 
+                'token' => $authResult['token'],
+                'role' => $authResult['role'],
+                'id_farm' => $authResult['id_farm']
             );
             Response::result(201, $response);
         } else {
