@@ -43,16 +43,33 @@ switch ($_SERVER['REQUEST_METHOD']) {
 	 */
 	case 'GET':
 		$params = $_GET;
-		
-		$usuarios = $usuario->get($params);
-
+	
+		// Verificar si el rol y el id_farm vienen como parámetros
+		$role = isset($params['role']) ? $params['role'] : null;
+		$id_farm = isset($params['id_farm']) ? $params['id_farm'] : null;
+	
+		// Filtrar usuarios según el rol
+		if ($role === 'superadmin') {
+			$usuarios = $usuario->get([]); // Obtener todos los usuarios
+		} elseif ($role && $id_farm) {
+			// Filtrar usuarios de la misma farmacia
+			$usuarios = $usuario->get(['id_farm' => $id_farm]);
+		} else {
+			// Si no hay rol válido, devolver error
+			$response = array(
+				'result' => 'error',
+				'details' => 'No autorizado'
+			);
+			Response::result(403, $response);
+			exit;
+		}
+	
 		$response = array(
 			'result' => 'ok',
 			'usuarios' => $usuarios
 		);
-
+	
 		Response::result(200, $response);
-
 		break;
 		
 	/**

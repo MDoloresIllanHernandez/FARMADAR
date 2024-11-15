@@ -134,34 +134,44 @@ export default {
     },
     // Método para buscar usuarios
     async searchUsers() {
-      this.loading = true;
-      this.users = []; // Limpiar la lista de usuarios
-      try {
-        //Consultar usuarios
-        const response = await apiClient.get('/usuario');
-        if (response.data.result == 'ok' && response.data.usuarios) {
-          this.users = response.data.usuarios.filter(user => 
-            user.nombre.toLowerCase().includes(this.searchQuery.toLowerCase())
-          );
-        //Consultar farmacias
-        await this.searchFarmacias(); 
-          // Asociar el nombre de la farmacia al usuario correspondiente
-          this.users = this.users.map(user => {
-            const farmacia = this.farmacias.find(f => f.id === user.id_farm);
-            return {
-              ...user,
-              nombre_farmacia: farmacia ? farmacia.nombre : 'Desconocido'
-            };
-          });
-        }
-          this.hasSearched = true;
-        
-      } catch (error) {
-        console.error('Error al obtener los usuarios', error);
-      } finally {
-      this.loading = false; // Stop loading
-      }
-    },      
+  this.loading = true;
+  this.users = []; // Limpiar la lista de usuarios
+
+  try {
+    // Recuperar role y id_farm desde sessionStorage
+    const role = sessionStorage.getItem('role');
+    const idFarm = sessionStorage.getItem('id_farm');
+
+    // Consultar usuarios enviando role e id_farm como parámetros
+    const response = await apiClient.get('/usuario', {
+      params: { role, id_farm: idFarm },
+    });
+
+    if (response.data.result === 'ok' && response.data.usuarios) {
+      this.users = response.data.usuarios.filter(user =>
+        user.nombre.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+
+      // Consultar farmacias
+      await this.searchFarmacias();
+
+      // Asociar el nombre de la farmacia al usuario correspondiente
+      this.users = this.users.map(user => {
+        const farmacia = this.farmacias.find(f => f.id === user.id_farm);
+        return {
+          ...user,
+          nombre_farmacia: farmacia ? farmacia.nombre : 'Desconocido',
+        };
+      });
+    }
+
+    this.hasSearched = true;
+  } catch (error) {
+    console.error('Error al obtener los usuarios', error);
+  } finally {
+    this.loading = false; // Stop loading
+  }
+},      
     // Método para añadir un usuario
     async addUser(formData) {
       this.loading = true;

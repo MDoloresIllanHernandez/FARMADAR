@@ -159,22 +159,14 @@ class Usuario extends Database
 	/**
 	 * Método para recuperar registros, pudiendo indicar algunos filtros 
 	 */
-	public function get($params){
+	public function get($params) {
 		foreach ($params as $key => $param) {
-			if(!in_array($key, $this->allowedConditions_get)){
+			if (!in_array($key, $this->allowedConditions_get)) {
 				unset($params[$key]);
-				$response = array(
-					'result' => 'error',
-					'details' => 'Error en la solicitud'
-				);
-	
-				Response::result(400, $response);
-				exit;
 			}
 		}
-
+	
 		$usuarios = parent::getDB($this->table, $params);
-
 		return $usuarios;
 	}
 

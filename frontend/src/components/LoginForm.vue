@@ -39,7 +39,7 @@ export default {
 
           sessionStorage.setItem('role', responseData.role);
 
-          sessionStorage.setItem('farmacia', responseData.id_farm);
+          sessionStorage.setItem('id_farm', responseData.id_farm);
 
           this.$router.push('/inicio');
         } else {
