@@ -39,7 +39,7 @@ export default {
       return {
         itemFields: [
           { name: "id", label: "Id producto", type: "number", error: "*Id requerido"},
-          { name: "producto", label: "Nombre producto", type: "text", error: "*Nombre requerido" },
+          { name: "producto", label: "Nombre", type: "text", error: "*Nombre requerido" },
           { name: "precio", label: "Precio", type: "text", error: "*Precio requerida" },
           { name: "stock", label: "Stock", type: "number", error: "*Stock requerido" },
         ],
