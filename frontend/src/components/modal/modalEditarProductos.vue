@@ -12,6 +12,7 @@
             cancelRoute="Productos"
             @submit="handleItemSubmit"
             @cancel="closeModal"
+            @error="errorForm"
           />
         </div>
       </div>
@@ -50,14 +51,32 @@ export default {
         dataSelect: [
           { name: "id_farm", label: "Farmacia", type: "select", error: "*Farmacia requerida", data:this.farmacias, readonly: true },
         ],
+        requiredFields: ["id", "nombre", "precio", "stock", "id_farm"],
       };
   },
   methods: {
+    errorForm(error) {
+      console.log("error", error);
+    },
     closeModal() {
       this.$emit('close'); // Emitir el evento para cerrar el modal
     },
     handleItemSubmit(formData) {
-      if (formData.id) {
+      // Este if es para evitar que lo envíe dos veces
+      if(formData.type) {
+        return 
+      }
+      let error = false;
+      let errorField = "";
+      this.requiredFields.forEach((field) => {
+        if (formData[field] == null || (typeof(formData[field])!='number' && formData[field].trim() === "")) {
+          error = true;
+          errorField=field
+        }
+      });
+      if (error) {
+        this.$emit('errorForm', errorField)
+      } else {
         this.$emit('save', formData); // Emitir el evento para guardar cambios
       }
     },
