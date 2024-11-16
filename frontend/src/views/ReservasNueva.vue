@@ -69,7 +69,9 @@ export default {
     methods: {
         // Método para manejar el envío del formulario y añadir la reserva
         async handleSubmit(formData) {
-            console.log(formData);
+           if (formData.isTrusted) {
+                return;
+            }
             try {
                 const response = await apiClient.post('/reserva', formData)
                 if (response.data.result === 'ok') {
