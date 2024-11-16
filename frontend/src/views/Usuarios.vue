@@ -10,7 +10,7 @@
             placeholder="Introduce el nombre del usuario..."
             class="min-w-0 flex-auto p-2 border border-primary-oscuro rounded" />
           <button @click="searchUsers" class="boton-claro"> Buscar </button>
-          <button @click="openCreateModal" class="boton-oscuro"> Añadir usuario </button>
+          <button v-if=!isUsu() @click="openCreateModal" class="boton-oscuro"> Añadir usuario </button>
         </div>
         <div v-if="loading" class="loading-overlay">
           <div class="spinner"></div>
@@ -83,7 +83,7 @@ export default {
 
   data() {
     return {
-      //role : null,
+      role : null,
       searchQuery: '',
       users: [],
       farmacias: [],
@@ -95,7 +95,9 @@ export default {
       selectedUser: null, // Almacena el usuario seleccionado para editar
     };
   },
-  
+  created() {
+    this.role = sessionStorage.getItem('role'); // Recuperar el rol desde sessionStorage
+  },
   methods: {
     async openEditModal(user) {
       // Copiar el usuario para no modificar la referencia original
