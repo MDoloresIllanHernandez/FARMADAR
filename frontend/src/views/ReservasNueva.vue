@@ -4,11 +4,8 @@
         <div class="relative isolate px-6 pt-14 lg:px-8">
             <div class="mx-auto max-w-6xl py-32 sm:py-32 lg:py-32">
                 <h1> Nueva Reserva</h1>
-                <GenericForm :fields="itemFields"
-                :initialData="existingItemData" 
-                submitButtonText="Reservar"
-                cancelRoute="Buscador"
-                @submit="handleItemSubmit" />
+                <GenericForm :fields="itemFields" :initialData="existingItemData" submitButtonText="Reservar"
+                    cancelRoute="Buscador" @submit="handleSubmit" />
             </div>
         </div>
 
@@ -20,44 +17,41 @@
 import Navbar from './../components/Navbar.vue';
 import Footer from './../components/Footer.vue';
 import GenericForm from './../components/GenericForm.vue';
+import apiClient from '../scripts/axios.js';
 
 export default {
 
     components: { Navbar, Footer, GenericForm },
     data() {
         return {
-            productId: null,
-            farmId: null,
-
+            existingItemData: {},
             itemFields: [
-                { name: "id_prod", label: "Id del producto", type: "text", readonly: true },
-                { name: "id_farm", label: "Id de la farmacia", type: "text", readonly: true },
+                { name: "id_prod", label: "Producto", type: "text", readonly: true },
+                { name: "id_farm", label: "Farmacia", type: "number", readonly: true },
+                { name: "farm_origen", label: "Farmacia origen", type: "number", },
                 { name: "fecha", label: "Fecha", type: "date", error: "*Fecha requerida" },
                 { name: "hora_inicio", label: "Hora inicio", type: "time", error: "*Hora requerida" },
-                { name: "hora_fin", label: "Hora fin", type: "time", max:"20:00", error: "*Hora requerida" },
+                { name: "hora_fin", label: "Hora fin", type: "time", max: "20:00", error: "*Hora requerida" },
                 { name: "cantidad", label: "Cantidad", type: "number", error: "*Cantidad requerida" },
                 { name: "nombre", label: "Nombre del cliente", type: "text", error: "*Nombre del cliente requerido" },
-                { name: "otros_datos", label: "Datos de contacto (teléfono/email)", type: "textarea", error: "*Datos de contacto requeridos" }
+                { name: "otros_datos", label: "Datos de contacto (teléfono/email)", type: "textarea", error: "*Datos de contacto requeridos" },
+                { name: "estado", label: "Estado", type: "text", readonly: true, value: "pendiente" },
 
             ],
-            existingItemData: {
-                id_prod: null,
-                id_farm: null,
-                fecha: null,
-                hora_inicio: null,
-                hora_fin: null,
-                cantidad: null,
-                nombre: null,
-                otros_datos: null,
-                estado: "pendiente"
-
-            },
         };
+
     },
     created() {
         // Obtener los parámetros de la URL
         this.productId = this.$route.params.productId;
         this.farmId = this.$route.params.farmId;
+
+        // Crear un objeto con los datos de la reserva
+        this.existingItemData = {
+            id_prod: this.productId,
+            id_farm: this.farmId,
+            estado: 'pendiente'
+        };
 
         // Establecer la fecha actual
         const today = new Date().toISOString().split('T')[0];
@@ -71,14 +65,20 @@ export default {
         //Establecer la hora final
         this.existingItemData.hora_fin = this.calculateEndTime(now);
 
-        // Asignar los valores de productId y farmId
-        this.existingItemData.id_prod = this.productId;
-        this.existingItemData.id_farm = this.farmId;
     },
     methods: {
-        handleItemSubmit(formData) {
-            // Lógica para manejar el envío del formulario de producto
-            console.log("Producto enviado:", formData);
+        // Método para manejar el envío del formulario y añadir la reserva
+        async handleSubmit(formData) {
+            console.log(formData);
+            try {
+                const response = await apiClient.post('/reserva', formData)
+                if (response.data.result === 'ok') {
+                    console.log('Reserva añadida correctamente');
+                    this.$router.push('/Reservas');
+                }
+            } catch (error) {
+                console.error('Error al añadir la reserva:', error);
+            }
         },
         // Método para calcular la hora final, 2 horas después de la hora de inicio y antes de las 20:00
         calculateEndTime(startTime) {
@@ -96,8 +96,8 @@ export default {
         }
 
 
-
     }
+
 };
 
 </script>

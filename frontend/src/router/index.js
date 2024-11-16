@@ -5,19 +5,12 @@ const routes = [
   { path: '/inicio', component: () => import('../views/Inicio.vue')},
   { path: '/buscador-productos', name:'Buscador', component: () => import('../views/BuscadorProductos.vue') },
   { path: '/farmacias', name:'Farmacias', component: () => import('../views/Farmacias.vue') },
-  { path: '/clientes', component: () => import('../views/Clientes.vue')},
   { path: '/productos', name:'Productos', component: () => import('../views/Productos.vue') },
   { path: '/reservas', name:'Reservas', component: () => import('../views/Reservas.vue') },
   { path: '/cerrar-sesion', component: () => import('../views/CerrarSesion.vue') },
   { path: '/:pathMatch(.*)*', component: () => import('../views/Login.vue') },
   { path: '/reservas/nueva/:productId/:farmId', name: 'Reserva', component: () => import('../views/ReservasNueva.vue') },
-  //{ path: '/productos/nuevo', name: 'ProductosNuevo', component: () => import('../views/ProductosNuevo.vue')},
-  { path: '/farmacias/nuevo', name: 'FarmaciasNuevo', component: () => import('../views/FarmaciasNuevo.vue')},
-  //{ path: '/productos/editar/:id', name: 'ProductosEditar', component: () => import('../views/ProductosEditar.vue')},
-  { path: '/farmacias/editar/:id', name: 'FarmaciasEditar', component: () => import('../views/FarmaciasEditar.vue')},
   { path: '/usuarios', name: 'Usuarios', component: () => import('../views/Usuarios.vue')},
-  { path: '/usuarios/nuevo', name: 'UsuariosNuevo', component: () => import('../views/UsuariosNuevo.vue')},
-  { path: '/usuarios/editar/:id', name: 'UsuariosEditar', component: () => import('../views/UsuariosEditar.vue')},
 ];
 
 const router = createRouter({

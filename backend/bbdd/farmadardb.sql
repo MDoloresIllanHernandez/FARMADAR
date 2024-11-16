@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 15-11-2024 a las 16:59:24
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Host: 127.0.0.1
+-- Generation Time: Nov 16, 2024 at 10:36 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,36 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `farmadardb`
+-- Database: `farmadardb`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `clientes`
---
-
-CREATE TABLE `clientes` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(255) NOT NULL,
-  `email` varchar(255) DEFAULT NULL,
-  `telefono` varchar(20) NOT NULL,
-  `dni` varchar(9) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `clientes`
---
-
-INSERT INTO `clientes` (`id`, `nombre`, `email`, `telefono`, `dni`) VALUES
-(1, 'Pepe', 'pepe@gmail.com', '600000000', '45236987J'),
-(2, 'Marta', 'marta@gmail.com', '636448823', '27339861H'),
-(3, 'Antonio', 'antonio@gmail.com', '666122155', '74601274T');
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `farmacias`
+-- Table structure for table `farmacias`
 --
 
 CREATE TABLE `farmacias` (
@@ -60,11 +37,11 @@ CREATE TABLE `farmacias` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `farmacias`
+-- Dumping data for table `farmacias`
 --
 
 INSERT INTO `farmacias` (`cif`, `nombre`, `direccion`, `telefono`, `email`, `id`) VALUES
-('B30785629', 'Farmacia La Merced', 'Calle Ceuta, 2, 30003 Murcia', '968239428', 'lamerced@gmail.com', 1),
+('B30785629', 'Farmacia La Merced', 'Calle Ceuta, 2, 30003 Murcia', '968239428', 'farmacialamerced@gmail.com', 1),
 ('B73669911', 'Farmacia Catedral', 'Calle Traperia, 1, 30001 Murcia', '968212829', 'catedral@gmail.com', 2),
 ('B30884526', 'Farmacia Vistabella', 'Plz. de los Patos, 5, 30003 Murcia', '968258523', 'vistabella@gmail.com', 3),
 ('B74962244', 'Farmacia Puxmarina', 'Plaza Puxmarina, 5, 30004 Murcia', '968213226', 'puxmarina@gmail.com', 4);
@@ -72,7 +49,7 @@ INSERT INTO `farmacias` (`cif`, `nombre`, `direccion`, `telefono`, `email`, `id`
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `productos`
+-- Table structure for table `productos`
 --
 
 CREATE TABLE `productos` (
@@ -84,51 +61,47 @@ CREATE TABLE `productos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `productos`
+-- Dumping data for table `productos`
 --
 
 INSERT INTO `productos` (`id`, `id_farm`, `nombre`, `precio`, `stock`) VALUES
-('300000', 1, 'Cañita', 4.00, 5),
 ('30001234', 1, 'Paracetamol', 2.36, 5),
-('30001234', 3, 'Paracetamol', 1.50, 20),
-('30004747', 2, 'Amoxicilina', 4.50, 5),
-('30005678', 2, 'Aspirina', 3.50, 9),
+('30001234', 3, 'Paracetamol', 1.50, 2),
+('30005678', 2, 'Aspirina', 3.50, 8),
 ('30005678', 4, 'Aspirina', 3.40, 7),
 ('30007732', 3, 'Ibuprofeno', 4.70, 20);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `reservas`
+-- Table structure for table `reservas`
 --
 
 CREATE TABLE `reservas` (
-  `id` varchar(50) NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_prod` varchar(50) NOT NULL,
   `id_farm` int(11) NOT NULL,
-  `id_cliente` int(11) NOT NULL,
+  `farm_origen` int(11) NOT NULL,
   `fecha` date NOT NULL,
-  `hora_inicio` time DEFAULT NULL,
-  `hora_fin` time DEFAULT NULL,
-  `estado` varchar(50) DEFAULT NULL
+  `hora_inicio` time NOT NULL,
+  `hora_fin` time NOT NULL,
+  `cantidad` int(11) NOT NULL,
+  `nombre` varchar(255) NOT NULL,
+  `otros_datos` varchar(255) NOT NULL,
+  `estado` enum('pendiente','confirmada','cancelada','') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `reservas`
+--
+
+INSERT INTO `reservas` (`id`, `id_prod`, `id_farm`, `farm_origen`, `fecha`, `hora_inicio`, `hora_fin`, `cantidad`, `nombre`, `otros_datos`, `estado`) VALUES
+(1, '30001234', 1, 2, '2024-11-10', '10:00:00', '12:00:00', 5, 'Pepito', 'Teléfono: 666 666 666', 'pendiente');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `reserva_items`
---
-
-CREATE TABLE `reserva_items` (
-  `id` varchar(50) NOT NULL,
-  `id_reserva` varchar(50) NOT NULL,
-  `id_produc` varchar(50) NOT NULL,
-  `cantidad` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `usuario`
+-- Table structure for table `usuario`
 --
 
 CREATE TABLE `usuario` (
@@ -142,7 +115,7 @@ CREATE TABLE `usuario` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
--- Volcado de datos para la tabla `usuario`
+-- Dumping data for table `usuario`
 --
 
 INSERT INTO `usuario` (`id`, `id_farm`, `username`, `password`, `token`, `nombre`, `role`) VALUES
@@ -152,144 +125,76 @@ INSERT INTO `usuario` (`id`, `id_farm`, `username`, `password`, `token`, `nombre
 (207, 2, 'admincatedral', '5003f9b63ba86a823794c26e0b6ba90be1340968091fa40b5e0ff1c729ed4637', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzE2ODYyMTMsImRhdGEiOnsidXNlcm5hbWUiOiJhZG1pbmNhdGVkcmFsIiwibm9tYnJlIjoiRmFybWFjXHUwMGU5dXRpY28gQ2F0ZWRyYWwifX0.wfcbjFSUjPzMmKiXKOpZATnI-REK7Uk_iYTUDhb', 'Farmacéutico Catedral', 'admin'),
 (208, 2, 'usucatedral', '5003f9b63ba86a823794c26e0b6ba90be1340968091fa40b5e0ff1c729ed4637', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzE2ODYyMzgsImRhdGEiOnsidXNlcm5hbWUiOiJ1c3VjYXRlZHJhbCIsIm5vbWJyZSI6IkRlcGVuZGllbnRlIENhdGVkcmFsIn19.EgTpA1XiuRv9hywoNNfxZFtk0N41ywhmW53TOPPzsfM', 'Dependiente Catedral', 'usu');
 
--- --------------------------------------------------------
-
 --
--- Estructura de tabla para la tabla `ventas`
---
-
-CREATE TABLE `ventas` (
-  `id` varchar(50) NOT NULL,
-  `id_cliente` varchar(50) NOT NULL,
-  `total` float(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `venta_items`
---
-
-CREATE TABLE `venta_items` (
-  `id` varchar(50) NOT NULL,
-  `id_venta` varchar(50) NOT NULL,
-  `id_produc` varchar(50) NOT NULL,
-  `cantidad` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Índices para tablas volcadas
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `clientes`
---
-ALTER TABLE `clientes`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indices de la tabla `farmacias`
+-- Indexes for table `farmacias`
 --
 ALTER TABLE `farmacias`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `productos`
+-- Indexes for table `productos`
 --
 ALTER TABLE `productos`
   ADD PRIMARY KEY (`id`,`id_farm`),
-  ADD KEY `id_farm` (`id_farm`) USING BTREE;
+  ADD KEY `id_farm` (`id_farm`) USING BTREE,
+  ADD KEY `idx_productos_id_idfarm` (`id`,`id_farm`);
 
 --
--- Indices de la tabla `reservas`
+-- Indexes for table `reservas`
 --
 ALTER TABLE `reservas`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `reservas_ibfk_2` (`id_cliente`),
-  ADD KEY `reservas_ibfk_1` (`id_farm`);
+  ADD KEY `fk_reservas_productos` (`id_prod`,`id_farm`),
+  ADD KEY `fk_farm_origen` (`farm_origen`);
 
 --
--- Indices de la tabla `reserva_items`
---
-ALTER TABLE `reserva_items`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_reserva` (`id_reserva`),
-  ADD KEY `id_produc` (`id_produc`);
-
---
--- Indices de la tabla `usuario`
+-- Indexes for table `usuario`
 --
 ALTER TABLE `usuario`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_farm` (`id_farm`);
+  ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `ventas`
---
-ALTER TABLE `ventas`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_cliente` (`id_cliente`);
-
---
--- Indices de la tabla `venta_items`
---
-ALTER TABLE `venta_items`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_venta` (`id_venta`),
-  ADD KEY `id_produc` (`id_produc`);
-
---
--- AUTO_INCREMENT de las tablas volcadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `clientes`
---
-ALTER TABLE `clientes`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
-
---
--- AUTO_INCREMENT de la tabla `farmacias`
+-- AUTO_INCREMENT for table `farmacias`
 --
 ALTER TABLE `farmacias`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT de la tabla `usuario`
+-- AUTO_INCREMENT for table `reservas`
+--
+ALTER TABLE `reservas`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `usuario`
 --
 ALTER TABLE `usuario`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=209;
 
 --
--- Restricciones para tablas volcadas
+-- Constraints for dumped tables
 --
 
 --
--- Filtros para la tabla `productos`
+-- Constraints for table `productos`
 --
 ALTER TABLE `productos`
   ADD CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`id_farm`) REFERENCES `farmacias` (`id`);
 
 --
--- Filtros para la tabla `reservas`
+-- Constraints for table `reservas`
 --
 ALTER TABLE `reservas`
-  ADD CONSTRAINT `reservas_ibfk_1` FOREIGN KEY (`id_farm`) REFERENCES `farmacias` (`id`),
-  ADD CONSTRAINT `reservas_ibfk_2` FOREIGN KEY (`id_cliente`) REFERENCES `clientes` (`id`);
-
---
--- Filtros para la tabla `reserva_items`
---
-ALTER TABLE `reserva_items`
-  ADD CONSTRAINT `reserva_items_ibfk_1` FOREIGN KEY (`id_reserva`) REFERENCES `reservas` (`id`),
-  ADD CONSTRAINT `reserva_items_ibfk_2` FOREIGN KEY (`id_produc`) REFERENCES `productos` (`id`);
-
---
--- Filtros para la tabla `venta_items`
---
-ALTER TABLE `venta_items`
-  ADD CONSTRAINT `venta_items_ibfk_1` FOREIGN KEY (`id_venta`) REFERENCES `ventas` (`id`),
-  ADD CONSTRAINT `venta_items_ibfk_2` FOREIGN KEY (`id_produc`) REFERENCES `productos` (`id`);
+  ADD CONSTRAINT `fk_farm_origen` FOREIGN KEY (`farm_origen`) REFERENCES `farmacias` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `fk_reservas_productos` FOREIGN KEY (`id_prod`,`id_farm`) REFERENCES `productos` (`id`, `id_farm`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
