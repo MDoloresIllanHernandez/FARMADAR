@@ -8,15 +8,24 @@
 
     <!-- Botones de acción -->
     <div class="flex gap-2 mt-4">
-      <button @click="editItem" class="boton-claro"> Editar </button>
-      <button @click="deleteItem" class="boton-oscuro"> Eliminar </button>
+      <button v-if="showEdit()" @click="editItem" class="boton-claro"> Editar </button>
+      <button v-if="showDelete()" @click="deleteItem" class="boton-oscuro"> Eliminar </button>
     </div>
   </div>
 </template>
 
 <script>
 export default {
+  data() {
+    return {
+      role: sessionStorage.getItem('role')
+    };
+  },
   props: {
+    calledFrom: {
+      type: String,
+      required: true
+    },
     title: {
       type: String,
       required: true
@@ -43,6 +52,18 @@ export default {
     }
   },
   methods: {
+    showEdit(){
+      if(this.calledFrom=='Farmacias' && this.role=='usu' ){
+        return false;
+      }
+      return true;
+    },
+    showDelete(){
+      if(this.calledFrom=='Farmacias' && (this.role=='usu' ||this.role=='admin')  ){
+        return false;
+      }
+      return true;
+    },
     editItem() {
       this.$emit('edit', this.data);
     },

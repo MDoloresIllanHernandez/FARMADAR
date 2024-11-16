@@ -43,8 +43,8 @@ export default {
   data() {
       return {
         itemFields: [
-          { name: "cif", label: "CIF", type: "text", error: "*CIF requerido" },
-          { name: "nombre", label: "Nombre", type: "text", error: "*Nombre requerido" },
+          { name: "cif", label: "CIF", type: "text", readonly: true, error: "*CIF requerido" },
+          { name: "nombre", label: "Nombre", type: "text",  error: "*Nombre requerido" },
           { name: "direccion", label: "Dirección", type: "text", error: "*Dirección requerida" },
           { name: "telefono", label: "Teléfono", type: "tel", error: "*Teléfono requerido" },
           { name: "email", label: "Email", type: "email", error: "*Email requerido" },

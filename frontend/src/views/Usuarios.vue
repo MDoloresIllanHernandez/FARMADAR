@@ -10,7 +10,7 @@
             placeholder="Introduce el nombre del usuario..."
             class="min-w-0 flex-auto p-2 border border-primary-oscuro rounded" />
           <button @click="searchUsers" class="boton-claro"> Buscar </button>
-          <button @click="openCreateModal" class="boton-oscuro"> Añadir usuario </button>
+          <button v-if="showAdd()" @click="openCreateModal" class="boton-oscuro"> Añadir usuario </button>
         </div>
         <div v-if="loading" class="loading-overlay">
           <div class="spinner"></div>
@@ -19,6 +19,7 @@
           <div v-if="users.length" class="grid div-cards">
             <GenericCard
               v-for="user in users"
+              :calledFrom="'Usuarios'"
               :key="user.id"
               :title="user.nombre"
               :detail1="'Username: ' + user.username"
@@ -83,7 +84,7 @@ export default {
 
   data() {
     return {
-      //role : null,
+      role: sessionStorage.getItem('role'),
       searchQuery: '',
       users: [],
       farmacias: [],
@@ -97,6 +98,12 @@ export default {
   },
   
   methods: {
+    showAdd(){
+      if(this.role=='usu' ){
+        return false;
+      }
+      return true;
+    },
     async openEditModal(user) {
       // Copiar el usuario para no modificar la referencia original
       this.selectedUser = { ...user }; 

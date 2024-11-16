@@ -9,7 +9,7 @@
           <input id="farmacias" v-model="searchQuery" @keyup.enter="searchFarmacias" type="text"
             placeholder="Introduce el nombre de la farmacia..." />
           <button @click="searchFarmacias" class="boton-claro"> Buscar </button>
-          <button @click="openCreateModal" class="boton-oscuro"> Añadir Farmacia </button>
+          <button v-if="showAdd()" @click="openCreateModal" class="boton-oscuro"> Añadir Farmacia </button>
         </div>
         <div v-if="loading" class="loading-overlay">
           <div class="spinner"></div>
@@ -17,6 +17,7 @@
         <div v-if="hasSearched">
           <div v-if="farmacias.length" class="grid div-cards">
             <GenericCard v-for="farmacia in farmacias" 
+            :calledFrom="'Farmacias'"
             :key="farmacia.id" 
             :title="farmacia.nombre"
             :detail1="'CIF: ' + farmacia.cif" :data="farmacia"
@@ -75,14 +76,13 @@ import ModalCreate from './../components/modal/modalCreateFarmacias.vue';
 import ModalEditar from './../components/modal/modalEditarFarmacias.vue';
 import ModalDelete from './../components/modal/modalDeleteFarmacias.vue';
 
-
-
 export default {
   components: {
     Navbar, Footer, GenericCard, ModalCreate, ModalEditar, ModalDelete },
   
   data() {
     return {
+      role: sessionStorage.getItem('role'),
       searchQuery: '',
       farmacias: [],
       hasSearched: false,
@@ -90,10 +90,16 @@ export default {
       isModalCreateVisible: false,
       isModalEditarVisible: false,
       isModalDeleteVisible: false,
-      selectedFarmacia: null,
+      selectedFarmacia: null, // Almacena la farmacia seleccionada
     };
   },
   methods: {
+    showAdd(){
+      if(this.role=='usu' || this.role=='admin' ){
+        return false;
+      }
+      return true;
+    },
     async openCreateModal() {
       this.isModalCreateVisible = true;
     },
@@ -105,8 +111,8 @@ export default {
       this.selectedFarmacia = farmacia;
       this.isModalDeleteVisible = true;
     },
+    // Método para cerrar el modal de crear
     closeModalCreate() {
-      // Cerrar el modal
       this.isModalCreateVisible = false; 
     },
     // Método para mostrar un error
@@ -117,6 +123,7 @@ export default {
           showConfirmButton: true,
           });
     },
+    // Método para buscar farmacias
     async searchFarmacias() {
       this.loading = true;
       this.farmacia = [];
@@ -128,7 +135,6 @@ export default {
             farmacia.nombre.toLowerCase().includes(this.searchQuery.toLowerCase())
           );
           this.hasSearched = true;
-          
         } else {
           console.error('Error en la respuesta de la API:', response.data);
         }

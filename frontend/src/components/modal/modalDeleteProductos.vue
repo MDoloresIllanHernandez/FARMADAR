@@ -59,7 +59,7 @@
   }
   
   .boton-oscuro {
-    background-color: #555;
+    background-color: bg-primary-violeta;
     color: white;
     padding: 8px 16px;
     border-radius: 4px;
