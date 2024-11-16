@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1
--- Generation Time: Nov 09, 2024 at 01:09 PM
--- Server version: 10.4.32-MariaDB
--- PHP Version: 8.2.12
+-- Servidor: 127.0.0.1
+-- Tiempo de generación: 15-11-2024 a las 16:59:24
+-- Versión del servidor: 10.4.32-MariaDB
+-- Versión de PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -65,9 +65,11 @@ CREATE TABLE `productos` (
 --
 
 INSERT INTO `productos` (`id`, `id_farm`, `nombre`, `precio`, `stock`) VALUES
+('300000', 1, 'Cañita', 4.00, 5),
 ('30001234', 1, 'Paracetamol', 2.36, 5),
-('30001234', 3, 'Paracetamol', 1.50, 2),
-('30005678', 2, 'Aspirina', 3.50, 8),
+('30001234', 3, 'Paracetamol', 1.50, 20),
+('30004747', 2, 'Amoxicilina', 4.50, 5),
+('30005678', 2, 'Aspirina', 3.50, 9),
 ('30005678', 4, 'Aspirina', 3.40, 7),
 ('30007732', 3, 'Ibuprofeno', 4.70, 20);
 
@@ -105,19 +107,26 @@ INSERT INTO `reservas` (`id`, `id_prod`, `id_farm`, `fecha`, `hora_inicio`, `hor
 
 CREATE TABLE `usuario` (
   `id` int(11) NOT NULL,
+  `id_farm` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` varchar(200) NOT NULL,
   `token` varchar(200) NOT NULL,
   `nombre` varchar(100) NOT NULL,
-  `disponible` tinyint(1) NOT NULL DEFAULT 1
+  `role` enum('superadmin','admin','usu','') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
 -- Dumping data for table `usuario`
 --
 
-INSERT INTO `usuario` (`id`, `username`, `password`, `token`, `nombre`, `disponible`) VALUES
-(100, 'prueba', '655e786674d9d3e77bc05ed1de37b4b6bc89f788829f9f3c679e7687b410c89b', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzExNDgyMjMsImRhdGEiOnsiaWQiOiIxMDAiLCJub21icmUiOiJVc3VhcmlvIGRlIFBydWViYSJ9fQ.RAvhdhjV_nXp8DhFnpWeo3Aic7W2OSL8FA9-tv1UPMs', 'Usuario de Prueba', 1);
+INSERT INTO `usuario` (`id`, `id_farm`, `username`, `password`, `token`, `nombre`, `role`) VALUES
+(100, 0, 'prueba', '655e786674d9d3e77bc05ed1de37b4b6bc89f788829f9f3c679e7687b410c89b', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzE2ODYxMzUsImRhdGEiOnsiaWQiOiIxMDAiLCJub21icmUiOiJVc3VhcmlvIGRlIFBydWViYSJ9fQ.uT8KSH738vgTHpw1_sXWl4Er_-U6s2rSyjQzq4j4CYU', 'Usuario de Prueba', 'superadmin'),
+(200, 1, 'adminmerced', '5003f9b63ba86a823794c26e0b6ba90be1340968091fa40b5e0ff1c729ed4637', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzE2ODU4MTYsImRhdGEiOnsiaWQiOiIyMDAiLCJub21icmUiOiJGYXJtYWNcdTAwZTl1dGljbyBNZXJjZWQifX0.zD797QVRIoUzW8QFK-7TgjTdG8aRfrb4ayZfaBqluJg', 'Farmacéutico Merced', 'admin'),
+(201, 1, 'usumerced', '5003f9b63ba86a823794c26e0b6ba90be1340968091fa40b5e0ff1c729ed4637', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzE2ODU4NzgsImRhdGEiOnsiaWQiOiIyMDEiLCJub21icmUiOiJEZXBlbmRpZW50ZSBNZXJjZWQifX0.1YUqUs15BHjHPAMw-6F2QcDzbMcBlKbq7r3YXMLFbQ4', 'Dependiente Merced', 'usu'),
+(207, 2, 'admincatedral', '5003f9b63ba86a823794c26e0b6ba90be1340968091fa40b5e0ff1c729ed4637', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzE2ODYyMTMsImRhdGEiOnsidXNlcm5hbWUiOiJhZG1pbmNhdGVkcmFsIiwibm9tYnJlIjoiRmFybWFjXHUwMGU5dXRpY28gQ2F0ZWRyYWwifX0.wfcbjFSUjPzMmKiXKOpZATnI-REK7Uk_iYTUDhb', 'Farmacéutico Catedral', 'admin'),
+(208, 2, 'usucatedral', '5003f9b63ba86a823794c26e0b6ba90be1340968091fa40b5e0ff1c729ed4637', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzE2ODYyMzgsImRhdGEiOnsidXNlcm5hbWUiOiJ1c3VjYXRlZHJhbCIsIm5vbWJyZSI6IkRlcGVuZGllbnRlIENhdGVkcmFsIn19.EgTpA1XiuRv9hywoNNfxZFtk0N41ywhmW53TOPPzsfM', 'Dependiente Catedral', 'usu');
+
+-- --------------------------------------------------------
 
 --
 -- Indexes for dumped tables
@@ -152,7 +161,13 @@ ALTER TABLE `reservas`
 -- AUTO_INCREMENT for table `farmacias`
 --
 ALTER TABLE `farmacias`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+
+--
+-- AUTO_INCREMENT de la tabla `usuario`
+--
+ALTER TABLE `usuario`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=209;
 
 --
 -- AUTO_INCREMENT for table `reservas`

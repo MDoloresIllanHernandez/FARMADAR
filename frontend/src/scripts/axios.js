@@ -11,7 +11,7 @@ const apiClient = axios.create({
 
 // Agregar un interceptor para inyectar el token en cada petición
 apiClient.interceptors.request.use((config) => {
-  // Obtener el token desde el localStorage o donde lo tengas guardado
+  // Obtener el token desde el sessionStorage 
   const token = sessionStorage.getItem('farmaToken');
  
   if (token) {

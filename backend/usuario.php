@@ -1,10 +1,10 @@
 <?php
 /**
- *	Script que se usa en los endpoints para trabajar con registros de la tabla RESERVAS
- *	La clase "reserva.class.php" es la clase del modelo, que representa a un reserva de la tabla
+ *	Script que se usa en los endpoints para trabajar con registros de la tabla PRODUCTOS
+ *	La clase "producto.class.php" es la clase del modelo, que representa a un producto de la tabla
 */
 require_once 'src/response.php';
-require_once 'src/classes/reserva.class.php';
+require_once 'src/classes/usuario.class.php';
 require_once 'src/classes/auth.class.php';
 
 // Permitir solicitudes desde cualquier origen (esto es más amplio y no recomendable en producción)
@@ -31,7 +31,7 @@ $auth = new Authentication();
 
 $auth->verify();
 
-$reserva = new Reserva();
+$usuario = new Usuario();
 
 /**
  * Se mira el tipo de petición que ha llegado a la API y dependiendo de ello se realiza una u otra accción
@@ -43,16 +43,33 @@ switch ($_SERVER['REQUEST_METHOD']) {
 	 */
 	case 'GET':
 		$params = $_GET;
-		
-		$reservas = $reserva->get($params);
-
+	
+		// Verificar si el rol y el id_farm vienen como parámetros
+		$role = isset($params['role']) ? $params['role'] : null;
+		$id_farm = isset($params['id_farm']) ? $params['id_farm'] : null;
+	
+		// Filtrar usuarios según el rol
+		if ($role === 'superadmin') {
+			$usuarios = $usuario->get([]); // Obtener todos los usuarios
+		} elseif ($role && $id_farm) {
+			// Filtrar usuarios de la misma farmacia
+			$usuarios = $usuario->get(['id_farm' => $id_farm]);
+		} else {
+			// Si no hay rol válido, devolver error
+			$response = array(
+				'result' => 'error',
+				'details' => 'No autorizado'
+			);
+			Response::result(403, $response);
+			exit;
+		}
+	
 		$response = array(
 			'result' => 'ok',
-			'reservas' => $reservas
+			'usuarios' => $usuarios
 		);
-
+	
 		Response::result(200, $response);
-
 		break;
 		
 	/**
@@ -72,18 +89,18 @@ switch ($_SERVER['REQUEST_METHOD']) {
 		}
 
 
-		$insert_id = $reserva->insert($params);
+		$insert_id = $usuario->insert($params);
 
 		$response = array(
 			'result' => 'ok',
-			'reserva' => $params
+			'usuario' => $params
 		);
 
 		Response::result(201, $response);
 		break;
 
 	/**
-	 * Cuando es PUT, comprobamos si la petición lleva el id del reserva que hay que actualizar. En caso afirmativo se usa el método update() del modelo.
+	 * Cuando es PUT, comprobamos si la petición lleva el id del usuario que hay que actualizar. En caso afirmativo se usa el método update() del modelo.
 	 */
 	case 'PUT':
 		$params = json_decode(file_get_contents('php://input'), true);
@@ -95,10 +112,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
 			);
 
 			Response::result(400, $response);
-			exit();
+			exit;
 		}
 
-		$reserva->update($_GET['id'], $params);
+		$usuario->update($_GET['id'], $params);
 
 		$response = array(
 			'result' => 'ok'
@@ -108,7 +125,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 		break;
 
 	/**
-	 * Cuando se solicita un DELETE se comprueba que se envíe un id de reserva. En caso afirmativo se utiliza el método delete() del modelo.
+	 * Cuando se solicita un DELETE se comprueba que se envíe un id de producto. En caso afirmativo se utiliza el método delete() del modelo.
 	 */
 	case 'DELETE':
 		if(!isset($_GET['id']) || empty($_GET['id'])){
@@ -118,10 +135,10 @@ switch ($_SERVER['REQUEST_METHOD']) {
 			);
 
 			Response::result(400, $response);
-			exit();
+			exit;
 		}
 
-		$reserva->delete($_GET['id']);
+		$usuario->delete($_GET['id']);
 
 		$response = array(
 			'result' => 'ok'

@@ -32,14 +32,15 @@ export default {
         // Envía los datos del formulario a la API
         const responseData = await authUser(this.username, this.password);
         // Manejamos la respuesta con un console.log y un if
-        console.log('Datos recibidos:', responseData);
-        if (responseData.result == 'ok' && responseData.token) {
+        if (responseData.result == 'ok' && responseData.token && responseData.role && responseData.id_farm) {
+          console.log('Datos recibidos:', responseData);
           //Guardamos el token en sessionStorage
           sessionStorage.setItem('farmaToken', responseData.token);
-          //Guardamos el usuario en sessionStorage
-          sessionStorage.setItem('user', JSON.stringify(responseData.user));
-          //Guardamos el rol en localStorage
-          //localStorage.setItem('role', 'noadmin');
+
+          sessionStorage.setItem('role', responseData.role);
+
+          sessionStorage.setItem('id_farm', responseData.id_farm);
+
           this.$router.push('/inicio');
         } else {
           // Aquí puedes manejar el error, como mostrar un mensaje de error
