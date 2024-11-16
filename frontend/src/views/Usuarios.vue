@@ -238,9 +238,7 @@ export default {
     }
       this.isModalDeleteVisible = false;  
     },
-    isUsu() {
-      return sessionStorage.getItem('role') == 'usu';  
-    },
+   
   },
 }
 </script>
