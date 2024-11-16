@@ -71,6 +71,7 @@
 import Navbar from './../components/Navbar.vue';
 import Footer from './../components/Footer.vue';
 import GenericCard from './../components/GenericCard.vue';
+import CardFarmacias from './../components/CardFarmacias.vue';
 import apiClient from '../scripts/axios.js';
 import ModalCreate from './../components/modal/modalCreateFarmacias.vue';
 import ModalEditar from './../components/modal/modalEditarFarmacias.vue';
@@ -78,13 +79,15 @@ import ModalDelete from './../components/modal/modalDeleteFarmacias.vue';
 
 export default {
   components: {
-    Navbar, Footer, GenericCard, ModalCreate, ModalEditar, ModalDelete },
+    Navbar, Footer, GenericCard, ModalCreate, ModalEditar, ModalDelete, CardFarmacias },
   
   data() {
     return {
       role: sessionStorage.getItem('role'),
       searchQuery: '',
       farmacias: [],
+      userRole: '',
+      userIdFarm: null,
       hasSearched: false,
       loading: false,
       isModalCreateVisible: false,
@@ -92,6 +95,11 @@ export default {
       isModalDeleteVisible: false,
       selectedFarmacia: null, // Almacena la farmacia seleccionada
     };
+  },
+  created() {
+    // Cargamos los datos del usuario desde sessionStorage
+    this.userRole = sessionStorage.getItem('role');
+    this.userIdFarm = sessionStorage.getItem('id_farm');
   },
   methods: {
     showAdd(){

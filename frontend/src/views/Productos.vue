@@ -150,8 +150,14 @@ export default {
       this.loading = true;
       this.products = []; // Limpiar la lista de productos
       try {
-        //Consultar productos
-        const response = await apiClient.get('/producto');
+        // Recuperar role y id_farm desde sessionStorage
+        const role = sessionStorage.getItem('role');
+        const idFarm = sessionStorage.getItem('id_farm');
+
+        // Consultar usuarios enviando role e id_farm como parámetros
+        const response = await apiClient.get('/producto', {
+          params: { role, id_farm: idFarm, source: 'producto' },
+        });
         if (response.data.result == 'ok' && response.data.productos) {
           this.products = response.data.productos.filter(product => 
             product.nombre.toLowerCase().includes(this.searchQuery.toLowerCase())
