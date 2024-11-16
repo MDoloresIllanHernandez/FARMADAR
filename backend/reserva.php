@@ -64,7 +64,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 		if(!isset($params)){
 			$response = array(
 				'result' => 'error',
-				'details' => 'Error en la solicitud'
+				'details' => 'Error en la solicitud del post'
 			);
 
 			Response::result(400, $response);

@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 15-11-2024 a las 16:59:24
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Host: 127.0.0.1
+-- Generation Time: Nov 16, 2024 at 10:36 AM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -41,7 +41,7 @@ CREATE TABLE `farmacias` (
 --
 
 INSERT INTO `farmacias` (`cif`, `nombre`, `direccion`, `telefono`, `email`, `id`) VALUES
-('B30785629', 'Farmacia La Merced', 'Calle Ceuta, 2, 30003 Murcia', '968239428', 'lamerced@gmail.com', 1),
+('B30785629', 'Farmacia La Merced', 'Calle Ceuta, 2, 30003 Murcia', '968239428', 'farmacialamerced@gmail.com', 1),
 ('B73669911', 'Farmacia Catedral', 'Calle Traperia, 1, 30001 Murcia', '968212829', 'catedral@gmail.com', 2),
 ('B30884526', 'Farmacia Vistabella', 'Plz. de los Patos, 5, 30003 Murcia', '968258523', 'vistabella@gmail.com', 3),
 ('B74962244', 'Farmacia Puxmarina', 'Plaza Puxmarina, 5, 30004 Murcia', '968213226', 'puxmarina@gmail.com', 4);
@@ -65,11 +65,9 @@ CREATE TABLE `productos` (
 --
 
 INSERT INTO `productos` (`id`, `id_farm`, `nombre`, `precio`, `stock`) VALUES
-('300000', 1, 'Cañita', 4.00, 5),
 ('30001234', 1, 'Paracetamol', 2.36, 5),
-('30001234', 3, 'Paracetamol', 1.50, 20),
-('30004747', 2, 'Amoxicilina', 4.50, 5),
-('30005678', 2, 'Aspirina', 3.50, 9),
+('30001234', 3, 'Paracetamol', 1.50, 2),
+('30005678', 2, 'Aspirina', 3.50, 8),
 ('30005678', 4, 'Aspirina', 3.40, 7),
 ('30007732', 3, 'Ibuprofeno', 4.70, 20);
 
@@ -83,21 +81,22 @@ CREATE TABLE `reservas` (
   `id` int(11) NOT NULL,
   `id_prod` varchar(50) NOT NULL,
   `id_farm` int(11) NOT NULL,
+  `farm_origen` int(11) NOT NULL,
   `fecha` date NOT NULL,
   `hora_inicio` time NOT NULL,
   `hora_fin` time NOT NULL,
   `cantidad` int(11) NOT NULL,
   `nombre` varchar(255) NOT NULL,
   `otros_datos` varchar(255) NOT NULL,
-  `estado` enum('pendiente','confirmada','pagada','cancelada','') NOT NULL
+  `estado` enum('pendiente','confirmada','cancelada','') NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `reservas`
 --
 
-INSERT INTO `reservas` (`id`, `id_prod`, `id_farm`, `fecha`, `hora_inicio`, `hora_fin`, `cantidad`, `nombre`, `otros_datos`, `estado`) VALUES
-(1, '30001234', 1, '2024-11-10', '10:00:00', '12:00:00', 5, 'Pepito', 'Teléfono: 666 666 666', 'pendiente');
+INSERT INTO `reservas` (`id`, `id_prod`, `id_farm`, `farm_origen`, `fecha`, `hora_inicio`, `hora_fin`, `cantidad`, `nombre`, `otros_datos`, `estado`) VALUES
+(1, '30001234', 1, 2, '2024-11-10', '10:00:00', '12:00:00', 5, 'Pepito', 'Teléfono: 666 666 666', 'pendiente');
 
 -- --------------------------------------------------------
 
@@ -126,8 +125,6 @@ INSERT INTO `usuario` (`id`, `id_farm`, `username`, `password`, `token`, `nombre
 (207, 2, 'admincatedral', '5003f9b63ba86a823794c26e0b6ba90be1340968091fa40b5e0ff1c729ed4637', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzE2ODYyMTMsImRhdGEiOnsidXNlcm5hbWUiOiJhZG1pbmNhdGVkcmFsIiwibm9tYnJlIjoiRmFybWFjXHUwMGU5dXRpY28gQ2F0ZWRyYWwifX0.wfcbjFSUjPzMmKiXKOpZATnI-REK7Uk_iYTUDhb', 'Farmacéutico Catedral', 'admin'),
 (208, 2, 'usucatedral', '5003f9b63ba86a823794c26e0b6ba90be1340968091fa40b5e0ff1c729ed4637', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzE2ODYyMzgsImRhdGEiOnsidXNlcm5hbWUiOiJ1c3VjYXRlZHJhbCIsIm5vbWJyZSI6IkRlcGVuZGllbnRlIENhdGVkcmFsIn19.EgTpA1XiuRv9hywoNNfxZFtk0N41ywhmW53TOPPzsfM', 'Dependiente Catedral', 'usu');
 
--- --------------------------------------------------------
-
 --
 -- Indexes for dumped tables
 --
@@ -151,7 +148,14 @@ ALTER TABLE `productos`
 --
 ALTER TABLE `reservas`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_reservas_productos` (`id_prod`,`id_farm`);
+  ADD KEY `fk_reservas_productos` (`id_prod`,`id_farm`),
+  ADD KEY `fk_farm_origen` (`farm_origen`);
+
+--
+-- Indexes for table `usuario`
+--
+ALTER TABLE `usuario`
+  ADD PRIMARY KEY (`id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -164,16 +168,16 @@ ALTER TABLE `farmacias`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT de la tabla `usuario`
---
-ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=209;
-
---
 -- AUTO_INCREMENT for table `reservas`
 --
 ALTER TABLE `reservas`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT for table `usuario`
+--
+ALTER TABLE `usuario`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=209;
 
 --
 -- Constraints for dumped tables
@@ -189,6 +193,7 @@ ALTER TABLE `productos`
 -- Constraints for table `reservas`
 --
 ALTER TABLE `reservas`
+  ADD CONSTRAINT `fk_farm_origen` FOREIGN KEY (`farm_origen`) REFERENCES `farmacias` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `fk_reservas_productos` FOREIGN KEY (`id_prod`,`id_farm`) REFERENCES `productos` (`id`, `id_farm`);
 COMMIT;
 

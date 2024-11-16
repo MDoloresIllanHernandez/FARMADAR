@@ -10,7 +10,7 @@
         <p class="text-xl sm:text-xl text-primary-oscuro">¿Qué productos deseas reservar?</p>
         <div class="mt-6 flex gap-x-4 pb-8">
           <label for="productos" class="sr-only">Productos</label>
-          <input id="productos" v-model="searchQuery" @keyup.enter="searchProducts" type="text"
+          <input id="productos" v-model="searchQuery" @keyup.enter="searchProducts" type="text" ref="searchInput"
             placeholder="Introduce el nombre del producto..."/>
           <button @click="searchProducts" class="boton-claro"> Buscar </button>
         </div>
@@ -36,11 +36,9 @@ import Navbar from './../components/Navbar.vue';
 import Footer from './../components/Footer.vue';
 import CardReservas from '../components/CardReservas.vue';
 import apiClient from '../scripts/axios.js';
-import axios from 'axios';
 
 export default {
-  components: {
-    Navbar, Footer, CardReservas},
+  components: { Navbar, Footer, CardReservas},
   
     data() {
     return {
@@ -49,6 +47,10 @@ export default {
       hasSearched: false,
       loading: false,
     };
+  },
+  mounted(){
+    //Poner el foco en el input de búsqueda al cargar la página
+    this.$refs.searchInput.focus();
   },
   methods: {
     async searchProducts() {
@@ -95,6 +97,7 @@ export default {
       // Aquí se podría realizar una llamada API o cualquier lógica adicional para gestionar la reserva
     }
   },  
+
 }
 </script>
 <style>

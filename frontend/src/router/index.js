@@ -11,8 +11,6 @@ const routes = [
   { path: '/:pathMatch(.*)*', component: () => import('../views/Login.vue') },
   { path: '/reservas/nueva/:productId/:farmId', name: 'Reserva', component: () => import('../views/ReservasNueva.vue') },
   { path: '/usuarios', name: 'Usuarios', component: () => import('../views/Usuarios.vue')},
-  { path: '/usuarios/nuevo', name: 'UsuariosNuevo', component: () => import('../views/UsuariosNuevo.vue')},
-  { path: '/usuarios/editar/:id', name: 'UsuariosEditar', component: () => import('../views/UsuariosEditar.vue')},
 ];
 
 const router = createRouter({

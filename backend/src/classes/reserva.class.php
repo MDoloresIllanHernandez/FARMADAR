@@ -19,16 +19,17 @@ class Reserva extends Database
 		'id',
 		'id_prod',
 		'id_farm',
-		'nombre'
+		'nombre',
+		'farm_origen'
 	);
 
 	/**
 	 * Array con los campos de la tabla que se pueden proporcionar para insertar registros
 	 */
 	private $allowedConditions_insert = array(
-		'id',
 		'id_prod',
 		'id_farm',
+		'farm_origen',
 		'fecha',
 		'hora_inicio',
 		'hora_fin',
@@ -44,15 +45,6 @@ class Reserva extends Database
 	 */
 	private function validate($data){
 		
-		if(!isset($data['id']) || empty($data['id'])){
-			$response = array(
-				'result' => 'error',
-				'details' => 'El campo id es obligatorio'
-			);
-
-			Response::result(400, $response);
-			exit;
-		}
 		if(!isset($data['id_farm']) || empty($data['id_farm'])){
 			$response = array(
 				'result' => 'error',
@@ -71,6 +63,17 @@ class Reserva extends Database
 			Response::result(400, $response);
 			exit;
 		}
+		if(!isset($data['farm_origen']) || empty($data['farm_origen'])){
+			$response = array(
+				'result' => 'error',
+				'details' => 'El campo farm_origen es obligatorio'
+			);
+
+			Response::result(400, $response);
+			exit;
+		}
+
+
 		if(!isset($data['fecha']) || empty($data['fecha'])){
 			$response = array(
 				'result' => 'error',
