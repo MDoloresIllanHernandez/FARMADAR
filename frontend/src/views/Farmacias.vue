@@ -16,16 +16,20 @@
         </div>
         <div v-if="hasSearched">
           <div v-if="farmacias.length" class="grid div-cards">
-            <GenericCard v-for="farmacia in farmacias" 
-            :calledFrom="'Farmacias'"
-            :key="farmacia.id" 
-            :title="farmacia.nombre"
-            :detail1="'CIF: ' + farmacia.cif" :data="farmacia"
-            :detail2="'Dirección: ' + farmacia.direccion" 
-            :detail3="'Teléfono: ' + farmacia.telefono"
-            :detail4="'Email: ' + farmacia.email" 
-            @edit="openEditModal(farmacia)" 
-            @delete="openDeleteModal(farmacia)" />
+            <CardFarmacias 
+              v-for="farmacia in farmacias" 
+              :key="farmacia.id" 
+              :title="farmacia.nombre"
+              :detail1="'CIF: ' + farmacia.cif"
+              :detail2="'Dirección: ' + farmacia.direccion"
+              :detail3="'Teléfono: ' + farmacia.telefono"
+              :detail4="'Email: ' + farmacia.email" 
+              :data="farmacia"
+              :userRole="userRole"
+              :userIdFarm="userIdFarm"
+              @edit="openEditModal(farmacia)" 
+              @delete="openDeleteModal(farmacia)" 
+            />
           </div>
           <div v-else>
             <p>No se encontraron farmacias.</p>
