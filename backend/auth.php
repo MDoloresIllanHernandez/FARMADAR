@@ -36,7 +36,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
                 'result' => 'ok',
                 'token' => $authResult['token'],
                 'role' => $authResult['role'],
-                'id_farm' => $authResult['id_farm']
+                'id_farm' => $authResult['id_farm'],
+                'id' => $authResult['id']
             );
             Response::result(201, $response);
         } else {
