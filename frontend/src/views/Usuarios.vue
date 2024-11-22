@@ -96,7 +96,9 @@ export default {
       selectedUser: null, // Almacena el usuario seleccionado para editar
     };
   },
-  
+  created() {
+    this.role = sessionStorage.getItem('role'); // Recuperar el rol desde sessionStorage
+  },
   methods: {
     showAdd(){
       if(this.role=='usu' ){

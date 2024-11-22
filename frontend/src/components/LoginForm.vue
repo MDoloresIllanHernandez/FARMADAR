@@ -32,7 +32,8 @@ export default {
         // Envía los datos del formulario a la API
         const responseData = await authUser(this.username, this.password);
         // Manejamos la respuesta con un console.log y un if
-        if (responseData.result == 'ok' && responseData.token && responseData.role && responseData.id_farm) {
+        if (responseData.result == 'ok' && responseData.token && responseData.role && responseData.id_farm && responseData.id 
+        ) {
           console.log('Datos recibidos:', responseData);
           //Guardamos el token en sessionStorage
           sessionStorage.setItem('farmaToken', responseData.token);
@@ -40,6 +41,9 @@ export default {
           sessionStorage.setItem('role', responseData.role);
 
           sessionStorage.setItem('id_farm', responseData.id_farm);
+
+          sessionStorage.setItem('id', responseData.id);
+
 
           this.$router.push('/inicio');
         } else {
