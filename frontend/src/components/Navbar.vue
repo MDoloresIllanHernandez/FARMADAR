@@ -119,12 +119,13 @@ onMounted(async () => {
   if (userId) {
     try {
       const idFarm = ref(sessionStorage.getItem('id_farm'));
+      const id = ref(sessionStorage.getItem('id'));
       const response = await apiClient.get('/usuario', {
           params: { role:roleUsuario.value, id_farm: idFarm.value },
         });
       if (response.data.result == 'ok' && response.data.usuarios) {
         const data = response.data.usuarios;
-        usuarioNombre.value = data[0].nombre || 'Usuario'; 
+        usuarioNombre.value = data.filter(item=>item.id==id.value)[0]?.nombre || 'Usuario'; 
       }else{
         throw new Error('Error al obtener los datos del usuario');
       }
