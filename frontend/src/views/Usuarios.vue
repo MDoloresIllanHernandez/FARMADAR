@@ -17,8 +17,7 @@
         </div>
         <div v-if="hasSearched">
           <div v-if="users.length" class="grid div-cards">
-            <GenericCard
-              v-for="user in users"
+            <GenericCard v-for="user in users"
               :calledFrom="'Usuarios'"
               :key="user.id"
               :title="user.nombre"
