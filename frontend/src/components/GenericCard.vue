@@ -19,7 +19,8 @@ export default {
   data() {
     return {
       role: sessionStorage.getItem('role'),
-      idFarm: sessionStorage.getItem('id_farm')
+      idFarm: sessionStorage.getItem('id_farm'),
+      id: sessionStorage.getItem('id')
     };
   },
   props: {
@@ -65,11 +66,35 @@ export default {
         }
         return false;
       }
+      if(this.calledFrom =='Usuarios' ){
+        if(this.data?.id==this.id){
+          return false;
+        }
+        if(this.role=='usu'){
+          return false;
+        }
+        if (this.role == 'superadmin'){
+          return true;
+        }
+       
+      }
       return true;
     },
     showDelete(){
       if(this.calledFrom =='Farmacias' && (this.role=='usu' || this.role=='admin')){
         return false;
+      }
+      if(this.calledFrom =='Usuarios' ){
+        if(this.data?.id==this.id){
+          return false;
+        }
+        if(this.role=='usu'){
+          return false;
+        }
+        if (this.role == 'superadmin'){
+          return true;
+        }
+     
       }
       return true;
     },
