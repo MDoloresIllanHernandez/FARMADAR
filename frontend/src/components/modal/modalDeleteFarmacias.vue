@@ -2,6 +2,7 @@
     <div v-if="isVisible" class="modal-overlay">
       <div class="modal-content">
         <h2 class="text-lg font-bold mb-4">¿Estás seguro de que deseas eliminar esta farmacia?</h2>
+        <p>Serán eliminados todos los productos y reservas asociadas a la misma</p>
         <p>Esta acción no se puede deshacer.</p>
         
         <div class="flex justify-end gap-2 mt-6">

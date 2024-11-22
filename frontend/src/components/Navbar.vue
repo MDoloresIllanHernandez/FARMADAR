@@ -18,7 +18,24 @@
             <a v-for="item in navigation" :key="item.name" :href="item.href" class="boton-navbar">{{ item.name }}</a>
           </div>
           <div class="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a :href="cerrarSesion.href" class="text-sm font-semibold leading-6 text-gray-900">Cerrar Sesión </a>
+            <!-- Ícono y Nombre del Usuario -->
+            <div class="flex items-center mr-4">
+              <img
+                src="../assets/logo_user.png"
+                alt="Icono Usuario"
+                class="h-6 w-6 rounded-full mr-2"
+              />
+              <span class="text-sm font-semibold text-gray-900">
+                <small>{{ usuarioNombre }}</small> 
+              </span>
+            </div>
+            <!-- Cerrar Sesión -->
+            <a :href="cerrarSesion.href" class="text-sm font-semibold leading-6 text-gray-900">
+              <img
+                src="../assets/logo_cerrarSesion.png"
+                alt="Icono Cerrar Sesión"
+                class="h-6 w-6 rounded-full mr-2"
+              /> </a>
           </div>
         </nav>
 
@@ -42,9 +59,25 @@
                   <a v-for="item in navigation" :key="item.name" :href="item.href" class="boton-navbar-movil">{{ item.name }}</a>
                 </div>
                 <div class="space-y-2 py-6">
-                  <a :href="cerrarSesion.href" class="text-sm font-semibold leading-6 text-gray-900">Cerrar Sesión </a>
+                  <!-- Ícono y Nombre del Usuario en Móvil -->
+                  <div class="flex items-center space-y-2 py-6">
+                    <img
+                      src="../assets/logo_user.png"
+                      alt="Icono Usuario"
+                      class="h-6 w-6 rounded-full mr-2"
+                    />
+                    <span class="text-sm font-semibold text-gray-900">
+                      <small>{{ usuarioNombre }}</small> 
+                    </span>
+                  </div>
+                  <!-- Cerrar Sesión en Móvil -->
+                  <a :href="cerrarSesion.href" class="flex text-sm font-semibold leading-6 text-gray-900">
+                    <img
+                      src="../assets/logo_cerrarSesion.png"
+                      alt="Icono Cerrar Sesión"
+                      class="h-6 w-6 rounded-full mr-2"
+                    /> Cerrar Sesion</a>
                 </div>
-               
               </div>
             </div>
           </DialogPanel>
@@ -72,6 +105,7 @@
 
   const mobileMenuOpen = ref(false)
   
+  const usuarioNombre = ref(sessionStorage.getItem('role')) || 'Usuario';
  ;
   </script>
 
