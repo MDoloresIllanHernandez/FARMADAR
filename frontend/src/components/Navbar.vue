@@ -15,7 +15,10 @@
             </button>
           </div>
           <div class="hidden lg:flex lg:gap-x-12">
-            <a v-for="item in navigation" :key="item.name" :href="item.href" class="boton-navbar">{{ item.name }}</a>
+            <span v-for="item in navigation" >
+              <a v-if="item.name!='Usuarios' || (item.name=='Usuarios' && (roleUsuario!='usu' && roleUsuario!='Usuario'))" :key="item.name" :href="item.href" class="boton-navbar">{{ item.name }}</a>
+            </span>
+           
           </div>
           <div class="hidden lg:flex lg:flex-1 lg:justify-end">
             <!-- Ícono y Nombre del Usuario -->
@@ -56,7 +59,10 @@
             <div class="mt-6 flow-root">
               <div class="-my-6 divide-y divide-gray-500/10">
                 <div class="space-y-2 py-6">
-                  <a v-for="item in navigation" :key="item.name" :href="item.href" class="boton-navbar-movil">{{ item.name }}</a>
+                  <span v-for="item in navigation" >
+                     <a v-if="item.name!='Usuarios' || (item.name=='Usuarios' && (roleUsuario!='usu' && roleUsuario!='Usuario'))" :key="item.name" :href="item.href" class="boton-navbar-movil">{{ item.name }}</a>
+                  </span>
+                 
                 </div>
                 <div class="space-y-2 py-6">
                   <!-- Ícono y Nombre del Usuario en Móvil -->
@@ -86,10 +92,10 @@
   </template>
   
   <script setup>
-  import { ref } from 'vue'
+  import { ref,onMounted } from 'vue'
   import { Dialog, DialogPanel } from '@headlessui/vue'
   import { Bars3Icon, XMarkIcon } from '@heroicons/vue/24/outline'
-  
+  import apiClient from '../scripts/axios.js';
   // Navigation links
   const navigation = [
     { name: 'Buscador FARMADAR', href: '/buscador-productos' },
@@ -105,8 +111,31 @@
 
   const mobileMenuOpen = ref(false)
   
-  const usuarioNombre = ref(sessionStorage.getItem('role')) || 'Usuario';
- ;
+  const roleUsuario = ref(sessionStorage.getItem('role')) || 'usu';
+  let usuarioNombre = ref('Usuario');
+ // Obtener el ID del usuario almacenado en sessionStorage
+const userId = sessionStorage.getItem('id');
+onMounted(async () => {
+  if (userId) {
+    try {
+      const idFarm = ref(sessionStorage.getItem('id_farm'));
+      const id = ref(sessionStorage.getItem('id'));
+      const response = await apiClient.get('/usuario', {
+          params: { role:roleUsuario.value, id_farm: idFarm.value },
+        });
+      if (response.data.result == 'ok' && response.data.usuarios) {
+        const data = response.data.usuarios;
+        usuarioNombre.value = data.filter(item=>item.id==id.value)[0]?.nombre || 'Usuario'; 
+      }else{
+        throw new Error('Error al obtener los datos del usuario');
+      }
+    
+    } catch (error) {
+      console.error('Error al cargar el usuario:', error);
+      usuarioNombre.value = 'Usuario';
+    }
+  }
+})
   </script>
 
 
