@@ -65,8 +65,16 @@ class Producto extends Database
 			Response::result(400, $response);
 			exit;
 		}
+		//controlar que el precio sea positivo
+		if($data['precio'] <= 0){
+			$response = array(
+				'result' => 'error',
+				'details' => 'El precio debe ser un número positivo'
+			);
 
-		//pendiente controlar que el precio sea positivo
+			Response::result(400, $response);
+			exit;
+		}
 		if(!isset($data['precio']) || empty($data['precio'])){
 			$response = array(
 				'result' => 'error',
@@ -76,8 +84,16 @@ class Producto extends Database
 			Response::result(400, $response);
 			exit;
 		}
+		//controlar que el stock sea positivo
+		if($data['stock'] <= 0){
+			$response = array(
+				'result' => 'error',
+				'details' => 'El stock debe ser positivo'
+			);
 
-		//pendiente controlar que el stock sea positivo
+			Response::result(400, $response);
+			exit;
+		}
 		if(!isset($data['stock']) || empty($data['stock'])){
 			$response = array(
 				'result' => 'error',
@@ -136,8 +152,16 @@ class Producto extends Database
 			Response::result(400, $response);
 			exit;
 		}
+		//controlar que el precio sea positivo
+		if($data['precio'] <= 0){
+			$response = array(
+				'result' => 'error',
+				'details' => 'El precio debe ser un número positivo'
+			);
 
-		//pendiente controlar que el precio sea positivo
+			Response::result(400, $response);
+			exit;
+		}
 		if(isset($data['precio']) && empty($data['precio'])){
 			$response = array(
 				'result' => 'error',
@@ -147,8 +171,16 @@ class Producto extends Database
 			Response::result(400, $response);
 			exit;
 		}
+		//controlar que el stock sea positivo
+		if($data['stock'] <= 0){
+			$response = array(
+				'result' => 'error',
+				'details' => 'El stock debe ser positivo'
+			);
 
-		//pendiente controlar que el stock sea positivo
+			Response::result(400, $response);
+			exit;
+		}
 		if(isset($data['stock']) && empty($data['stock'])){
 			$response = array(
 				'result' => 'error',

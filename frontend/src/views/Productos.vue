@@ -85,7 +85,7 @@ export default {
 
   data() {
     return {
-      role: sessionStorage.getItem('role'),
+      role: sessionStorage.getItem('role'), //Almacena el role
       searchQuery: '',
       products: [],
       farmacias: [],
@@ -236,7 +236,7 @@ export default {
       } catch (error) {
         this.$swal.fire({
           icon: "error",
-          title: `Error al editar la farmacia: ${error.response?.data?.details}`,
+          title: `Error al editar el producto: ${error.response?.data?.details}`,
           showConfirmButton: true,
           });
         await this.searchProducts();  

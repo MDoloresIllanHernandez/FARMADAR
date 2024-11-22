@@ -80,6 +80,7 @@ class Database
 
 		return $this->connection->insert_id;
 	}
+
 	/**
 	 * Método para actualizar un producto de la BD controlando el id de la farmacia
 	 * Hay que indicar el registro mediante un campo que sea clave primaria y que debe llamarse "id"
@@ -104,6 +105,7 @@ class Database
 
 		return $this->connection->affected_rows;
 	}
+
 	/**
 	 * Método para actualizar un registro de la BD
 	 * Hay que indicar el registro mediante un campo que sea clave primaria y que debe llamarse "id"
@@ -136,6 +138,22 @@ class Database
 	public function deleteDB($table, $id)
 	{
 		$query = "DELETE FROM $table WHERE id = $id";
+		$this->connection->query($query);
+
+		if(!$this->connection->affected_rows){
+			return 0;
+		}
+
+		return $this->connection->affected_rows;
+	}
+
+	/**
+	 * Método para eliminar registros de la BD pasandole un id_farm
+	 * Hay que indicar el registro mediante un campo que sea clave primaria y que debe llamarse "id"
+	 */
+	public function deleteByIdFarm($table, $id)
+	{
+		$query = "DELETE FROM $table WHERE id_farm = $id";
 		$this->connection->query($query);
 
 		if(!$this->connection->affected_rows){

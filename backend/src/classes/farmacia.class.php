@@ -149,7 +149,6 @@ class Farmacia extends Database
 		return $clientes;
 	}
 
-
 	/**
 	 * Método para guardar un registro en la base de datos, recibe como parámetro el JSON con los datos a insertar
 	 */
@@ -241,7 +240,7 @@ class Farmacia extends Database
 		//Recuperamos el id de la farmacia
 		$id = $this->getByParams('cif', $cif)[0]['id'];
 		//Si no existe la farmacia
-		if($id==null){
+		if($id == null){
 			$response = array(
 				'result' => 'error',
 				'details' => 'Esa farmacia no existe'
@@ -250,10 +249,29 @@ class Farmacia extends Database
 			Response::result(400, $response);
 			exit;
 		}
+		//Comprobar si tiene reservas asociadas
+
+
+		//Eliminar los productos asociados a la farmacia
+		$deleteProductos  = parent::deleteByIdFarm('productos', $id);
 		
+		if($deleteProductos == 0){
+			$response = array(
+				'result' => 'error',
+				'details' => 'Error al eliminar los productos asociados a la farmacia'
+			);
+
+			Response::result(200, $response);
+			exit;
+		}
+
+		//Eliminar los usuarios asociados a la farmacia
+		//$deleteUsuarios
+
+		//Eliminar la farmacia
 		$affected_rows = parent::deleteDB($this->table, $id);
 
-		if($affected_rows==0){
+		if($affected_rows == 0){
 			$response = array(
 				'result' => 'ok',
 				'details' => 'No hubo cambios'

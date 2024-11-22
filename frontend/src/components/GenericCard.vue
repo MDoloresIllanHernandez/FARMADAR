@@ -15,13 +15,16 @@
 </template>
 
 <script>
+
 export default {
   data() {
     return {
-      role: sessionStorage.getItem('role')
+      role: sessionStorage.getItem('role'),
+      idFarm: sessionStorage.getItem('id_farm')
     };
   },
   props: {
+   
     calledFrom: {
       type: String,
       required: true
@@ -46,20 +49,27 @@ export default {
       type: String,
       required: true
     },
+  
     data: {
       type: Object,
-      required: true
+      required: false
     }
   },
   methods: {
     showEdit(){
-      if(this.calledFrom=='Farmacias' && this.role=='usu' ){
+      if(this.calledFrom =='Farmacias' && this.role=='usu' ){
+        return false;
+      }
+      if(this.calledFrom =='Farmacias' && this.data?.id!=this.idFarm){
+        if (this.role == 'superadmin'){
+          return true;
+        }
         return false;
       }
       return true;
     },
     showDelete(){
-      if(this.calledFrom=='Farmacias' && (this.role=='usu' ||this.role=='admin')  ){
+      if(this.calledFrom =='Farmacias' && (this.role=='usu' || this.role=='admin')){
         return false;
       }
       return true;

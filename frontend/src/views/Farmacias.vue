@@ -16,20 +16,17 @@
         </div>
         <div v-if="hasSearched">
           <div v-if="farmacias.length" class="grid div-cards">
-            <CardFarmacias 
-              v-for="farmacia in farmacias" 
-              :key="farmacia.id" 
-              :title="farmacia.nombre"
-              :detail1="'CIF: ' + farmacia.cif"
-              :detail2="'Dirección: ' + farmacia.direccion"
-              :detail3="'Teléfono: ' + farmacia.telefono"
-              :detail4="'Email: ' + farmacia.email" 
-              :data="farmacia"
-              :userRole="userRole"
-              :userIdFarm="userIdFarm"
-              @edit="openEditModal(farmacia)" 
-              @delete="openDeleteModal(farmacia)" 
-            />
+            <GenericCard v-for="farmacia in farmacias" 
+            :calledFrom="'Farmacias'"
+            :key="farmacia.id"
+            :data="farmacia"
+            :title="farmacia.nombre"
+            :detail1="'CIF: ' + farmacia.cif" 
+            :detail2="'Dirección: ' + farmacia.direccion" 
+            :detail3="'Teléfono: ' + farmacia.telefono"
+            :detail4="'Email: ' + farmacia.email" 
+            @edit="openEditModal(farmacia)" 
+            @delete="openDeleteModal(farmacia)" />
           </div>
           <div v-else>
             <p>No se encontraron farmacias.</p>
@@ -75,7 +72,6 @@
 import Navbar from './../components/Navbar.vue';
 import Footer from './../components/Footer.vue';
 import GenericCard from './../components/GenericCard.vue';
-import CardFarmacias from './../components/CardFarmacias.vue';
 import apiClient from '../scripts/axios.js';
 import ModalCreate from './../components/modal/modalCreateFarmacias.vue';
 import ModalEditar from './../components/modal/modalEditarFarmacias.vue';
@@ -83,7 +79,7 @@ import ModalDelete from './../components/modal/modalDeleteFarmacias.vue';
 
 export default {
   components: {
-    Navbar, Footer, GenericCard, ModalCreate, ModalEditar, ModalDelete, CardFarmacias },
+    Navbar, Footer, GenericCard, ModalCreate, ModalEditar, ModalDelete },
   
   data() {
     return {
@@ -101,13 +97,13 @@ export default {
     };
   },
   created() {
-    // Cargamos los datos del usuario desde sessionStorage
+    // Cargamos los datos del usuario  desde sessionStorage
     this.userRole = sessionStorage.getItem('role');
     this.userIdFarm = sessionStorage.getItem('id_farm');
   },
   methods: {
     showAdd(){
-      if(this.role=='usu' || this.role=='admin' ){
+      if(this.role=='usu' || this.role =='admin' ){
         return false;
       }
       return true;
