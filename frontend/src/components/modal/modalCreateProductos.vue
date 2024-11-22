@@ -40,12 +40,13 @@ export default {
         itemFields: [
           { name: "id", label: "Id producto", type: "number", error: "*Id requerido"},
           { name: "producto", label: "Nombre", type: "text", error: "*Nombre requerido" },
-          { name: "precio", label: "Precio", type: "text", error: "*Precio requerida" },
+          { name: "precio", label: "Precio", type: "text", error: "*Precio requerido" },
           { name: "stock", label: "Stock", type: "number", error: "*Stock requerido" },
         ],
         dataSelect: [
           { name: "id_farm", label: "Farmacia", type: "select", error: "*Farmacia requerida", data:this.farmacias },
         ],
+        requiredFields: ["id", "producto", "precio", "stock", "id_farm"],
       };
     },
   methods: {
@@ -57,7 +58,21 @@ export default {
       this.$emit('close'); // Emitir el evento para cerrar el modal
     },
     saveChanges(formData) {
-      if (formData.id) {
+      // Este if es para evitar que lo envíe dos veces
+      if(formData.type){
+        return
+      }
+      let error = false;
+      let errorField = "";
+      this.requiredFields.forEach((field) => {
+        if (formData[field] == null || (typeof(formData[field])!='number' && formData[field].trim() === "")) {
+          error = true;
+          errorField=field
+        }
+      });
+      if (error) {
+        this.$emit('errorForm', errorField)
+      } else {
         this.$emit('save', formData); // Emitir el evento para guardar cambios
       }
     },

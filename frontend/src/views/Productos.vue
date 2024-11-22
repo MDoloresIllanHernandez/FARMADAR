@@ -9,7 +9,7 @@
           <input id="productos" v-model="searchQuery" @keyup.enter="searchProducts" type="text"
             placeholder="Introduce el nombre del producto..." />
           <button @click="searchProducts" class="boton-claro"> Buscar</button>
-          <button @click="openCreateModal" class="boton-oscuro"> Añadir Producto </button>
+          <button v-if="showAdd()" @click="openCreateModal" class="boton-oscuro"> Añadir Producto </button>
         </div>
         <div v-if="loading" class="loading-overlay">
           <div class="spinner"></div>
@@ -17,6 +17,7 @@
         <div v-if="hasSearched">
           <div v-if="products.length" class="grid div-cards">
             <GenericCard v-for="product in products"
+              :calledFrom="'Productos'"
               :key="product.id"
               :title="product.nombre"
               :detail1="'Id: ' + product.id"
@@ -43,6 +44,7 @@
       :farmacias="farmacias"
       @save="addProduct"
       @close="closeModalCreate"
+      @errorForm="mostrarError"
      
     />
     <!-- Modal para editar producto -->
@@ -53,6 +55,7 @@
       :farmacias="farmacias"
       @save="editProduct"
       @close="isModalEditarVisible = false"
+      @errorForm="mostrarError"
       
     />
     <!-- Modal para eliminar producto -->
@@ -82,6 +85,7 @@ export default {
 
   data() {
     return {
+      role: sessionStorage.getItem('role'), //Almacena el role
       searchQuery: '',
       products: [],
       farmacias: [],
@@ -94,6 +98,16 @@ export default {
     };
   },
   methods: {
+    showAdd(){
+     
+      return true;
+    },
+    async openCreateModal() {
+      // Consultar las farmacias 
+      await this.searchFarmacias(); 
+      // Mostrar el modal
+      this.isModalCreateVisible = true; 
+    },
     async openEditModal(product) {
       // Copiar el producto para no modificar la referencia original
       this.selectedProduct = { ...product }; 
@@ -103,21 +117,23 @@ export default {
       // Mostrar el modal
       this.isModalEditarVisible = true; 
     },
-    async openCreateModal() {
-      // Consultar las farmacias 
-      await this.searchFarmacias(); 
-      // Mostrar el modal
-      this.isModalCreateVisible = true; 
-    },
     async openDeleteModal(product) {
       // Copiar el producto para no modificar la referencia original
       this.selectedProduct = { ...product }; 
       // Mostrar el modal
       this.isModalDeleteVisible = true; 
     },
+    // Método para cerrar el modal de crear
     closeModalCreate() {
-      // Cerrar el modal
       this.isModalCreateVisible = false; 
+    },
+    // Método para mostrar un error
+    mostrarError(errorField) {
+      this.$swal.fire({
+          icon: "error",
+          title: `El campo ${errorField} es obligatorio`,
+          showConfirmButton: true,
+          });
     },
     async searchFarmacias() {
       try {
@@ -134,8 +150,14 @@ export default {
       this.loading = true;
       this.products = []; // Limpiar la lista de productos
       try {
-        //Consultar productos
-        const response = await apiClient.get('/producto');
+        // Recuperar role y id_farm desde sessionStorage
+        const role = sessionStorage.getItem('role');
+        const idFarm = sessionStorage.getItem('id_farm');
+
+        // Consultar usuarios enviando role e id_farm como parámetros
+        const response = await apiClient.get('/producto', {
+          params: { role, id_farm: idFarm, source: 'producto' },
+        });
         if (response.data.result == 'ok' && response.data.productos) {
           this.products = response.data.productos.filter(product => 
             product.nombre.toLowerCase().includes(this.searchQuery.toLowerCase())
@@ -170,15 +192,26 @@ export default {
           id_farm: formData.id_farm
         });
         if (response.data.result === 'ok') {
-          console.log('Producto añadido correctamente');
+          this.isModalCreateVisible = false;
+          this.$swal.fire({
+              icon: "success",
+              title: "Producto añadido correctamente",
+              showConfirmButton: false,
+              timer: 2000
+            });
           await this.searchProducts();
         }
       } catch (error) {
-        console.error('Error al añadir el producto:', error);
+        this.$swal.fire({
+          icon: "error",
+          title: `Error al añadir el producto: ${error.response?.data?.details}`,
+          showConfirmButton: true,
+          });   
+        await this.searchProducts();
       } finally {
         this.loading = false; // Stop loading
       }
-      this.isModalCreateVisible = false;
+      //this.isModalCreateVisible = false;
     },
     // Método para editar un producto
     async editProduct(product) {
@@ -191,15 +224,26 @@ export default {
           id_farm: product.id_farm
         });
         if (response.data.result === 'ok') {
-          console.log('Producto editado correctamente');
+          this.isModalEditarVisible = false;
+          this.$swal.fire({
+              icon: "success",
+              title: "Producto editado correctamente",
+              showConfirmButton: false,
+              timer: 2000
+            });
           await this.searchProducts(); // Actualizar la lista de productos
         } 
       } catch (error) {
-        console.error('Error al editar el producto:', error);
+        this.$swal.fire({
+          icon: "error",
+          title: `Error al editar el producto: ${error.response?.data?.details}`,
+          showConfirmButton: true,
+          });
+        await this.searchProducts();  
       } finally {
-      this.loading = false; // Stop loading
-    }
-      this.isModalEditarVisible = false 
+        this.loading = false; // Stop loading
+      }
+      //this.isModalEditarVisible = false 
     },
     // Método para eliminar un producto
     async deleteProduct() {
@@ -207,15 +251,26 @@ export default {
       try {
         const response = await apiClient.delete(`/producto?id=${this.selectedProduct.id}`);
         if (response.data.result === 'ok') {
-          console.log('Producto eliminado correctamente:', response.data.producto);
+          this.isModalDeleteVisible = false;
+          this.$swal.fire({
+              icon: "success",
+              title: "Producto eliminado correctamente",
+              showConfirmButton: false,
+              timer: 2000
+            });
           await this.searchProducts(); // Actualizar la lista de productos
         }
       } catch (error) {
-        console.error('Error al eliminar el producto:', error);
+        this.$swal.fire({
+          icon: "error",
+          title: `Error al eliminar el producto: ${error.response?.data?.details}`,
+          showConfirmButton: true,
+          });
+        await this.searchProducts();   
       } finally {
-      this.loading = false; // Stop loading
-    }
-      this.isModalDeleteVisible = false;  
+        this.loading = false; // Stop loading
+      }
+        //this.isModalDeleteVisible = false;  
     },
     // Método para formatear el precio como moneda
     currency(value) {
