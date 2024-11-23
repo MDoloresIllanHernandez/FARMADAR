@@ -83,3 +83,11 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+
+.boton-oscuro:hover{
+  background-color: darkred;
+  color: white;
+}
+</style>

@@ -58,9 +58,5 @@
     width: 100%;
   }
   
-  .boton-oscuro:hover {
-    background-color: #e74c3c; /* Rojo para indicar acción peligrosa */
-    color: white;
-  }
   </style>
   
