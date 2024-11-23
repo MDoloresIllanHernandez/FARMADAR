@@ -5,8 +5,8 @@
         <p>Esta acción no se puede deshacer.</p>
         
         <div class="flex justify-end gap-2 mt-6">
-          <button @click="cancel" class="boton-oscuro">Cancelar</button>
-          <button @click="confirmDelete" class="boton-claro">Confirmar</button>
+          <button @click="cancel" class="boton-claro-fantasma">Cancelar</button>
+          <button @click="confirmDelete" class="boton-oscuro">Confirmar</button>
         </div>
       </div>
     </div>
@@ -58,22 +58,9 @@
     width: 100%;
   }
   
-  .boton-oscuro {
-    background-color: bg-primary-violeta;
-    color: white;
-    padding: 8px 16px;
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .boton-claro {
+  .boton-oscuro:hover {
     background-color: #e74c3c; /* Rojo para indicar acción peligrosa */
     color: white;
-    padding: 8px 16px;
-    border-radius: 4px;
-    border: none;
-    cursor: pointer;
   }
   </style>
   
