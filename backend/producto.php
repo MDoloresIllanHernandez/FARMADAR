@@ -42,6 +42,7 @@ switch ($_SERVER['REQUEST_METHOD']) {
 	 * Si se ha recibido un GET se llama al método get() del modelo y se le pasan los parámetros recibidos por GET en la petición
 	 */
 	case 'GET':
+		/*
 		$params = $_GET;
 	
 		// Verificar si el rol y el id_farm vienen como parámetros
@@ -70,6 +71,19 @@ switch ($_SERVER['REQUEST_METHOD']) {
 		);
 	
 		Response::result(200, $response);
+		break;*/
+
+		$params = $_GET;
+		
+		$productos = $producto->get($params);
+
+		$response = array(
+			'result' => 'ok',
+			'productos' => $productos
+		);
+
+		Response::result(200, $response);
+
 		break;
 		
 	/**
