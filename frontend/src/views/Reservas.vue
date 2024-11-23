@@ -95,13 +95,18 @@ export default {
   methods: {
   async fetchAllReservas() {
     try {
+       
       // Obtener todas los datos que necesitamos de la api
       const responseReservas = await apiClient.get('/reserva');
       const responseFarmacias = await apiClient.get('/farmacia');
-      const responseProductos = await apiClient.get('/producto');
+      const role = sessionStorage.getItem('role');
+      const idFarm = sessionStorage.getItem('id_farm')
+      const responseProductos =  await apiClient.get('/producto', {
+          params: { role, id_farm: idFarm, source: 'producto' },
+        });
 
-      // Asignar los datos a las variables locales
-      this.reservas = responseReservas.data.reservas;
+     // Asignar los datos a las variables locales
+     this.reservas = responseReservas.data.reservas;
       this.farmacias = responseFarmacias.data.farmacias;
       this.productos = responseProductos.data.productos;
 
