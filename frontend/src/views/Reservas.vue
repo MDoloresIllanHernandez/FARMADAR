@@ -14,50 +14,73 @@
             <table class="min-w-full divide-y divide-gray-200">
               <thead class="bg-gray-50">
                 <tr>
-                  <th scope="col"
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Farmacia
-                    origen</th>
-                  <th scope="col"
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Farmacia
-                    destino</th>
-                  <th scope="col"
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Producto</th>
-                  <th scope="col"
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Fecha</th>
-                  <th scope="col"
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hora Inicio
-                  </th>
-                  <th scope="col"
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hora Fin</th>
-                  <th scope="col"
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cantidad</th>
-                  <th scope="col"
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cliente</th>
-                  <th scope="col"
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Otros Datos
-                  </th>
-                  <th scope="col"
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Estado</th>
-                  <th scope="col"
-                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Acciones</th>
+                  <th scope="col">Farmacia origen</th>
+                  <th scope="col">Farmacia destino</th>
+                  <th scope="col">Producto</th>
+                  <th scope="col">Fecha</th>
+                  <th scope="col">Hora Inicio</th>
+                  <th scope="col">Hora Fin</th>
+                  <th scope="col">Cantidad</th>
+                  <th scope="col">Cliente</th>
+                  <th scope="col">Otros Datos</th>
+                  <th scope="col">Estado</th>
+                  <th scope="col">Acciones</th>
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
-                <tr v-for="reserva in reservas" :key="reserva.id">
-                  <td class="px-6 py-4 whitespace-nowrap">{{ getFarmaciaName(reserva.farm_origen) }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap">{{ getFarmaciaName(reserva.id_farm) }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap">{{ getProductoName(reserva.id_prod) }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap">{{ reserva.fecha }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap">{{ reserva.hora_inicio }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap">{{ reserva.hora_fin }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap">{{ reserva.cantidad }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap">{{ reserva.nombre }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap">{{ reserva.otros_datos }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap">{{ reserva.estado }}</td>
-                  <td class="px-6 py-4 whitespace-nowrap">
-                    <button @click="editReserva(reserva)" class="text-indigo-600 hover:text-indigo-900">Editar</button>
-                    <button @click="deleteReserva(reserva)"
-                      class="text-red-600 hover:text-red-900 ml-4">Eliminar</button>
+                <tr v-for="reserva in reservas" :key="reserva.id" :class="{'bg-primary-turquesa': isEditing(reserva.id)}">
+                  <td><span>{{ getFarmaciaName(reserva.farm_origen) }}</span></td>
+                  <td><span>{{ getFarmaciaName(reserva.id_farm) }}</span></td>
+                  <td><span>{{ getProductoName(reserva.id_prod) }}</span></td>
+                  <td>
+                    <input v-if="isEditing(reserva.id)" v-model="reserva.editedFecha" type="date" class="w-full" />
+                    <span v-else>{{ formatFecha(reserva.fecha) }}</span>
+                  </td>
+                  <td>
+                    <input v-if="isEditing(reserva.id)" v-model="reserva.editedHoraInicio" type="time" class="w-full" />
+                    <span v-else>{{ reserva.hora_inicio }}</span>
+                  </td>
+                  <td>
+                    <input v-if="isEditing(reserva.id)" v-model="reserva.editedHoraFin" type="time" class="w-full" />
+                    <span v-else>{{ reserva.hora_fin }}</span>
+                  </td>
+                  <td>
+                    <input v-if="isEditing(reserva.id)" v-model="reserva.editedCantidad" type="number" class="w-full" />
+                    <span v-else>{{ reserva.cantidad }}</span>
+                  </td>
+                  <td>
+                    <input v-if="isEditing(reserva.id)" v-model="reserva.editedNombre" type="text" class="w-full" />
+                    <span v-else>{{ reserva.nombre }}</span>
+                  </td>
+                  <td>
+                    <input v-if="isEditing(reserva.id)" v-model="reserva.editedOtrosDatos" type="text" class="w-full" />
+                    <span v-else>{{ reserva.otros_datos }}</span>
+                  </td>
+                  <td><span>{{ reserva.estado }}</span></td>
+                  <td>
+                      <div  v-if="isEditing(reserva.id)" >
+                        <button @click="saveReserva(reserva)" class="boton-claro">
+                          Confirmar
+                        </button>
+                        <button @click="editingId = null" class="boton-oscuro">
+                          Cancelar
+                        </button>
+                      </div>
+                      <div v-else>
+                        <button @click="confirmReserva(reserva)" class="p-0 rounded hover:bg-primary-verde">
+                          <img src="../assets/check-box.png" alt="Confirmar" class="h-6 w-6" />
+                        </button>
+                        <button @click="cancelReserva(reserva)" class="p-0 rounded hover:bg-primary-verde">
+                          <img src="../assets/cancel.png" alt="Cancelar" class="h-6 w-6" />
+                        </button>
+                        <button @click="editReserva(reserva)" class="p-0 rounded hover:bg-primary-verde">
+                          <img src="../assets/edit.png" alt="Editar" class="h-6 w-6" />
+                        </button>
+                        <button @click="deleteReserva(reserva)" class="p-0 rounded hover:bg-primary-verde">
+                          <img src="../assets/delete.png" alt="Eliminar" class="h-6 w-6" />
+                        </button>
+                      </div>
+              
                   </td>
                 </tr>
               </tbody>
@@ -86,7 +109,8 @@ export default {
       reservas: [],
       farmacias: [],
       productos: [],
-      hasSearched: false
+      hasSearched: false,
+      editingId: null, // Control de edición
     };
   },
   mounted() {
@@ -105,8 +129,8 @@ export default {
           params: { role, id_farm: idFarm, source: 'producto' },
         });
 
-     // Asignar los datos a las variables locales
-     this.reservas = responseReservas.data.reservas;
+      // Asignar los datos a las variables locales
+      this.reservas = responseReservas.data.reservas;
       this.farmacias = responseFarmacias.data.farmacias;
       this.productos = responseProductos.data.productos;
 
@@ -166,10 +190,93 @@ export default {
     return producto ? producto.nombre : 'No disponible';
   },
 
-  // Método para editar una reserva
-  editReserva(reserva) {
-    // Lógica para editar la reserva
+  //Método para formatear la fecha
+  formatFecha(fecha) {
+    const [año, mes, día] = fecha.split('-');
+    return `${día}/${mes}/${año}`;
   },
+
+  // Método para confirmar una reserva
+  async confirmReserva(reserva) {
+    try{
+      // Hacer la llamada PUT a la API para confirmar la reserva
+      const response = await apiClient.patch(`/reserva?id=${reserva.id}`, { estado: 'Confirmada' });
+
+      if(response.data.result === 'ok'){
+        console.log('Reserva confirmada correctamente:', response.data.reserva);
+        // Actualizar la lista de reservas después de la confirmación
+       await this.fetchAllReservas();
+      }else{
+        console.error('Error al confirmar la reserva:', response.data);
+      }
+
+    }catch(error){
+      console.error('(catch)Error al confirmar la reserva:', error);
+    }
+  },
+
+  // Método para cancelar una reserva
+  async cancelReserva(reserva) {
+    try{
+      // Hacer la llamada PUT a la API para cancelar la reserva
+      const response = await apiClient.patch(`/reserva?id=${reserva.id}`, { estado: 'Cancelada' });
+
+      if(response.data.result === 'ok'){
+        console.log('Reserva cancelada correctamente:', response.data.reserva);
+        // Actualizar la lista de reservas después de la cancelación
+       await this.fetchAllReservas();
+      }else{
+        console.error('Error al cancelar la reserva:', response.data);
+      }
+
+    }catch(error){
+      console.error('(catch)Error al cancelar la reserva:', error);
+    }
+  },
+
+  // Método para editar una reserva
+  async editReserva(reserva) {
+    this.editingId = reserva.id;
+      reserva.editedFecha = reserva.fecha; 
+      reserva.editedHoraInicio = reserva.hora_inicio;
+      reserva.editedHoraFin = reserva.hora_fin;
+      reserva.editedCantidad = reserva.cantidad;
+      reserva.editedNombre = reserva.nombre;
+      reserva.editedOtrosDatos = reserva.otros_datos;
+    },
+
+  // Método para saber si una reserva está siendo editada
+  isEditing(id) {
+      return this.editingId === id;
+    },
+
+  // Método para guardar los cambios de una reserva
+  async saveReserva(reserva) {
+    try {
+      // Hacer la llamada PUT a la API para guardar los cambios de la reserva
+      const response = await apiClient.put(`/reserva?id=${reserva.id}`, {
+        fecha: reserva.editedFecha,
+        hora_inicio: reserva.editedHoraInicio,
+        hora_fin: reserva.editedHoraFin,
+        cantidad: reserva.editedCantidad,
+        nombre: reserva.editedNombre,
+        otros_datos: reserva.editedOtrosDatos,
+      });
+
+      if (response.data.result === 'ok') {
+        console.log('Reserva actualizada correctamente:', response.data.reserva);
+        // Actualizar la lista de reservas después de la actualización
+        await this.fetchAllReservas();
+        this.editingId = null;
+      } else {
+        console.error('Error al actualizar la reserva:', response.data);
+      }
+    } catch (error) {
+      console.error('Error al actualizar la reserva:', error);
+    }
+  },
+
+
   // Método para eliminar una reserva
   async deleteReserva(reserva) {
     try {
@@ -193,3 +300,29 @@ export default {
 
 };
 </script>
+
+<style scoped>
+.boton-claro{
+  background-color: white;
+  color: #453C5C;
+  
+}
+
+.boton-claro:hover{
+  background-color: #31ADA1;
+  color: white;
+}
+
+.boton-oscuro{
+  background-color: #59D999;
+  color: #453C5C;
+  
+}
+
+.boton-oscuro:hover{
+  background-color: #453C5C;
+  color: white;
+}
+
+
+</style>

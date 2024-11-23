@@ -14,7 +14,7 @@ header("Access-Control-Allow-Origin: *");
 // header("Access-Control-Allow-Origin: http://localhost:5173");
 
 // Permitir los métodos que se pueden usar en las solicitudes
-header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
+header("Access-Control-Allow-Methods: GET, POST, PUT,PATCH, DELETE, OPTIONS");
 
 // Permitir los encabezados personalizados
 header("Access-Control-Allow-Headers: Content-Type, Authorization, Api-Key, Farma-User");
@@ -106,6 +106,49 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
 		Response::result(200, $response);	
 		break;
+
+	/**
+	 * Si se recibe un PATCH se comprueba que se envíe un id de reserva. En caso afirmativo se utiliza el método update() del modelo.
+	 */
+	case 'PATCH':
+		$params = json_decode(file_get_contents('php://input'), true);
+	
+		if (!isset($params) || !isset($_GET['id']) || empty($_GET['id'])) {
+			$response = array(
+				'result' => 'error',
+				'details' => 'Error en la solicitud'
+			);
+	
+			Response::result(400, $response);
+			exit();
+		}
+	
+		// Verificar si el parámetro 'estado' está presente
+		if (isset($params['estado'])) {
+			// Solo actualizamos el estado
+			$estado = $params['estado'];
+			
+			// Aquí usamos el método `update` para actualizar solo el estado
+			$updateParams = ['estado' => $estado];
+			$reserva->update($_GET['id'], $updateParams); // Llamamos al método `update` solo con el estado
+		} else {
+			// Si no se pasa el 'estado', retornamos un error
+			$response = array(
+				'result' => 'error',
+				'details' => 'Falta el parámetro estado'
+			);
+	
+			Response::result(400, $response);
+			exit();
+		}
+	
+		$response = array(
+			'result' => 'ok'
+		);
+	
+		Response::result(200, $response);
+		break;
+	
 
 	/**
 	 * Cuando se solicita un DELETE se comprueba que se envíe un id de reserva. En caso afirmativo se utiliza el método delete() del modelo.
