@@ -9,7 +9,7 @@
                 :initialData="existingItemData" 
                 submitButtonText="Reservar"
                 cancelRoute="Buscador" 
-                @submit="handleSubmit" />
+                 @submit="handleSubmit" />
             </div>
         </div>
 
@@ -29,33 +29,33 @@ export default {
     data() {
         return {
             existingItemData: {},
-           /* dataSelect:{
-                dataSelect: [
-                    {
-                        name: "id_prod",
-                        label: "Producto",
-                        type: "select",
-                        data: [], // Aquí llenaremos los datos dinámicamente
-                        error: "*Producto requerido",
-                        readonly: true,
-                    },
-                    {
-                        name: "id_farm",
-                        label: "Farmacia destino",
-                        type: "select",
-                        data: [], // Aquí llenaremos los datos dinámicamente
-                        error: "*Farmacia requerida",
-                        readonly: true,
-                    },
-                    {
-                        name: "farm_origen",
-                        label: "Farmacia origen",
-                        type: "select",
-                        data: [], // Aquí llenaremos los datos dinámicamente
-                        error: "*Farmacia origen requerida",
-                    },
-                ]
-            },*/
+            /* dataSelect:{
+                 dataSelect: [
+                     {
+                         name: "id_prod",
+                         label: "Producto",
+                         type: "select",
+                         data: [], // Aquí llenaremos los datos dinámicamente
+                         error: "*Producto requerido",
+                         readonly: true,
+                     },
+                     {
+                         name: "id_farm",
+                         label: "Farmacia destino",
+                         type: "select",
+                         data: [], // Aquí llenaremos los datos dinámicamente
+                         error: "*Farmacia requerida",
+                         readonly: true,
+                     },
+                     {
+                         name: "farm_origen",
+                         label: "Farmacia origen",
+                         type: "select",
+                         data: [], // Aquí llenaremos los datos dinámicamente
+                         error: "*Farmacia origen requerida",
+                     },
+                 ]
+             },*/
             itemFields: [
                 { name: "id_prod", label: "Producto", type: "text", error: "*Producto requerido", readonly: true },
                 { name: "id_farm", label: "Farmacia destino", type: "text", error: "*Farmacia requerida", readonly: true },
@@ -122,7 +122,7 @@ export default {
         },*/
         // Método para manejar el envío del formulario y añadir la reserva
         async handleSubmit(formData) {
-           if (formData.isTrusted) {
+            if (formData.isTrusted) {
                 return;
             }
             try {
