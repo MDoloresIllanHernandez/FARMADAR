@@ -22,6 +22,7 @@ import Navbar from './../components/Navbar.vue';
 import Footer from './../components/Footer.vue';
 import GenericForm from './../components/GenericForm.vue';
 import apiClient from '../scripts/axios.js';
+import { readonly } from 'vue';
 
 export default {
 
@@ -29,11 +30,12 @@ export default {
     data() {
         return {
             farm_origen: sessionStorage.getItem('id_farm'),
+            role: sessionStorage.getItem('role'),
             existingItemData: {},
             itemFields: [
                 { name: "id_prod", label: "Producto", type: "text", error: "*Producto requerido", readonly: true },
                 { name: "id_farm", label: "Farmacia destino", type: "text", error: "*Farmacia requerida", readonly: true },
-                { name: "farm_origen", label: "Farmacia origen", type: "text", error: "*Farmacia origen requerida" },
+                { name: "farm_origen", label: "Farmacia origen", type: "text", error: "*Farmacia origen requerida", readonly: false },
                 { name: "fecha", label: "Fecha", type: "date", error: "*Fecha requerida" },
                 { name: "hora_inicio", label: "Hora inicio", type: "time", error: "*Hora requerida" },
                 { name: "hora_fin", label: "Hora fin", type: "time", max: "20:00", error: "*Hora requerida" },
@@ -47,6 +49,10 @@ export default {
 
     },
     created() {
+        //Ajustar el campo farm_origen según el rol
+        if (this.role !== 'superadmin') {
+            this.itemFields[2].readonly = true;
+        }
         // Obtener los parámetros de la URL
         this.productId = this.$route.params.productId;
         this.farmId = this.$route.params.farmId;
