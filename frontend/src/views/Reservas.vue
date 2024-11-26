@@ -216,7 +216,11 @@ export default {
         const response = await apiClient.patch(`/reserva?id=${reserva.id}`, { estado: 'Confirmada' });
 
         if (response.data.result === 'ok') {
-          console.log('Reserva confirmada correctamente:', response.data.reserva);
+          this.$swal.fire({
+                        icon: 'success',
+                        title: 'Reserva confirmada',
+                        showConfirmButton: true,
+                    });
           // Actualizar la lista de reservas después de la confirmación
           await this.fetchAllReservas();
         } else {
@@ -235,6 +239,11 @@ export default {
         const response = await apiClient.patch(`/reserva?id=${reserva.id}`, { estado: 'Cancelada' });
 
         if (response.data.result === 'ok') {
+          this.$swal.fire({
+                        icon: 'error',
+                        title: 'Reserva cancelada',
+                        showConfirmButton: true,
+                    });
           console.log('Reserva cancelada correctamente:', response.data.reserva);
           // Actualizar la lista de reservas después de la cancelación
           await this.fetchAllReservas();
@@ -277,7 +286,11 @@ export default {
         });
 
         if (response.data.result === 'ok') {
-          console.log('Reserva actualizada correctamente:', response.data.reserva);
+          this.$swal.fire({
+                        icon: 'success',
+                        title: 'Reserva actualizada correctamente',
+                        showConfirmButton: true,
+                    });
           // Actualizar la lista de reservas después de la actualización
           await this.fetchAllReservas();
           this.editingId = null;
@@ -296,7 +309,11 @@ export default {
         const response = await apiClient.delete(`/reserva?id=${reserva.id}`);
 
         if (response.data.result === 'ok') {
-          console.log('Reserva eliminada correctamente:', response.data.producto);
+          this.$swal.fire({
+                        icon: 'success',
+                        title: 'Reserva eliminada correctamente',
+                        showConfirmButton: true,
+                    });
 
           // Actualizar la lista de reservas después de la eliminación
           await this.fetchAllReservas();
