@@ -11,7 +11,7 @@
         <div class="mt-6 flex gap-x-4 pb-8">
           <label for="productos" class="sr-only">Productos</label>
           <input id="productos" v-model="searchQuery" @keyup.enter="searchProducts" type="text" ref="searchInput"
-            placeholder="Introduce el nombre del producto..."/>
+            placeholder="Introduce el nombre del producto..." />
           <button @click="searchProducts" class="boton-claro"> Buscar </button>
         </div>
         <div v-if="loading" class="loading-overlay">
@@ -38,17 +38,19 @@ import CardReservas from '../components/CardReservas.vue';
 import apiClient from '../scripts/axios.js';
 
 export default {
-  components: { Navbar, Footer, CardReservas},
-  
-    data() {
+  components: { Navbar, Footer, CardReservas },
+
+  data() {
     return {
       searchQuery: '',
       products: [],
       hasSearched: false,
       loading: false,
+      role: sessionStorage.getItem('role'),
+      idFarm: sessionStorage.getItem('id_farm')
     };
   },
-  mounted(){
+  mounted() {
     //Poner el foco en el input de búsqueda al cargar la página
     this.$refs.searchInput.focus();
   },
@@ -63,20 +65,28 @@ export default {
             product.nombre.toLowerCase().includes(this.searchQuery.toLowerCase())
           );
 
-        // Consultar farmacias
-        const pharmaciesResponse = await apiClient.get('/farmacia');
-        if (pharmaciesResponse.data.result === 'ok' && pharmaciesResponse.data.farmacias) {
-          const farmacias = pharmaciesResponse.data.farmacias;
+          // Consultar farmacias
+          const pharmaciesResponse = await apiClient.get('/farmacia');
+          if (pharmaciesResponse.data.result === 'ok' && pharmaciesResponse.data.farmacias) {
+            const farmacias = pharmaciesResponse.data.farmacias;
 
-          // Asociar el nombre de la farmacia al producto correspondiente
-          this.products = this.products.map(product => {
-            const farmacia = farmacias.find(f => f.id === product.id_farm);
-            return {
-              ...product,
-              nombre_farmacia: farmacia ? farmacia.nombre : 'Desconocido'
-            };
-          });
-        }
+            //Recojo el id de la farmacia del sessionStorage
+            const idFarm = sessionStorage.getItem('id_farm');
+            const userRole = sessionStorage.getItem('role');
+
+            // Asociar el nombre de la farmacia al producto correspondiente
+            this.products = this.products.map(product => {
+              const farmacia = farmacias.find(f => f.id === product.id_farm);
+              return {
+                ...product,
+                nombre_farmacia: farmacia ? farmacia.nombre : 'Desconocido'
+              };
+            })
+            // Filtrar productos por farmacia si el usuario es distinto de superadmin
+            if (userRole !== 'superadmin') {
+              this.products = this.products.filter(product => product.id_farm === idFarm);
+            }
+          }
           this.hasSearched = true;
         }
       } catch (error) {
@@ -96,7 +106,7 @@ export default {
       console.log(`Reserva realizada para el producto: ${product.nombre}`);
       // Aquí se podría realizar una llamada API o cualquier lógica adicional para gestionar la reserva
     }
-  },  
+  },
 
 }
 </script>
@@ -124,10 +134,12 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(255, 255, 255, 0.8); /* Slight overlay background */
+  background: rgba(255, 255, 255, 0.8);
+  /* Slight overlay background */
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000; /* Ensure it’s above other elements */
+  z-index: 1000;
+  /* Ensure it’s above other elements */
 }
 </style>
