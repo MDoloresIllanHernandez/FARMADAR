@@ -28,34 +28,8 @@ export default {
     components: { Navbar, Footer, GenericForm },
     data() {
         return {
+            farm_origen: sessionStorage.getItem('id_farm'),
             existingItemData: {},
-            /* dataSelect:{
-                 dataSelect: [
-                     {
-                         name: "id_prod",
-                         label: "Producto",
-                         type: "select",
-                         data: [], // Aquí llenaremos los datos dinámicamente
-                         error: "*Producto requerido",
-                         readonly: true,
-                     },
-                     {
-                         name: "id_farm",
-                         label: "Farmacia destino",
-                         type: "select",
-                         data: [], // Aquí llenaremos los datos dinámicamente
-                         error: "*Farmacia requerida",
-                         readonly: true,
-                     },
-                     {
-                         name: "farm_origen",
-                         label: "Farmacia origen",
-                         type: "select",
-                         data: [], // Aquí llenaremos los datos dinámicamente
-                         error: "*Farmacia origen requerida",
-                     },
-                 ]
-             },*/
             itemFields: [
                 { name: "id_prod", label: "Producto", type: "text", error: "*Producto requerido", readonly: true },
                 { name: "id_farm", label: "Farmacia destino", type: "text", error: "*Farmacia requerida", readonly: true },
@@ -81,6 +55,7 @@ export default {
         this.existingItemData = {
             id_prod: this.productId,
             id_farm: this.farmId,
+            farm_origen: this.farm_origen,
             estado: 'Pendiente'
         };
 
@@ -96,30 +71,10 @@ export default {
         //Establecer la hora final
         this.existingItemData.hora_fin = this.calculateEndTime(now);
 
-        //Cargar los select de farmacias y productos
-        //this.loadSelectData();
+       
     },
     methods: {
-        // Método para cargar los datos de los select de farmacias y productos
-        /*async loadSelectData() {
-            try {
-                   // Obtener todas los datos que necesitamos de la api
-                    const responseFarmacias = await apiClient.get('/farmacia');
-                    const role = sessionStorage.getItem('role');
-                    const idFarm = sessionStorage.getItem('id_farm')
-                    const responseProductos =  await apiClient.get('/producto', {
-                        params: { role, id_farm: idFarm, source: 'producto' },
-                        });
-              
-                    // Asignar los datos a las variables locales
-                    this.dataSelect.dataSelect[0].data = responseProductos.data.productos;
-                    this.dataSelect.dataSelect[1].data = responseFarmacias.data.farmacias;
-                    this.dataSelect.dataSelect[2].data = responseFarmacias.data.farmacias;
-              
-            } catch (error) {
-                console.error('Error al cargar los datos de los select:', error);
-            }
-        },*/
+     
         // Método para manejar el envío del formulario y añadir la reserva
         async handleSubmit(formData) {
             if (formData.isTrusted) {
