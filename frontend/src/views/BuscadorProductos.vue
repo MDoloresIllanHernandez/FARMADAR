@@ -84,7 +84,7 @@ export default {
             })
             // Filtrar productos por farmacia si el usuario es distinto de superadmin
             if (userRole !== 'superadmin') {
-              this.products = this.products.filter(product => product.id_farm === idFarm);
+              this.products = this.products.filter(product => product.id_farm !== idFarm);
             }
           }
           this.hasSearched = true;
