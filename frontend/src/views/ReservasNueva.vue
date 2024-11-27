@@ -107,31 +107,41 @@ export default {
                 return;
             }
             try {
-                const response = await apiClient.post('/reserva', formData)
+                // Realizar la reserva
+                const response = await apiClient.post('/reserva', formData);
+
                 if (response.data.result === 'ok') {
-                    this.$swal.fire({
-                        icon: 'success',
-                        title: 'Reserva añadida correctamente',
-                        showConfirmButton: true,
+                    // Llamar al endpoint PUT para actualizar el stock
+                    const stockResponse = await apiClient.put('/stock', {
+                        id: formData.id_prod,
+                        id_farm: formData.id_farm,
+                        newStock: this.cantidadMaxima - formData.cantidad // Stock actualizado
                     });
-                    this.$router.push('/Reservas');
+
+                    if (stockResponse.data.result === 'ok') {
+                        this.$swal.fire({
+                            icon: 'success',
+                            title: 'Reserva realizada correctamente',
+                            showConfirmButton: true,
+                        });
+                        this.$router.push('/Reservas');
+                    } else {
+                        throw new Error('No se pudo actualizar el stock.');
+                    }
+                } else {
+                    throw new Error(response.data.message);
                 }
             } catch (error) {
-                let errorField = "";
-                let errorFound = false;
-
-                this.requiredFields.forEach((field) => {
-                    if (formData[field] == null || (typeof (formData[field]) != 'number' && formData[field].trim() === "")) {
-                        error = true;
-                        errorField = field
-                    }
+                console.error('Error al procesar la reserva:', error.message);
+                this.$swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: error.message || 'No se pudo procesar la reserva',
+                    showConfirmButton: true,
                 });
-                if (errorFound) {
-                    this.$emit('errorForm', errorField)
-                    console.error('Error al añadir la reserva: El campo ' + errorField + ' es obligatorio');
-                }
             }
         },
+
         // Método para calcular la hora final, 2 horas después de la hora de inicio y antes de las 20:00
         calculateEndTime(startTime) {
             // Crear una nueva fecha con la hora de inicio

@@ -87,7 +87,8 @@ switch ($_SERVER['REQUEST_METHOD']) {
 	case 'PUT':
 		$data = json_decode(file_get_contents('php://input'), true);
 
-		if (empty($data['id']) || empty($data['id_farm']) || !isset($data['stock'])) {
+
+		if (empty($data['id']) || empty($data['id_farm']) || !isset($data['newStock'])) {
 			Response::result(400, array(
 				'result' => 'error',
 				'message' => 'Faltan parámetros requeridos: id, id_farm, y/o el stock.'
