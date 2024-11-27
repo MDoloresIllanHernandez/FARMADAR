@@ -68,13 +68,16 @@
                       </button>
                     </div>
                     <div v-else>
-                      <button v-if="reserva.estado === 'Pendiente' || showButton()" @click="confirmReserva(reserva)" class="p-0 rounded hover:bg-primary-verde">
+                      <button v-if="reserva.estado === 'Pendiente' || showButton()" @click="confirmReserva(reserva)"
+                        class="p-0 rounded hover:bg-primary-verde">
                         <img src="../assets/check-box.png" alt="Confirmar" class="h-6 w-6" />
                       </button>
-                      <button v-if="reserva.estado === 'Pendiente' || showButton()" @click="cancelReserva(reserva)" class="p-0 rounded hover:bg-primary-verde">
+                      <button v-if="reserva.estado === 'Pendiente' || showButton()" @click="cancelReserva(reserva)"
+                        class="p-0 rounded hover:bg-primary-verde">
                         <img src="../assets/cancel.png" alt="Cancelar" class="h-6 w-6" />
                       </button>
-                      <button v-if="reserva.estado === 'Pendiente' || showButton()" @click="editReserva(reserva)" class="p-0 rounded hover:bg-primary-verde">
+                      <button v-if="reserva.estado === 'Pendiente' || showButton()" @click="editReserva(reserva)"
+                        class="p-0 rounded hover:bg-primary-verde">
                         <img src="../assets/edit.png" alt="Editar" class="h-6 w-6" />
                       </button>
                       <button v-if="showButton()" @click="deleteReserva(reserva)"
@@ -143,10 +146,10 @@ export default {
 
         //Filtrar las reservas por farmacia
         if (role !== 'superadmin') {
-          this.reservas = this.reservas.filter(reserva => 
-          reserva.id_farm == idFarm || reserva.farm_origen == idFarm);
+          this.reservas = this.reservas.filter(reserva =>
+            reserva.id_farm == idFarm || reserva.farm_origen == idFarm);
         }
-       
+
         // Ordenar las reservas primero por fecha (más recientes primero)
         // Luego, dentro de la misma fecha, ordenarlas por hora de fin (más alta primero)
         this.reservas.sort((a, b) => {
@@ -212,11 +215,15 @@ export default {
     // Método para confirmar una reserva
     async confirmReserva(reserva) {
       try {
-        // Hacer la llamada PUT a la API para confirmar la reserva
+        // Hacer la llamada PATCH a la API para confirmar la reserva
         const response = await apiClient.patch(`/reserva?id=${reserva.id}`, { estado: 'Confirmada' });
 
         if (response.data.result === 'ok') {
-          console.log('Reserva confirmada correctamente:', response.data.reserva);
+          this.$swal.fire({
+            icon: 'success',
+            title: 'Reserva confirmada',
+            showConfirmButton: true,
+          });
           // Actualizar la lista de reservas después de la confirmación
           await this.fetchAllReservas();
         } else {
@@ -231,19 +238,41 @@ export default {
     // Método para cancelar una reserva
     async cancelReserva(reserva) {
       try {
-        // Hacer la llamada PUT a la API para cancelar la reserva
-        const response = await apiClient.patch(`/reserva?id=${reserva.id}`, { estado: 'Cancelada' });
+        // Cancelar la reserva
+        const cancelResponse = await apiClient.patch(`/reserva?id=${reserva.id}`, { estado: 'Cancelada' });
 
-        if (response.data.result === 'ok') {
-          console.log('Reserva cancelada correctamente:', response.data.reserva);
-          // Actualizar la lista de reservas después de la cancelación
+        if (cancelResponse.data.result === 'ok') {
+      
+          //Obtener el stock del producto
+          const stockResponse = await apiClient.get(`/stock?id=${reserva.id_prod}&id_farm=${reserva.id_farm}`);
+        
+          // Calcular el nuevo stock
+          const nuevoStock = parseInt(stockResponse.data.stock) + parseInt(reserva.cantidad);
+
+          // Actualizar el stock usando el método PUT
+          const putStockResponse = await apiClient.put(`/stock`, {
+            id: reserva.id_prod,
+            id_farm: reserva.id_farm,
+            newStock: nuevoStock
+          });
+
+          if (putStockResponse.data.result === 'ok') {
+            this.$swal.fire({
+              icon: 'success',
+              title: 'Reserva cancelada y stock actualizado correctamente',
+              showConfirmButton: true,
+            });
+          } else {
+            console.error('Error al actualizar el stock:', stockResponse.data.message);
+          }
+
+          // Refrescar la lista de reservas
           await this.fetchAllReservas();
         } else {
-          console.error('Error al cancelar la reserva:', response.data);
+          console.error('Error al cancelar la reserva:', cancelResponse.data.message);
         }
-
       } catch (error) {
-        console.error('(catch)Error al cancelar la reserva:', error);
+        console.error('Error al cancelar la reserva y/o actualizar el stock:', error);
       }
     },
 
@@ -277,7 +306,11 @@ export default {
         });
 
         if (response.data.result === 'ok') {
-          console.log('Reserva actualizada correctamente:', response.data.reserva);
+          this.$swal.fire({
+            icon: 'success',
+            title: 'Reserva actualizada correctamente',
+            showConfirmButton: true,
+          });
           // Actualizar la lista de reservas después de la actualización
           await this.fetchAllReservas();
           this.editingId = null;
@@ -296,7 +329,11 @@ export default {
         const response = await apiClient.delete(`/reserva?id=${reserva.id}`);
 
         if (response.data.result === 'ok') {
-          console.log('Reserva eliminada correctamente:', response.data.producto);
+          this.$swal.fire({
+            icon: 'success',
+            title: 'Reserva eliminada correctamente',
+            showConfirmButton: true,
+          });
 
           // Actualizar la lista de reservas después de la eliminación
           await this.fetchAllReservas();

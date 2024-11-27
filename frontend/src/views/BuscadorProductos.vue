@@ -62,7 +62,7 @@ export default {
         const productsResponse = await apiClient.get('/buscadorProductos');
         if (productsResponse.data.result === 'ok' && productsResponse.data.productos) {
           this.products = productsResponse.data.productos.filter(product =>
-            product.nombre.toLowerCase().includes(this.searchQuery.toLowerCase())
+            product.nombre.toLowerCase().includes(this.searchQuery.toLowerCase()) && product.stock > 0
           );
 
           // Consultar farmacias

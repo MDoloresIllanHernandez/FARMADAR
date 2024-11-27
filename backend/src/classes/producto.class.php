@@ -300,6 +300,24 @@ class Producto extends Database
 			exit;
 		}
 	}
+
+	/**
+	 * Método para actualizar el stock de un producto en una farmacia
+	 */
+	public function updateStock($id, $id_farm, $stock)
+	{
+		$affected_rows = parent::updateProductDB($this->table, $id, array('stock' => $stock, 'id_farm' => $id_farm));
+
+		if($affected_rows==0){
+			$response = array(
+				'result' => 'ok',
+				'details' => 'No hubo cambios'
+			);
+
+			Response::result(200, $response);
+			exit;
+		}
+	}
 }
 
 ?>

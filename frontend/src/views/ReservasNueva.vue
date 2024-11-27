@@ -4,12 +4,8 @@
         <div class="relative isolate px-6 pt-14 lg:px-8">
             <div class="mx-auto max-w-6xl py-32 sm:py-32 lg:py-32">
                 <h1> Nueva Reserva</h1>
-                <GenericForm 
-                :fields="itemFields" 
-                :initialData="existingItemData" 
-                submitButtonText="Reservar"
-                cancelRoute="Buscador" 
-                 @submit="handleSubmit" />
+                <GenericForm :fields="itemFields" :initialData="existingItemData" submitButtonText="Reservar"
+                    cancelRoute="Buscador" @errorForm="mostrarError" @submit="handleSubmit" />
             </div>
         </div>
 
@@ -23,56 +19,38 @@ import Footer from './../components/Footer.vue';
 import GenericForm from './../components/GenericForm.vue';
 import apiClient from '../scripts/axios.js';
 
+
 export default {
 
     components: { Navbar, Footer, GenericForm },
     data() {
         return {
+            farm_origen: sessionStorage.getItem('id_farm'),
+            role: sessionStorage.getItem('role'),
             existingItemData: {},
-            /* dataSelect:{
-                 dataSelect: [
-                     {
-                         name: "id_prod",
-                         label: "Producto",
-                         type: "select",
-                         data: [], // Aquí llenaremos los datos dinámicamente
-                         error: "*Producto requerido",
-                         readonly: true,
-                     },
-                     {
-                         name: "id_farm",
-                         label: "Farmacia destino",
-                         type: "select",
-                         data: [], // Aquí llenaremos los datos dinámicamente
-                         error: "*Farmacia requerida",
-                         readonly: true,
-                     },
-                     {
-                         name: "farm_origen",
-                         label: "Farmacia origen",
-                         type: "select",
-                         data: [], // Aquí llenaremos los datos dinámicamente
-                         error: "*Farmacia origen requerida",
-                     },
-                 ]
-             },*/
+            cantidadMaxima: 0,
             itemFields: [
                 { name: "id_prod", label: "Producto", type: "text", error: "*Producto requerido", readonly: true },
                 { name: "id_farm", label: "Farmacia destino", type: "text", error: "*Farmacia requerida", readonly: true },
-                { name: "farm_origen", label: "Farmacia origen", type: "text", error: "*Farmacia origen requerida" },
+                { name: "farm_origen", label: "Farmacia origen", type: "text", error: "*Farmacia origen requerida", readonly: false },
                 { name: "fecha", label: "Fecha", type: "date", error: "*Fecha requerida" },
                 { name: "hora_inicio", label: "Hora inicio", type: "time", error: "*Hora requerida" },
                 { name: "hora_fin", label: "Hora fin", type: "time", max: "20:00", error: "*Hora requerida" },
-                { name: "cantidad", label: "Cantidad", type: "number", error: "*Cantidad requerida" },
+                { name: "cantidad", label: "Cantidad", type: "number", error: `*Cantidad requerida (máximo no definido)`, max: 0 },
                 { name: "nombre", label: "Nombre del cliente", type: "text", error: "*Nombre del cliente requerido" },
                 { name: "otros_datos", label: "Datos de contacto (teléfono/email)", type: "textarea", error: "*Datos de contacto requeridos" },
                 { name: "estado", label: "Estado", type: "text", readonly: true, value: "Pendiente" },
 
             ],
+            requiredFields: ["id_prod", "id_farm", "farm_origen", "fecha", "hora_inicio", "hora_fin", "cantidad", "nombre", "otros_datos", "estado"],
         };
 
     },
-    created() {
+    created: async function () {
+        //Ajustar el campo farm_origen según el rol
+        if (this.role !== 'superadmin') {
+            this.itemFields[2].readonly = true;
+        }
         // Obtener los parámetros de la URL
         this.productId = this.$route.params.productId;
         this.farmId = this.$route.params.farmId;
@@ -81,6 +59,7 @@ export default {
         this.existingItemData = {
             id_prod: this.productId,
             id_farm: this.farmId,
+            farm_origen: this.farm_origen,
             estado: 'Pendiente'
         };
 
@@ -96,44 +75,73 @@ export default {
         //Establecer la hora final
         this.existingItemData.hora_fin = this.calculateEndTime(now);
 
-        //Cargar los select de farmacias y productos
-        //this.loadSelectData();
+        // Obtener la cantidad máxima en stock (ejemplo dinámico)
+        try {
+            this.cantidadMaxima = await this.getStock(); // Espera a que se resuelva la promesa
+
+            // Actualizar dinámicamente el campo "cantidad"
+            const cantidadField = this.itemFields.find(field => field.name === "cantidad");
+            if (cantidadField) {
+                cantidadField.max = this.cantidadMaxima; // Actualiza el límite máximo
+                cantidadField.error = `*Cantidad requerida (máximo: ${this.cantidadMaxima})`; // Actualiza el mensaje de error
+            }
+        } catch (error) {
+            console.error("Error al obtener la cantidad máxima en stock:", error);
+        }
+
+
     },
     methods: {
-        // Método para cargar los datos de los select de farmacias y productos
-        /*async loadSelectData() {
-            try {
-                   // Obtener todas los datos que necesitamos de la api
-                    const responseFarmacias = await apiClient.get('/farmacia');
-                    const role = sessionStorage.getItem('role');
-                    const idFarm = sessionStorage.getItem('id_farm')
-                    const responseProductos =  await apiClient.get('/producto', {
-                        params: { role, id_farm: idFarm, source: 'producto' },
-                        });
-              
-                    // Asignar los datos a las variables locales
-                    this.dataSelect.dataSelect[0].data = responseProductos.data.productos;
-                    this.dataSelect.dataSelect[1].data = responseFarmacias.data.farmacias;
-                    this.dataSelect.dataSelect[2].data = responseFarmacias.data.farmacias;
-              
-            } catch (error) {
-                console.error('Error al cargar los datos de los select:', error);
-            }
-        },*/
+        // Método para mostrar un error
+        mostrarError(errorField) {
+            this.$swal.fire({
+                icon: "error",
+                title: `El campo ${errorField} es obligatorio`,
+                showConfirmButton: true,
+            });
+        },
+
         // Método para manejar el envío del formulario y añadir la reserva
         async handleSubmit(formData) {
             if (formData.isTrusted) {
                 return;
             }
             try {
-                const response = await apiClient.post('/reserva', formData)
+                // Realizar la reserva
+                const response = await apiClient.post('/reserva', formData);
+
                 if (response.data.result === 'ok') {
-                    this.$router.push('/Reservas');
+                    // Llamar al endpoint PUT para actualizar el stock
+                    const stockResponse = await apiClient.put('/stock', {
+                        id: formData.id_prod,
+                        id_farm: formData.id_farm,
+                        newStock: this.cantidadMaxima - formData.cantidad // Stock actualizado
+                    });
+
+                    if (stockResponse.data.result === 'ok') {
+                        this.$swal.fire({
+                            icon: 'success',
+                            title: 'Reserva realizada correctamente',
+                            showConfirmButton: true,
+                        });
+                        this.$router.push('/Reservas');
+                    } else {
+                        throw new Error('No se pudo actualizar el stock.');
+                    }
+                } else {
+                    throw new Error(response.data.message);
                 }
             } catch (error) {
-                console.error('Error al añadir la reserva:', error);
+                console.error('Error al procesar la reserva:', error.message);
+                this.$swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: error.message || 'No se pudo procesar la reserva',
+                    showConfirmButton: true,
+                });
             }
         },
+
         // Método para calcular la hora final, 2 horas después de la hora de inicio y antes de las 20:00
         calculateEndTime(startTime) {
             // Crear una nueva fecha con la hora de inicio
@@ -147,6 +155,21 @@ export default {
             }
             // Devolver la hora final en formato HH:MM
             return endTime.toTimeString().split(' ')[0].substring(0, 5);
+        },
+
+        //Método para traer el stock de un producto en una farmacia
+        async getStock() {
+            try {
+                const response = await apiClient.get(`/stock?id=${this.productId}&id_farm=${this.farmId}`);
+
+                if (response.data.result === 'ok') {
+                    this.stock = response.data.stock;
+                    return this.stock;
+                }
+            } catch (error) {
+                console.error('Error al obtener el stock:', error);
+                return 0;
+            }
         }
 
 
