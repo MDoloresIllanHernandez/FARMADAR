@@ -36,20 +36,45 @@ export default {
     },
   },
   data() {
+    const userRole = sessionStorage.getItem('role');
+    const userFarm = sessionStorage.getItem('id_farm');
       return {
+        role: userRole,
+        farmacias: [],
         itemFields: [
           { name: "nombre", label: "Nombre", type: "text", error: "*Nombre requerido" },
           { name: "username", label: "Username", type: "text", error: "*Username requerido" },
           { name: "password", label: "Password", type: "password", error: "*Password requerida" },
-          { name: "role", label: "Rol", type: "text", error: "*Rol requerido" },
         ],
         dataSelect: [
-        { name: "id_farm", label: "Farmacia", type: "select", error: "*Farmacia requerida", data:this.farmacias },
+        { name: "id_farm", label: "Farmacia", type: "select", error: "*Farmacia requerida", data:this.filterFarmacias(userRole, userFarm) },
+        { name: "role", label: "Rol", type: "select", error: "*Rol requerido", data:this.filterRoles(userRole)},
         ],
         requiredFields: ["nombre", "username", "password", "role", "id_farm"],
       };
     },
   methods: {
+    filterFarmacias(role, userFarm){
+      if(role === 'admin'){
+        return this.farmacias.filter(farmacia => farmacia.id === userFarm);
+      }
+      return this.farmacias;
+    },
+    filterRoles(role) {
+      if (role === 'admin') {
+        // Si el rol es "admin", solo puede asignar "admin" y "usu"
+        return [
+          { id: 'admin', nombre: 'Administrador' },
+          { id: 'usu', nombre: 'Usuario' },
+        ];
+      }
+      // Si es "superadmin", puede asignar todos los roles
+      return [
+        { id: 'superadmin', nombre: 'Superadministrador' },
+        { id: 'admin', nombre: 'Administrador' },
+        { id: 'usu', nombre: 'Usuario' },
+      ];
+    },
     errorForm(error) {
       console.log("error", error);
     },
