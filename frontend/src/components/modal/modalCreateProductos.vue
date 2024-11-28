@@ -36,7 +36,11 @@ export default {
     },
   },
   data() {
+    const userRole = sessionStorage.getItem('role');
+    const userFarm = sessionStorage.getItem('id_farm');
       return {
+        role: userRole,
+        farmacias: [],
         itemFields: [
           { name: "id", label: "Id producto", type: "number", error: "*Id requerido"},
           { name: "producto", label: "Nombre", type: "text", error: "*Nombre requerido" },
@@ -44,12 +48,18 @@ export default {
           { name: "stock", label: "Stock", type: "number", error: "*Stock requerido" },
         ],
         dataSelect: [
-          { name: "id_farm", label: "Farmacia", type: "select", error: "*Farmacia requerida", data:this.farmacias },
+          { name: "id_farm", label: "Farmacia", type: "select", error: "*Farmacia requerida", data:this.filterFarmacias(userRole, userFarm) },
         ],
         requiredFields: ["id", "producto", "precio", "stock", "id_farm"],
       };
     },
   methods: {
+    filterFarmacias(role, userFarm){
+      if(role === 'admin' || role === 'usu'){
+        return this.farmacias.filter(farmacia => farmacia.id === userFarm);
+      }
+      return this.farmacias;
+    },
     errorForm(error) {
       console.log("error", error);
     },
