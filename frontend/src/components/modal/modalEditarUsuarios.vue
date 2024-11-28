@@ -46,7 +46,7 @@ export default {
         itemFields: [
           { name: "id", label: "Id usuario", type: "number", error: "*Id requerido", readonly: true },
           { name: "nombre", label: "Nombre usuario", type: "text", error: "*Nombre requerido" },
-          { name: "username", label: "Username", type: "text", error: "*Username requerido",readonly:this.role=='superadmin'?false:true },
+          { name: "username", label: "Username", type: "text", error: "*Username requerido"},
           { name: "role", label: "Rol", type: "text", error: "*Rol requerido",readonly:this.role=='superadmin'?false:true },
         ],
         dataSelect: [
