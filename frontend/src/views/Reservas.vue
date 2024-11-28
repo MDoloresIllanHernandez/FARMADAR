@@ -34,33 +34,36 @@
                   <td><span>{{ getFarmaciaName(reserva.id_farm) }}</span></td>
                   <td><span>{{ getProductoName(reserva.id_prod) }}</span></td>
                   <td>
-                    <input v-if="isEditing(reserva.id)" v-model="reserva.editedFecha" type="date" class="w-full" />
+                    <input v-if="isEditing(reserva.id)" v-model="currentReserva.fecha" type="date" class="w-full" />
                     <span v-else>{{ formatFecha(reserva.fecha) }}</span>
                   </td>
                   <td>
-                    <input v-if="isEditing(reserva.id)" v-model="reserva.editedHoraInicio" type="time" class="w-full" />
+                    <input v-if="isEditing(reserva.id)" v-model="currentReserva.hora_inicio" type="time"
+                      class="w-full" />
                     <span v-else>{{ reserva.hora_inicio }}</span>
                   </td>
                   <td>
-                    <input v-if="isEditing(reserva.id)" v-model="reserva.editedHoraFin" type="time" class="w-full" />
+                    <input v-if="isEditing(reserva.id)" v-model="currentReserva.hora_fin" type="time" class="w-full" />
                     <span v-else>{{ reserva.hora_fin }}</span>
                   </td>
                   <td>
-                    <input v-if="isEditing(reserva.id)" v-model="reserva.editedCantidad" type="number" class="w-full" />
+                    <input v-if="isEditing(reserva.id)" v-model="currentReserva.cantidad" type="number"
+                      class="w-full" />
                     <span v-else>{{ reserva.cantidad }}</span>
                   </td>
                   <td>
-                    <input v-if="isEditing(reserva.id)" v-model="reserva.editedNombre" type="text" class="w-full" />
+                    <input v-if="isEditing(reserva.id)" v-model="currentReserva.nombre" type="text" class="w-full" />
                     <span v-else>{{ reserva.nombre }}</span>
                   </td>
                   <td>
-                    <input v-if="isEditing(reserva.id)" v-model="reserva.editedOtrosDatos" type="text" class="w-full" />
+                    <input v-if="isEditing(reserva.id)" v-model="currentReserva.otros_datos" type="text"
+                      class="w-full" />
                     <span v-else>{{ reserva.otros_datos }}</span>
                   </td>
                   <td><span>{{ reserva.estado }}</span></td>
                   <td>
                     <div v-if="isEditing(reserva.id)">
-                      <button @click="saveReserva(reserva)" class="boton-claro boton-claro-confirmar">
+                      <button @click="saveReserva" class="boton-claro boton-claro-confirmar">
                         Confirmar
                       </button>
                       <button @click="editingId = null" class="boton-oscuro">
@@ -70,22 +73,21 @@
                     <div v-else>
                       <button v-if="reserva.estado === 'Pendiente' || showButton()" @click="confirmReserva(reserva)"
                         class="p-0 rounded hover:bg-primary-verde">
-                        <img src="../assets/check-box.png" alt="Confirmar" class="h-6 w-6" />
+                        <img src="../assets/check-box.png" alt="Confirmar" class="h-6 w-6" title="Confirmar reserva" />
                       </button>
                       <button v-if="reserva.estado === 'Pendiente' || showButton()" @click="cancelReserva(reserva)"
                         class="p-0 rounded hover:bg-primary-verde">
-                        <img src="../assets/cancel.png" alt="Cancelar" class="h-6 w-6" />
+                        <img src="../assets/cancel.png" alt="Cancelar" class="h-6 w-6" title="Cancelar reserva" />
                       </button>
                       <button v-if="reserva.estado === 'Pendiente' || showButton()" @click="editReserva(reserva)"
                         class="p-0 rounded hover:bg-primary-verde">
-                        <img src="../assets/edit.png" alt="Editar" class="h-6 w-6" />
+                        <img src="../assets/edit.png" alt="Editar" class="h-6 w-6" title="Editar reserva" />
                       </button>
                       <button v-if="showButton()" @click="deleteReserva(reserva)"
                         class="p-0 rounded hover:bg-primary-verde">
-                        <img src="../assets/delete.png" alt="Eliminar" class="h-6 w-6" />
+                        <img src="../assets/delete.png" alt="Eliminar" class="h-6 w-6" title="Eliminar reserva" />
                       </button>
                     </div>
-
                   </td>
                 </tr>
               </tbody>
@@ -115,7 +117,16 @@ export default {
       farmacias: [],
       productos: [],
       hasSearched: false,
-      editingId: null, // Control de edición
+      editingId: null, // Control de edición, null si no se está editando
+      currentReserva: {
+        id: null,
+        fecha: '',
+        hora_inicio: '',
+        hora_fin: '',
+        cantidad: 0,
+        nombre: '',
+        otros_datos: '',
+      }, // Datos de la reserva actualmente en edición
       role: sessionStorage.getItem('role'),
       idFarm: sessionStorage.getItem('id_farm')
 
@@ -123,8 +134,74 @@ export default {
   },
   mounted() {
     this.fetchAllReservas();
+    this.checkExpiredReservas();
   },
   methods: {
+
+    //Método para verificar si hay reservas pendientes y cancelarlas si ha pasado la fecha de fin
+    async checkExpiredReservas() {
+      // Obtener la fecha y hora actual
+      const now = new Date();
+
+      for (let reserva of this.reservas) {
+        // Construir la fecha y hora fin completa
+        const fechaHoraFin = new Date(`${reserva.fecha}T${reserva.hora_fin}`);
+
+        // Verificar si la reserva está vencida y pendiente
+        if (reserva.estado === "Pendiente" && fechaHoraFin < now) {
+          try {
+            // Cambiar estado a "Cancelada" en la base de datos
+            const response = await apiClient.patch(`/reserva?id=${reserva.id}`, { estado: "Cancelada" });
+
+            if (response.data.result === "ok") {
+
+              // Actualizar el stock del producto
+              await this.updateStock(reserva.id_prod, reserva.id_farm, reserva.cantidad);
+
+            } else {
+              console.error(`Error al cancelar la reserva ${reserva.id}:`, response.data.message);
+            }
+          } catch (error) {
+            console.error(`Error al procesar la reserva ${reserva.id}:`, error);
+          }
+        }
+      }
+
+      // Refrescar la lista de reservas para reflejar los cambios
+      this.fetchAllReservas();
+    },
+
+    // Método para actualizar el stock de un producto en una farmacia
+    async updateStock(productId, pharmacyId, quantityToAdd) {
+      try {
+        // Obtener el stock actual
+        const stockResponse = await apiClient.get(`/stock?id=${productId}&id_farm=${pharmacyId}`);
+
+        if (stockResponse.data.result === "ok") {
+          const nuevoStock = parseInt(stockResponse.data.stock) + parseInt(quantityToAdd);
+
+          // Actualizar el stock con el nuevo valor
+          const updateStockResponse = await apiClient.put(`/stock`, {
+            id: productId,
+            id_farm: pharmacyId,
+            newStock: nuevoStock,
+          });
+
+          if (updateStockResponse.data.result === "ok") {
+            return true; // Devolver verdadero si la actualización fue exitosa
+          } else {
+            console.error(`Error al actualizar el stock del producto ${productId}:`, updateStockResponse.data.message);
+            return false;
+          }
+        } else {
+          console.error(`Error al obtener el stock del producto ${productId}:`, stockResponse.data.message);
+          return false;
+        }
+      } catch (error) {
+        console.error(`Error al actualizar el stock para el producto ${productId} en la farmacia ${pharmacyId}:`, error);
+        return false;
+      }
+    },
 
     // Método para obtener todas las reservas
     async fetchAllReservas() {
@@ -175,6 +252,10 @@ export default {
 
         // Marcar que ya se ha realizado una búsqueda
         this.hasSearched = true;
+
+        //Validar si hay reservas pendientes y cancelarlas
+        this.checkExpiredReservas();
+
       } catch (error) {
         console.error('Error al obtener los datos:', error);
       }
@@ -208,6 +289,9 @@ export default {
 
     //Método para formatear la fecha
     formatFecha(fecha) {
+      if (!fecha || typeof fecha !== 'string') {
+        return 'Fecha no válida'; // Devuelve un mensaje por defecto si el valor es inválido
+      }
       const [año, mes, día] = fecha.split('-');
       return `${día}/${mes}/${año}`;
     },
@@ -229,7 +313,6 @@ export default {
         } else {
           console.error('Error al confirmar la reserva:', response.data);
         }
-
       } catch (error) {
         console.error('(catch)Error al confirmar la reserva:', error);
       }
@@ -242,30 +325,18 @@ export default {
         const cancelResponse = await apiClient.patch(`/reserva?id=${reserva.id}`, { estado: 'Cancelada' });
 
         if (cancelResponse.data.result === 'ok') {
-      
-          //Obtener el stock del producto
-          const stockResponse = await apiClient.get(`/stock?id=${reserva.id_prod}&id_farm=${reserva.id_farm}`);
-        
-          // Calcular el nuevo stock
-          const nuevoStock = parseInt(stockResponse.data.stock) + parseInt(reserva.cantidad);
+          // Llamar al método updateStock para actualizar el stock
+          const stockActualizado = await this.updateStock(reserva.id_prod, reserva.id_farm, reserva.cantidad);
 
-          // Actualizar el stock usando el método PUT
-          const putStockResponse = await apiClient.put(`/stock`, {
-            id: reserva.id_prod,
-            id_farm: reserva.id_farm,
-            newStock: nuevoStock
-          });
-
-          if (putStockResponse.data.result === 'ok') {
+          if (stockActualizado) {
             this.$swal.fire({
               icon: 'success',
               title: 'Reserva cancelada y stock actualizado correctamente',
               showConfirmButton: true,
             });
           } else {
-            console.error('Error al actualizar el stock:', stockResponse.data.message);
+            console.error('Error al actualizar el stock');
           }
-
           // Refrescar la lista de reservas
           await this.fetchAllReservas();
         } else {
@@ -279,12 +350,15 @@ export default {
     // Método para editar una reserva
     async editReserva(reserva) {
       this.editingId = reserva.id;
-      reserva.editedFecha = reserva.fecha;
-      reserva.editedHoraInicio = reserva.hora_inicio;
-      reserva.editedHoraFin = reserva.hora_fin;
-      reserva.editedCantidad = reserva.cantidad;
-      reserva.editedNombre = reserva.nombre;
-      reserva.editedOtrosDatos = reserva.otros_datos;
+      this.currentReserva = {
+        id: reserva.id,
+        fecha: reserva.fecha,
+        hora_inicio: reserva.hora_inicio,
+        hora_fin: reserva.hora_fin,
+        cantidad: reserva.cantidad,
+        nombre: reserva.nombre,
+        otros_datos: reserva.otros_datos,
+      };
     },
 
     // Método para saber si una reserva está siendo editada
@@ -293,24 +367,41 @@ export default {
     },
 
     // Método para guardar los cambios de una reserva
-    async saveReserva(reserva) {
-      try {
-        // Hacer la llamada PUT a la API para guardar los cambios de la reserva
-        const response = await apiClient.put(`/reserva?id=${reserva.id}`, {
-          fecha: reserva.editedFecha,
-          hora_inicio: reserva.editedHoraInicio,
-          hora_fin: reserva.editedHoraFin,
-          cantidad: reserva.editedCantidad,
-          nombre: reserva.editedNombre,
-          otros_datos: reserva.editedOtrosDatos,
+    async saveReserva() {
+      if (!this.currentReserva.fecha || !this.currentReserva.hora_inicio || !this.currentReserva.hora_fin || !this.currentReserva.cantidad || !this.currentReserva.nombre) {
+        this.$swal.fire({
+          icon: 'error',
+          title: 'Por favor, rellene todos los campos',
+          showConfirmButton: true,
         });
-
+        return;
+      }
+      try {
+     
+        // Hacer la llamada PUT a la API para guardar los cambios de la reserva
+        const response = await apiClient.put(`/reserva?id=${this.currentReserva.id}`, {
+          fecha: this.currentReserva.fecha,
+          hora_inicio: this.currentReserva.hora_inicio,
+          hora_fin: this.currentReserva.hora_fin,
+          cantidad: this.currentReserva.cantidad,
+          nombre: this.currentReserva.nombre,
+          otros_datos: this.currentReserva.otros_datos,
+        });
         if (response.data.result === 'ok') {
+          // Mostrar un mensaje de éxito
           this.$swal.fire({
             icon: 'success',
             title: 'Reserva actualizada correctamente',
             showConfirmButton: true,
           });
+          //// Actualiza localmente si la operación fue exitosa
+          const index = this.reservas.findIndex(r => r.id === this.currentReserva.id);
+          if (index !== -1) {
+            this.reservas[index] = { ...response.data }; // Usa la respuesta del servidor
+            this.editingId = null;
+            this.currentReserva = {};
+          }
+    
           // Actualizar la lista de reservas después de la actualización
           await this.fetchAllReservas();
           this.editingId = null;
@@ -354,7 +445,6 @@ export default {
     },
   }
 }
-
 </script>
 
 <style scoped>
