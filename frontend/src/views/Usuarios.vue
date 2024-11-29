@@ -44,6 +44,7 @@
       :farmacias="farmacias"
       @save="addUser"
       @close="closeModalCreate"
+      @errorForm="mostrarError"
      
     />
     <!-- Modal para editar usuario -->
@@ -54,6 +55,7 @@
       :farmacias="farmacias"
       @save="editUser"
       @close="isModalEditarVisible = false"
+      @errorForm="mostrarError"
       
     />
     <!-- Modal para eliminar usuario -->
@@ -130,6 +132,14 @@ export default {
       // Cerrar el modal
       this.isModalCreateVisible = false; 
     },
+    // Método para mostrar un error
+    mostrarError(errorField) {
+      this.$swal.fire({
+          icon: "error",
+          title: `El campo ${errorField} es obligatorio`,
+          showConfirmButton: true,
+          });
+    },
     async searchFarmacias() {
       try {
         const pharmaciesResponse = await apiClient.get('/farmacia');
@@ -192,15 +202,26 @@ export default {
           id_farm: formData.id_farm
         });
         if (response.data.result === 'ok') {
-          console.log('Usuario añadido correctamente:', response.data.usuario);
+          this.isModalCreateVisible = false;
+          this.$swal.fire({
+              icon: "success",
+              title: "Usuario añadido correctamente",
+              showConfirmButton: false,
+              timer: 2000
+            });
           await this.searchUsers();
         }
       } catch (error) {
-        console.error('Error al añadir el usuario:', error);
+        this.$swal.fire({
+          icon: "error",
+          title: `Error al añadir el producto: ${error.response?.data?.details}`,
+          showConfirmButton: true,
+          });   
+        await this.searchUsers();
       } finally {
       this.loading = false; // Stop loading
     }
-      this.isModalCreateVisible = false;
+      //this.isModalCreateVisible = false;
     },
     // Método para editar un usuario
     async editUser(user) {
@@ -213,15 +234,26 @@ export default {
           id_farm: user.id_farm
         });
         if (response.data.result === 'ok') {
-          console.log('Usuario editado correctamente:', response.data.usuario);
+          this.isModalEditarVisible = false;
+          this.$swal.fire({
+              icon: "success",
+              title: "Usuario actualizado correctamente",
+              showConfirmButton: false,
+              timer: 2000
+            });
           await this.searchUsers(); // Actualizar la lista de usuarios
         } 
       } catch (error) {
-        console.error('Error al editar el usuario:', error);
+        this.$swal.fire({
+          icon: "error",
+          title: `Error al editar el producto: ${error.response?.data?.details}`,
+          showConfirmButton: true,
+          });
+        await this.searchUsers();
       } finally {
       this.loading = false; // Stop loading
     }
-      this.isModalEditarVisible = false 
+      //this.isModalEditarVisible = false 
     },
     // Método para eliminar un usuario
     async deleteUser() {
@@ -229,15 +261,26 @@ export default {
       try {
         const response = await apiClient.delete(`/usuario?id=${this.selectedUser.id}`);
         if (response.data.result === 'ok') {
-          console.log('Usuario eliminado correctamente:', response.data.usuario);
+          this.isModalDeleteVisible = false;
+          this.$swal.fire({
+              icon: "success",
+              title: "Usuario eliminado correctamente",
+              showConfirmButton: false,
+              timer: 2000
+            });
           await this.searchUsers(); // Actualizar la lista de usuarios
         }
       } catch (error) {
-        console.error('Error al eliminar el usuario:', error);
+        this.$swal.fire({
+          icon: "error",
+          title: `Error al eliminar el usuario: ${error.response?.data?.details}`,
+          showConfirmButton: true,
+          });
+          await this.searchUsers();   
       }finally {
       this.loading = false; // Stop loading
     }
-      this.isModalDeleteVisible = false;  
+      //this.isModalDeleteVisible = false;  
     },
    
   },
