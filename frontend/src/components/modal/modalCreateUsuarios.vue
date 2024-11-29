@@ -48,7 +48,7 @@ export default {
         ],
         dataSelect: [
         { name: "id_farm", label: "Farmacia", type: "select", error: "*Farmacia requerida", data:this.filterFarmacias(userRole, userFarm) },
-        { name: "role", label: "Rol", type: "select", error: "*Rol requerido", data:this.filterRoles(userRole)},
+        { name: "role", label: "Rol", type: "select", error: "*Rol requerido", data:this.filterRoles()},
         ],
         requiredFields: ["nombre", "username", "password", "role", "id_farm"],
       };
@@ -60,17 +60,8 @@ export default {
       }
       return this.farmacias;
     },
-    filterRoles(role) {
-      if (role === 'admin') {
-        // Si el rol es "admin", solo puede asignar "admin" y "usu"
-        return [
-          { id: 'admin', nombre: 'Administrador' },
-          { id: 'usu', nombre: 'Usuario' },
-        ];
-      }
-      // Si es "superadmin", puede asignar todos los roles
+    filterRoles() {
       return [
-        { id: 'superadmin', nombre: 'Superadministrador' },
         { id: 'admin', nombre: 'Administrador' },
         { id: 'usu', nombre: 'Usuario' },
       ];

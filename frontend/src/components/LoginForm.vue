@@ -33,7 +33,12 @@ export default {
         const responseData = await authUser(this.username, this.password);
         // Manejamos la respuesta con un console.log y un if
         if (responseData.result == 'ok' && responseData.token && responseData.role && responseData.id_farm && responseData.id 
-        ) {
+        ) {this.$swal.fire({
+              icon: "success",
+              title: "Acceso válido.",
+              showConfirmButton: false,
+              timer: 2000
+          });
           console.log('Datos recibidos:', responseData);
           //Guardamos el token en sessionStorage
           sessionStorage.setItem('farmaToken', responseData.token);
@@ -47,11 +52,15 @@ export default {
 
           this.$router.push('/inicio');
         } else {
-          // Aquí puedes manejar el error, como mostrar un mensaje de error
           console.log('Error en la respuesta:', responseData);
         }
 
       } catch (error) {
+        this.$swal.fire({
+        icon: "error",
+        title: "Usuario y/o contraseña incorrecta.",
+        showConfirmButton: true,
+        });
         console.error('Error al enviar el formulario:', error);
       }
     }
