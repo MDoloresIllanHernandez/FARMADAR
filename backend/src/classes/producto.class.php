@@ -152,7 +152,7 @@ class Producto extends Database
 			Response::result(400, $response);
 			exit;
 		}
-		//controlar que el precio sea positivo
+		//controla que el precio sea positivo
 		if($data['precio'] <= 0){
 			$response = array(
 				'result' => 'error',
@@ -171,7 +171,7 @@ class Producto extends Database
 			Response::result(400, $response);
 			exit;
 		}
-		//controlar que el stock sea positivo
+		//controla que el stock sea positivo
 		if($data['stock'] <= 0){
 			$response = array(
 				'result' => 'error',
@@ -212,6 +212,7 @@ class Producto extends Database
 		}
 
 		$productos = parent::getDB($this->table, $params);
+
 
 		return $productos;
 	}

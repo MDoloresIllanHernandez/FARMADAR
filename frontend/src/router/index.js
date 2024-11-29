@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import apiClient from '../scripts/axios.js';
 
 const routes = [
   { path: '/login', component: () => import('../views/Login.vue') },
@@ -9,7 +10,39 @@ const routes = [
   { path: '/reservas', name:'Reservas', component: () => import('../views/Reservas.vue') },
   { path: '/cerrar-sesion', component: () => import('../views/CerrarSesion.vue') },
   { path: '/:pathMatch(.*)*', component: () => import('../views/Login.vue') },
-  { path: '/reservas/nueva/:productId/:farmId', name: 'Reserva', component: () => import('../views/ReservasNueva.vue') },
+  { path: '/reservas/nueva/:productId/:farmId', name: 'Reserva'
+    , component: () => import('../views/ReservasNueva.vue')
+    ,props: true, // Permitir pasar props desde la ruta.
+    beforeEnter: async (to, from, next) => {
+      try {
+          // Obtener las farmacias antes de entrar al componente.
+          const response = await apiClient.get('/farmacia');
+          if (response.data.result === 'ok' && response.data.farmacias) {
+              // Pasar las farmacias como prop.
+              to.params.farmacias = response.data.farmacias;
+          }
+      } catch (error) {
+          console.error('Error al obtener las farmacias:', error);
+          to.params.farmacias = []; // Manejo de errores: pasar un array vacío.
+      }
+      const role = sessionStorage.getItem('role');
+      const idFarm = sessionStorage.getItem('id_farm');
+      try {
+        // Obtener los productos antes de entrar al componente.
+        const response = await apiClient.get('/producto', {
+          params: { role, id_farm: idFarm, source: 'producto' },
+        });
+        if (response.data.result === 'ok' && response.data.productos) {
+            // Pasar los productos como prop.
+            to.params.productos = response.data.productos;
+        }
+    } catch (error) {
+        console.error('Error al obtener los productos:', error);
+        to.params.productos = []; // Manejo de errores: pasar un array vacío.
+    }
+      next();
+  },
+     },
   { path: '/usuarios', name: 'Usuarios', component: () => import('../views/Usuarios.vue')},
 ];
 

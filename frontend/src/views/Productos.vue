@@ -135,6 +135,7 @@ export default {
           showConfirmButton: true,
           });
     },
+    // Método para buscar farmacias
     async searchFarmacias() {
       try {
         const pharmaciesResponse = await apiClient.get('/farmacia');
@@ -154,7 +155,7 @@ export default {
         const role = sessionStorage.getItem('role');
         const idFarm = sessionStorage.getItem('id_farm');
 
-        // Consultar usuarios enviando role e id_farm como parámetros
+        // Consultar productos enviando role e id_farm como parámetros
         const response = await apiClient.get('/producto', {
           params: { role, id_farm: idFarm, source: 'producto' },
         });
@@ -162,6 +163,16 @@ export default {
           this.products = response.data.productos.filter(product => 
             product.nombre.toLowerCase().includes(this.searchQuery.toLowerCase())
           );
+          // Mostrar un mensaje si hay productos sin stock
+          const outOfStockProducts = this.products.filter(product => Number(product.stock) == 0);
+          if (outOfStockProducts.length > 0) {
+            this.$swal.fire({
+              icon: "warning",
+              title: `Tiene ${outOfStockProducts.length} productos sin stock`,
+              text: outOfStockProducts.map(product => product.nombre).join(', '),
+              showConfirmButton: true,
+            });
+          }
         //Consultar farmacias
         await this.searchFarmacias(); 
           // Asociar el nombre de la farmacia al producto correspondiente
@@ -256,7 +267,7 @@ export default {
               icon: "success",
               title: "Producto eliminado correctamente",
               showConfirmButton: false,
-              timer: 2000
+              //timer: 2000
             });
           await this.searchProducts(); // Actualizar la lista de productos
         }

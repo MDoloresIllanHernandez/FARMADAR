@@ -1,8 +1,8 @@
 <template>
   <div v-if="isVisible" class="modal-overlay">
     <div class="modal-content">
-      <div class="relative isolate px-6 pt-14 lg:px-8">
-        <div class="mx-auto max-w-6xl py-32 sm:py-32 lg:py-32">
+      <div class="relative isolate lg:px-8">
+        <div class="mx-auto max-w-6xl">
           <h1>Nuevo usuario</h1>
           <GenericForm
             :fields="itemFields"
@@ -126,7 +126,11 @@ export default {
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
   max-width: 600px;
   width: 100%;
-  position: relative;
+  max-height: 100%; /* Limita el alto al 80% del viewport */
+  overflow-y: auto; /* Habilita el scroll si el contenido supera el alto */
+  display: flex;
+  flex-direction: column; /* Asegura que el contenido respete la estructura */
+  justify-content: space-between; /* Distribuye los elementos adecuadamente */
 }
 
 .close-button {

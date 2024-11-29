@@ -38,6 +38,7 @@
                 src="../assets/logo_cerrarSesion.png"
                 alt="Icono Cerrar Sesión"
                 class="h-6 w-6 rounded-full mr-2"
+                title="Cerrar Sesión"
               /> </a>
           </div>
         </nav>

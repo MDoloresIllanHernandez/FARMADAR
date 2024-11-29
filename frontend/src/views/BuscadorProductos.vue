@@ -19,7 +19,10 @@
         </div>
         <div v-if="hasSearched">
           <div v-if="products.length">
-            <CardReservas v-for="product in products" :key="product.id" :product="product" @reserve="handleReserve" />
+            <CardReservas v-for="product in products" 
+              :key="product.id" 
+              :product="product" 
+              @reserve="handleReserve" />
           </div>
           <div v-else>
             <p>No se encontraron productos.</p>
@@ -44,6 +47,7 @@ export default {
     return {
       searchQuery: '',
       products: [],
+      farmacias: [],
       hasSearched: false,
       loading: false,
       role: sessionStorage.getItem('role'),

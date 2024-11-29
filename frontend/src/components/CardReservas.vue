@@ -21,7 +21,11 @@ export default {
     product: {
       type: Object,
       required: true
-    }
+    },
+    farmacias: {
+      type: Array,
+      required: false,
+    },
   },
   methods: {
     currency(value) {

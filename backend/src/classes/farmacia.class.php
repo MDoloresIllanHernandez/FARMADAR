@@ -233,7 +233,7 @@ class Farmacia extends Database
 	}
 
 	/**
-	 * Método para borrar un registro de la base de datos, se indica el id del registro que queremos eliminar
+	 * Método para borrar una farmacia de la base de datos, se indica el cif de la farmacia que queremos eliminar
 	 */
 	public function delete($cif)
 	{
@@ -250,6 +250,17 @@ class Farmacia extends Database
 			exit;
 		}
 		//Comprobar si tiene reservas asociadas
+		$deleteReservas = parent::deleteByIdFarm('reservas', $id);
+
+		if($deleteReservas == 0){
+			$response = array(
+				'result' => 'error',
+				'details' => 'Error al eliminar las reservas asociadas a la farmacia'
+			);
+
+			Response::result(200, $response);
+			exit;
+		}
 
 
 		//Eliminar los productos asociados a la farmacia
@@ -266,7 +277,17 @@ class Farmacia extends Database
 		}
 
 		//Eliminar los usuarios asociados a la farmacia
-		//$deleteUsuarios
+		$deleteUsuarios = parent::deleteByIdFarm('usuario', $id);
+
+		if($deleteUsuarios == 0){
+			$response = array(
+				'result' => 'error',
+				'details' => 'Error al eliminar los usuarios asociados a la farmacia'
+			);
+
+			Response::result(200, $response);
+			exit;
+		}
 
 		//Eliminar la farmacia
 		$affected_rows = parent::deleteDB($this->table, $id);

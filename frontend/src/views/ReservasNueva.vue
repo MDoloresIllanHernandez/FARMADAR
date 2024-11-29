@@ -4,8 +4,17 @@
         <div class="relative isolate px-6 pt-14 lg:px-8">
             <div class="mx-auto max-w-6xl py-32 sm:py-32 lg:py-32">
                 <h1> Nueva Reserva</h1>
-                <GenericForm :fields="itemFields" :initialData="existingItemData" submitButtonText="Reservar"
-                    cancelRoute="Buscador" @errorForm="mostrarError" @submit="handleSubmit" />
+                <GenericForm 
+                    :calledFrom="'reservasNueva'"
+                    :productSelect="productoSeleccionado"
+                    :fields="itemFields" 
+                    :initialData="existingItemData"
+                    :dataSelect="computedDataSelect" 
+                    submitButtonText="Reservar"
+                    cancelRoute="Buscador"
+                    @submit="handleSubmit"
+                    @errorForm="mostrarError" 
+                />
             </div>
         </div>
 
@@ -21,18 +30,29 @@ import apiClient from '../scripts/axios.js';
 
 
 export default {
-
     components: { Navbar, Footer, GenericForm },
-    data() {
+    props: {
+        farmacias: {
+            type: Array,
+            required: true,
+        },
+        productos: {
+            type: Array,
+            required: true,
+        },
+    },
+  
+     data() {
+        const farm_origen = sessionStorage.getItem('id_farm');
+        const userRole = sessionStorage.getItem('role');
+       
         return {
-            farm_origen: sessionStorage.getItem('id_farm'),
-            role: sessionStorage.getItem('role'),
+          
+            
             existingItemData: {},
             cantidadMaxima: 0,
             itemFields: [
                 { name: "id_prod", label: "Producto", type: "text", error: "*Producto requerido", readonly: true },
-                { name: "id_farm", label: "Farmacia destino", type: "text", error: "*Farmacia requerida", readonly: true },
-                { name: "farm_origen", label: "Farmacia origen", type: "text", error: "*Farmacia origen requerida", readonly: false },
                 { name: "fecha", label: "Fecha", type: "date", error: "*Fecha requerida" },
                 { name: "hora_inicio", label: "Hora inicio", type: "time", error: "*Hora requerida" },
                 { name: "hora_fin", label: "Hora fin", type: "time", max: "20:00", error: "*Hora requerida" },
@@ -42,10 +62,51 @@ export default {
                 { name: "estado", label: "Estado", type: "text", readonly: true, value: "Pendiente" },
 
             ],
+            
             requiredFields: ["id_prod", "id_farm", "farm_origen", "fecha", "hora_inicio", "hora_fin", "cantidad", "nombre", "otros_datos", "estado"],
         };
 
+      },
+    computed: {
+    productoSeleccionado() {
+        return this.productos.find(producto => producto.id === this.$route.params.productId);
+        
     },
+    farmaciasOrigen() {
+        const idFarm = sessionStorage.getItem('id_farm');
+        return this.farmacias.filter(it=>it.id!=this.$route.params.farmId).map(farmacia => ({
+            ...farmacia,
+            selected: farmacia.id === idFarm,
+        }));
+    },
+    farmaciasDestino() {
+        return this.farmacias.map(farmacia => ({
+            ...farmacia,
+            selected: farmacia.id === this.$route.params.farmId,
+        }));
+    },
+    computedDataSelect() {
+            return [
+                {
+                    name: "farm_origen",
+                    label: "Farmacia origen",
+                    type: "select",
+                    error: "*Farmacia requerida",
+                    readonly: sessionStorage.getItem('role')=='superadmin'?false:true,
+                    data: this.farmaciasOrigen,
+                },
+                {
+                    name: "id_farm",
+                    label: "Farmacia destino",
+                    type: "select",
+                    error: "*Farmacia requerida",
+                    readonly: true,
+                    data: this.farmaciasDestino,
+                },
+            ];
+        },
+    },
+
     created: async function () {
         //Ajustar el campo farm_origen según el rol
         if (this.role !== 'superadmin') {
@@ -54,7 +115,7 @@ export default {
         // Obtener los parámetros de la URL
         this.productId = this.$route.params.productId;
         this.farmId = this.$route.params.farmId;
-
+         
         // Crear un objeto con los datos de la reserva
         this.existingItemData = {
             id_prod: this.productId,
@@ -62,7 +123,6 @@ export default {
             farm_origen: this.farm_origen,
             estado: 'Pendiente'
         };
-
         // Establecer la fecha actual
         const today = new Date().toISOString().split('T')[0];
         this.existingItemData.fecha = today;
@@ -88,10 +148,16 @@ export default {
         } catch (error) {
             console.error("Error al obtener la cantidad máxima en stock:", error);
         }
-
-
+        
     },
     methods: {
+         filterFarmacias(role, userFarm){
+
+            if(role === 'admin' || role === 'usu'){
+                return this.farmacias.filter(farmacia => farmacia.id === userFarm);
+            }
+            return this.farmacias;
+    },
         // Método para mostrar un error
         mostrarError(errorField) {
             this.$swal.fire({
@@ -100,10 +166,36 @@ export default {
                 showConfirmButton: true,
             });
         },
-
+        // Método para buscar farmacias
+        async searchFarmacias() {
+        try {
+            const pharmaciesResponse = await apiClient.get('/farmacia');
+            if (pharmaciesResponse.data.result === 'ok' && pharmaciesResponse.data.farmacias) {
+            this.farmacias = pharmaciesResponse.data.farmacias;
+            }
+        } catch (error) {
+            console.error('Error al obtener las farmacias:', error);
+        }
+        },
         // Método para manejar el envío del formulario y añadir la reserva
         async handleSubmit(formData) {
             if (formData.isTrusted) {
+                return;
+            }
+            let error = false;
+            let errorField = "";
+            this.requiredFields.forEach((field) => {
+                if (formData[field] == null || (typeof(formData[field])!='number' && formData[field].trim() === "")) {
+                error = true;
+                errorField=field
+                }
+            });
+            if (error) {
+                this.$swal.fire({
+                    icon: "error",
+                    title: `El campo ${errorField} es obligatorio`,
+                    showConfirmButton: true,
+                    });
                 return;
             }
             try {
@@ -122,7 +214,8 @@ export default {
                         this.$swal.fire({
                             icon: 'success',
                             title: 'Reserva realizada correctamente',
-                            showConfirmButton: true,
+                            showConfirmButton: false,
+                            timer: 2000
                         });
                         this.$router.push('/Reservas');
                     } else {
@@ -132,11 +225,9 @@ export default {
                     throw new Error(response.data.message);
                 }
             } catch (error) {
-                console.error('Error al procesar la reserva:', error.message);
                 this.$swal.fire({
                     icon: 'error',
-                    title: 'Error',
-                    text: error.message || 'No se pudo procesar la reserva',
+                    text: `${error.response?.data?.details}`,
                     showConfirmButton: true,
                 });
             }

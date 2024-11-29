@@ -1,8 +1,8 @@
 <template>
   <div v-if="isVisible" class="modal-overlay">
     <div class="modal-content">
-      <div class="relative isolate px-6 pt-14 lg:px-8">
-        <div class="mx-auto max-w-6xl py-32 sm:py-32 lg:py-32">
+      <div class="relative isolate lg:px-8">
+        <div class="mx-auto max-w-6xl">
           <h1>Editar producto</h1>
           <GenericForm
             :fields="itemFields"
@@ -91,18 +91,25 @@ export default {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  z-index: 1000; /* Asegura que esté encima de otros elementos */
 }
 
 .modal-content {
   background: white;
   padding: 20px;
   border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
   width: 100%;
-  position: relative; /* Asegúrate de que el contenido del modal esté posicionado */
+  max-height: 100%; /* Limita el alto al 80% del viewport */
+  overflow-y: auto; /* Habilita el scroll si el contenido supera el alto */
+  display: flex;
+  flex-direction: column; /* Asegura que el contenido respete la estructura */
+  justify-content: space-between; /* Distribuye los elementos adecuadamente */
 }
 
 .close-button {
