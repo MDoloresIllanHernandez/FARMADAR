@@ -54,11 +54,14 @@ export default {
       idFarm: sessionStorage.getItem('id_farm')
     };
   },
+
   mounted() {
     //Poner el foco en el input de búsqueda al cargar la página
     this.$refs.searchInput.focus();
   },
+
   methods: {
+    // Método para buscar productos
     async searchProducts() {
       this.loading = true;
       try {
@@ -99,11 +102,13 @@ export default {
         this.loading = false; // Stop loading
       }
     },
+
     // Método para formatear el precio a moneda
     currency(value) {
       if (!value || isNaN(value)) return '0.00€';
       return `${parseFloat(value).toFixed(2)}€`;
     },
+
     // Método para gestionar la reserva de un producto
     handleReserve(product) {
       // Lógica para realizar la reserva
@@ -114,36 +119,3 @@ export default {
 
 }
 </script>
-<style>
-/* Spinner styles */
-.spinner {
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  border-top: 4px solid #3498db;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Overlay styles */
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.8);
-  /* Slight overlay background */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-  /* Ensure it’s above other elements */
-}
-</style>

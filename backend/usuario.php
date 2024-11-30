@@ -1,7 +1,7 @@
 <?php
 /**
- *	Script que se usa en los endpoints para trabajar con registros de la tabla PRODUCTOS
- *	La clase "producto.class.php" es la clase del modelo, que representa a un producto de la tabla
+ *	Script que se usa en los endpoints para trabajar con registros de la tabla USUARIOS
+ *	La clase "usuario.class.php" es la clase del modelo, que representa a un producto de la tabla
 */
 require_once 'src/response.php';
 require_once 'src/classes/usuario.class.php';
@@ -10,15 +10,11 @@ require_once 'src/classes/auth.class.php';
 // Permitir solicitudes desde cualquier origen (esto es más amplio y no recomendable en producción)
 header("Access-Control-Allow-Origin: *");
 
-// O permitir solicitudes solo desde un origen específico
-// header("Access-Control-Allow-Origin: http://localhost:5173");
-
 // Permitir los métodos que se pueden usar en las solicitudes
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 
 // Permitir los encabezados personalizados
 header("Access-Control-Allow-Headers: Content-Type, Authorization, Api-Key, Farma-User");
-
 
 // Manejar la solicitud preflight (OPTIONS) antes de ejecutar cualquier lógica de verificación
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
