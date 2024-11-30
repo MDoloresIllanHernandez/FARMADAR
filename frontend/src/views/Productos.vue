@@ -6,7 +6,7 @@
         <h1>Lista de productos</h1>
         <div class="mt-6 flex gap-x-4 pb-8">
           <label for="productos" class="sr-only">Productos</label>
-          <input id="productos" v-model="searchQuery" @keyup.enter="searchProducts" type="text"
+          <input id="productos" v-model="searchQuery" @keyup.enter="searchProducts" type="text" ref="searchInput"
             placeholder="Introduce el nombre del producto..." />
           <button @click="searchProducts" class="boton-claro"> Buscar</button>
           <button v-if="showAdd()" @click="openCreateModal" class="boton-oscuro"> Añadir Producto </button>
@@ -78,6 +78,7 @@ import apiClient from '../scripts/axios.js';
 import ModalCreate from '../components/modal/modalCreateProductos.vue';
 import ModalEditar from '../components/modal/modalEditarProductos.vue';
 import ModalDelete from '../components/modal/modalDeleteProductos.vue';
+import { onMounted } from 'vue';
 
 export default {
   components: {
@@ -97,6 +98,9 @@ export default {
       selectedProduct: null, // Almacena el producto seleccionado para editar
     };
   },
+  mounted() {
+      this.$refs.searchInput.focus();
+    },
   methods: {
     showAdd(){
      

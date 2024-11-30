@@ -25,7 +25,7 @@ h1{
 }
 
 input{
-    @apply min-w-0 flex-auto p-2 border border-primary-oscuro rounded
+    @apply min-w-0 flex-auto p-2 border border-primary-oscuro rounded focus:outline-none focus:ring-2 focus:ring-primary-azul focus:border-transparent;
 }
 
 .div-cards{
@@ -37,9 +37,9 @@ label{
 }
 
 th{
-    @apply px-6 py-3 text-left text-xs font-medium text-primary-violeta uppercase tracking-wider;
+    @apply px-1 py-4 text-left text-xs font-medium text-primary-violeta uppercase tracking-wider;
 }
 
 td{
-    @apply px-6 py-4 whitespace-nowrap text-sm text-primary-oscuro;
+    @apply px-1 py-4 whitespace-nowrap text-xs text-primary-oscuro;
 }

@@ -5,16 +5,16 @@
       <div class="mx-auto max-w-6xl py-32 sm:py-32 lg:py-32">
         <h1 class="text-4xl py-4 font-bold sm:text-4xl text-primary-azul">Reservas</h1>
         <div class="mt-6 flex gap-x-4 pb-8">
-          <input id="productos" v-model="searchQuery" @input="searchReservas" type="text"
+          <input id="productos" v-model="searchQuery" @input="searchReservas" type="text" ref="searchInput"
             placeholder="Introduce el nombre del producto o del cliente..." />
           <button @click="searchReservas" class="boton-claro"> Buscar</button>
         </div>
         <div v-if="hasSearched">
-          <div v-if="reservas.length" class="flex justify-center">
-            <table class="min-w-full divide-y divide-gray-200">
+          <div v-if="reservas.length" class="overflow-x-auto text-xs">
+            <table class="min-w-80 divide-y divide-gray-200 text-xs">
               <thead class="bg-gray-50">
                 <tr>
-                  <th scope="col">Farmacia origen</th>
+                  <th scope="col" >Farmacia origen</th>
                   <th scope="col">Farmacia destino</th>
                   <th scope="col">Producto</th>
                   <th scope="col">Fecha</th>
@@ -135,6 +135,7 @@ export default {
   mounted() {
     this.fetchAllReservas();
     this.checkExpiredReservas();
+    this.$refs.searchInput.focus();
   },
   methods: {
 

@@ -6,7 +6,7 @@
         <h1 class="text-4xl py-4 font-bold sm:text-4xl text-primary-azul">Lista de usuarios</h1>
         <div class="mt-6 flex gap-x-4 pb-8">
           <label for="usuarios" class="sr-only">Usuarios</label>
-          <input id="usuarios" v-model="searchQuery" @keyup.enter="searchUsers" type="text"
+          <input id="usuarios" v-model="searchQuery" @keyup.enter="searchUsers" type="text" ref="searchInput"
             placeholder="Introduce el nombre del usuario..."
             class="min-w-0 flex-auto p-2 border border-primary-oscuro rounded" />
           <button @click="searchUsers" class="boton-claro"> Buscar </button>
@@ -99,6 +99,9 @@ export default {
   },
   created() {
     this.role = sessionStorage.getItem('role'); // Recuperar el rol desde sessionStorage
+  },
+  mounted() {
+    this.$refs.searchInput.focus();
   },
   methods: {
     showAdd(){

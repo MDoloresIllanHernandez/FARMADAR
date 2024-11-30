@@ -6,7 +6,7 @@
         <h1>Lista de farmacias</h1>
         <div class="mt-6 flex gap-x-4 pb-8">
           <label for="farmacias" class="sr-only">Farmacias</label>
-          <input id="farmacias" v-model="searchQuery" @keyup.enter="searchFarmacias" type="text"
+          <input id="farmacias" v-model="searchQuery" @keyup.enter="searchFarmacias" type="text" ref="searchInput"
             placeholder="Introduce el nombre de la farmacia..." />
           <button @click="searchFarmacias" class="boton-claro"> Buscar </button>
           <button v-if="showAdd()" @click="openCreateModal" class="boton-oscuro"> Añadir Farmacia </button>
@@ -101,6 +101,9 @@ export default {
     this.userRole = sessionStorage.getItem('role');
     this.userIdFarm = sessionStorage.getItem('id_farm');
   },
+  mounted() {
+      this.$refs.searchInput.focus();
+    },
   methods: {
     showAdd(){
       if(this.role=='usu' || this.role =='admin' ){
