@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: {"verde":"#BEED80","turquesa":"#59D999","azul":"#31ADA1","violeta":"#51647A","oscuro":"#453C5C"},
+        primary: {"verde":"#BEED80","turquesa":"#59D999","azul":"#31ADA1","violeta":"#51647A","oscuro":"#453C5C", "darkred":"#8B0000"},
       },
     }, fontFamily:{
       'body': ['Montserrat']

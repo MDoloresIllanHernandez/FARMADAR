@@ -10,9 +10,6 @@ require_once 'src/classes/auth.class.php';
 // Permitir solicitudes desde cualquier origen (esto es más amplio y no recomendable en producción)
 header("Access-Control-Allow-Origin: *");
 
-// O permitir solicitudes solo desde un origen específico
-// header("Access-Control-Allow-Origin: http://localhost:5173");
-
 // Permitir los métodos que se pueden usar en las solicitudes
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 

@@ -73,10 +73,10 @@
                     <div v-else>
                       <button v-if="reserva.estado === 'Pendiente' || showButton()" @click="confirmReserva(reserva)"
                         class="p-0 rounded hover:bg-primary-verde">
-                        <img src="../assets/check-box.png" alt="Confirmar" class="h-6 w-6" title="Confirmar reserva" />
+                        <img src="../assets/check.png" alt="Confirmar" class="h-6 w-6" title="Confirmar reserva" />
                       </button>
                       <button v-if="reserva.estado === 'Pendiente' || showButton()" @click="cancelReserva(reserva)"
-                        class="p-0 rounded hover:bg-primary-verde">
+                        class="p-0 rounded hover:bg-primary-darkred">
                         <img src="../assets/cancel.png" alt="Cancelar" class="h-6 w-6" title="Cancelar reserva" />
                       </button>
                       <button v-if="reserva.estado === 'Pendiente' || showButton()" @click="editReserva(reserva)"
@@ -84,7 +84,7 @@
                         <img src="../assets/edit.png" alt="Editar" class="h-6 w-6" title="Editar reserva" />
                       </button>
                       <button v-if="showButton()" @click="deleteReserva(reserva)"
-                        class="p-0 rounded hover:bg-primary-verde">
+                        class="p-0 rounded hover:bg-primary-darkred">
                         <img src="../assets/delete.png" alt="Eliminar" class="h-6 w-6" title="Eliminar reserva" />
                       </button>
                     </div>
@@ -149,26 +149,26 @@ export default {
     this.checkExpiredReservas();
     this.$refs.searchInput.focus();
   },
-  computed:{
-    paginateReservas(){
+  computed: {
+    paginateReservas() {
       const start = (this.currentPage - 1) * this.itemsPerPage;
       const end = start + this.itemsPerPage;
       return this.reservas.slice(start, end);
     },
-    totalPages(){
+    totalPages() {
       return Math.ceil(this.reservas.length / this.itemsPerPage);
     }
   },
   methods: {
     // Método para ir a la página siguiente
-    nextPage(){
-      if(this.currentPage < this.totalPages){
+    nextPage() {
+      if (this.currentPage < this.totalPages) {
         this.currentPage++;
       }
     },
     // Método para ir a la página anterior
-    prevPage(){
-      if(this.currentPage > 1){
+    prevPage() {
+      if (this.currentPage > 1) {
         this.currentPage--;
       }
     },
@@ -412,7 +412,6 @@ export default {
         return;
       }
       try {
-
         // Hacer la llamada PUT a la API para guardar los cambios de la reserva
         const response = await apiClient.put(`/reserva?id=${this.currentReserva.id}`, {
           fecha: this.currentReserva.fecha,
@@ -489,7 +488,7 @@ export default {
 
 }
 
-.boton-claro:hover {
+.boton-claro-confirmar:hover {
   background-color: #31ADA1;
   color: white;
 }

@@ -17,7 +17,6 @@
                 />
             </div>
         </div>
-
         <Footer />
     </div>
 </template>
@@ -28,9 +27,9 @@ import Footer from './../components/Footer.vue';
 import GenericForm from './../components/GenericForm.vue';
 import apiClient from '../scripts/axios.js';
 
-
 export default {
     components: { Navbar, Footer, GenericForm },
+
     props: {
         farmacias: {
             type: Array,
@@ -41,14 +40,11 @@ export default {
             required: true,
         },
     },
-  
-     data() {
-        const farm_origen = sessionStorage.getItem('id_farm');
-        const userRole = sessionStorage.getItem('role');
-       
+
+    data() {
+
         return {
-          
-            
+
             existingItemData: {},
             cantidadMaxima: 0,
             itemFields: [
@@ -62,37 +58,36 @@ export default {
                 { name: "estado", label: "Estado", type: "text", readonly: true, value: "Pendiente" },
 
             ],
-            
             requiredFields: ["id_prod", "id_farm", "farm_origen", "fecha", "hora_inicio", "hora_fin", "cantidad", "nombre", "otros_datos", "estado"],
         };
 
-      },
+    },
     computed: {
-    productoSeleccionado() {
-        return this.productos.find(producto => producto.id === this.$route.params.productId);
-        
-    },
-    farmaciasOrigen() {
-        const idFarm = sessionStorage.getItem('id_farm');
-        return this.farmacias.filter(it=>it.id!=this.$route.params.farmId).map(farmacia => ({
-            ...farmacia,
-            selected: farmacia.id === idFarm,
-        }));
-    },
-    farmaciasDestino() {
-        return this.farmacias.map(farmacia => ({
-            ...farmacia,
-            selected: farmacia.id === this.$route.params.farmId,
-        }));
-    },
-    computedDataSelect() {
+        productoSeleccionado() {
+            return this.productos.find(producto => producto.id === this.$route.params.productId);
+
+        },
+        farmaciasOrigen() {
+            const idFarm = sessionStorage.getItem('id_farm');
+            return this.farmacias.filter(it => it.id != this.$route.params.farmId).map(farmacia => ({
+                ...farmacia,
+                selected: farmacia.id === idFarm,
+            }));
+        },
+        farmaciasDestino() {
+            return this.farmacias.map(farmacia => ({
+                ...farmacia,
+                selected: farmacia.id === this.$route.params.farmId,
+            }));
+        },
+        computedDataSelect() {
             return [
                 {
                     name: "farm_origen",
                     label: "Farmacia origen",
                     type: "select",
                     error: "*Farmacia requerida",
-                    readonly: sessionStorage.getItem('role')=='superadmin'?false:true,
+                    readonly: sessionStorage.getItem('role') == 'superadmin' ? false : true,
                     data: this.farmaciasOrigen,
                 },
                 {
@@ -115,7 +110,7 @@ export default {
         // Obtener los parámetros de la URL
         this.productId = this.$route.params.productId;
         this.farmId = this.$route.params.farmId;
-         
+
         // Crear un objeto con los datos de la reserva
         this.existingItemData = {
             id_prod: this.productId,
@@ -148,16 +143,16 @@ export default {
         } catch (error) {
             console.error("Error al obtener la cantidad máxima en stock:", error);
         }
-        
+
     },
     methods: {
-         filterFarmacias(role, userFarm){
+        filterFarmacias(role, userFarm) {
 
-            if(role === 'admin' || role === 'usu'){
+            if (role === 'admin' || role === 'usu') {
                 return this.farmacias.filter(farmacia => farmacia.id === userFarm);
             }
             return this.farmacias;
-    },
+        },
         // Método para mostrar un error
         mostrarError(errorField) {
             this.$swal.fire({
@@ -168,14 +163,14 @@ export default {
         },
         // Método para buscar farmacias
         async searchFarmacias() {
-        try {
-            const pharmaciesResponse = await apiClient.get('/farmacia');
-            if (pharmaciesResponse.data.result === 'ok' && pharmaciesResponse.data.farmacias) {
-            this.farmacias = pharmaciesResponse.data.farmacias;
+            try {
+                const pharmaciesResponse = await apiClient.get('/farmacia');
+                if (pharmaciesResponse.data.result === 'ok' && pharmaciesResponse.data.farmacias) {
+                    this.farmacias = pharmaciesResponse.data.farmacias;
+                }
+            } catch (error) {
+                console.error('Error al obtener las farmacias:', error);
             }
-        } catch (error) {
-            console.error('Error al obtener las farmacias:', error);
-        }
         },
         // Método para manejar el envío del formulario y añadir la reserva
         async handleSubmit(formData) {
@@ -185,9 +180,9 @@ export default {
             let error = false;
             let errorField = "";
             this.requiredFields.forEach((field) => {
-                if (formData[field] == null || (typeof(formData[field])!='number' && formData[field].trim() === "")) {
-                error = true;
-                errorField=field
+                if (formData[field] == null || (typeof (formData[field]) != 'number' && formData[field].trim() === "")) {
+                    error = true;
+                    errorField = field
                 }
             });
             if (error) {
@@ -195,7 +190,7 @@ export default {
                     icon: "error",
                     title: `El campo ${errorField} es obligatorio`,
                     showConfirmButton: true,
-                    });
+                });
                 return;
             }
             try {
@@ -261,11 +256,7 @@ export default {
                 console.error('Error al obtener el stock:', error);
                 return 0;
             }
-        }
-
-
+        },
     }
-
 };
-
 </script>

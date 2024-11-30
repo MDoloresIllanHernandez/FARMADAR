@@ -35,6 +35,7 @@
       </div>
     </div>
     <Footer />
+
     <!-- Modal para crear farmacia -->
     <ModalCreate
       v-if="isModalCreateVisible"
@@ -43,8 +44,8 @@
       @save="addFarmacia"
       @close="closeModalCreate"
       @errorForm="mostrarError"
-
     />
+
     <!-- Modal para editar farmacia -->
     <ModalEditar
       v-if="isModalEditarVisible"
@@ -53,9 +54,9 @@
       :farmacias="farmacias"
       @save="editFarmacia"
       @close="isModalEditarVisible = false"
-      @errorForm="mostrarError"
-      
+      @errorForm="mostrarError" 
     />
+
     <!-- Modal para eliminar farmacia -->
     <ModalDelete
       v-if="isModalDeleteVisible"
@@ -63,7 +64,6 @@
       :farmacia="selectedFarmacia"
       @confirm="deleteFarmacia"
       @cancel="isModalDeleteVisible = false"
-    
     />  
   </div>
 </template>
@@ -78,9 +78,8 @@ import ModalEditar from './../components/modal/modalEditarFarmacias.vue';
 import ModalDelete from './../components/modal/modalDeleteFarmacias.vue';
 
 export default {
-  components: {
-    Navbar, Footer, GenericCard, ModalCreate, ModalEditar, ModalDelete },
-  
+  components: { Navbar, Footer, GenericCard, ModalCreate, ModalEditar, ModalDelete },
+
   data() {
     return {
       role: sessionStorage.getItem('role'),
@@ -96,44 +95,57 @@ export default {
       selectedFarmacia: null, // Almacena la farmacia seleccionada
     };
   },
+
   created() {
     // Cargamos los datos del usuario  desde sessionStorage
     this.userRole = sessionStorage.getItem('role');
     this.userIdFarm = sessionStorage.getItem('id_farm');
   },
+
   mounted() {
-      this.$refs.searchInput.focus();
-    },
+    this.$refs.searchInput.focus();
+  },
+
   methods: {
-    showAdd(){
-      if(this.role=='usu' || this.role =='admin' ){
+    // Método para mostrar el botón de añadir farmacia
+    showAdd() {
+      if (this.role == 'usu' || this.role == 'admin') {
         return false;
       }
       return true;
     },
+
+    // Método para abrir el modal de crear
     async openCreateModal() {
       this.isModalCreateVisible = true;
     },
+
+    // Método para abrir el modal de editar
     async openEditModal(farmacia) {
       this.selectedFarmacia = farmacia;
       this.isModalEditarVisible = true;
     },
+
+    // Método para abrir el modal de eliminar
     async openDeleteModal(farmacia) {
       this.selectedFarmacia = farmacia;
       this.isModalDeleteVisible = true;
     },
+
     // Método para cerrar el modal de crear
     closeModalCreate() {
-      this.isModalCreateVisible = false; 
+      this.isModalCreateVisible = false;
     },
+
     // Método para mostrar un error
     mostrarError(errorField) {
       this.$swal.fire({
-          icon: "error",
-          title: `El campo ${errorField} es obligatorio`,
-          showConfirmButton: true,
-          });
+        icon: "error",
+        title: `El campo ${errorField} es obligatorio`,
+        showConfirmButton: true,
+      });
     },
+
     // Método para buscar farmacias
     async searchFarmacias() {
       this.loading = true;
@@ -155,6 +167,7 @@ export default {
         this.loading = false;
       }
     },
+
     // Método para añadir una farmacia
     async addFarmacia(formData) {
       this.loading = true;
@@ -169,11 +182,11 @@ export default {
         if (response.data.result === 'ok') {
           this.isModalCreateVisible = false;
           this.$swal.fire({
-              icon: "success",
-              title: "Farmacia añadida correctamente",
-              showConfirmButton: false,
-              timer: 2000
-            });
+            icon: "success",
+            title: "Farmacia añadida correctamente",
+            showConfirmButton: false,
+            timer: 2000
+          });
           await this.searchFarmacias();
         }
       } catch (error) {
@@ -181,13 +194,14 @@ export default {
           icon: "error",
           title: `Error al añadir la farmacia: ${error.response?.data?.details}`,
           showConfirmButton: true,
-          });   
+        });
         await this.searchFarmacias();
       } finally {
         this.loading = false;
       }
-       // this.isModalCreateVisible = false;
+      // this.isModalCreateVisible = false;
     },
+
     // Método para editar una farmacia
     async editFarmacia(farmacia) {
       this.loading = true;
@@ -202,11 +216,11 @@ export default {
         if (response.data.result === 'ok') {
           this.isModalEditarVisible = false;
           this.$swal.fire({
-              icon: "success",
-              title: "Farmacia editada correctamente",
-              showConfirmButton: false,
-              timer: 2000
-            });
+            icon: "success",
+            title: "Farmacia editada correctamente",
+            showConfirmButton: false,
+            timer: 2000
+          });
           await this.searchFarmacias(); // Actualizar la lista de farmacias
         }
       } catch (error) {
@@ -214,13 +228,14 @@ export default {
           icon: "error",
           title: `Error al editar la farmacia: ${error.response?.data?.details}`,
           showConfirmButton: true,
-          });   
+        });
         await this.searchFarmacias();
       } finally {
         this.loading = false;
       }
-        //this.isModalEditarVisible = false;
+      //this.isModalEditarVisible = false;
     },
+
     // Método para eliminar una farmacia
     async deleteFarmacia() {
       this.loading = true;
@@ -229,11 +244,11 @@ export default {
         if (response.data.result === 'ok') {
           this.isModalDeleteVisible = false;
           this.$swal.fire({
-              icon: "success",
-              title: "Farmacia eliminada correctamente",
-              showConfirmButton: false,
-              timer: 2000
-            });
+            icon: "success",
+            title: "Farmacia eliminada correctamente",
+            showConfirmButton: false,
+            timer: 2000
+          });
           await this.searchFarmacias(); // Actualizar la lista de farmacias
         }
       } catch (error) {
@@ -241,45 +256,13 @@ export default {
           icon: "error",
           title: `Error al eliminar la farmacia: ${error.response?.data?.details}`,
           showConfirmButton: true,
-          });   
+        });
         await this.searchFarmacias();
       } finally {
         this.loading = false; // Stop loading
       }
-        //this.isModalDeleteVisible = false;
+      //this.isModalDeleteVisible = false;
     },
   },
 }
 </script>
-<style>
-/* Spinner styles */
-.spinner {
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  border-top: 4px solid #3498db;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Overlay styles */
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.8); /* Slight overlay background */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000; /* Ensure it’s above other elements */
-}
-
-</style>

@@ -1,6 +1,6 @@
 <?php
 /**
- * Clase para el modelo que representa a la tabla "productos".
+ * Clase para el modelo que representa a la tabla "usuarios".
  */
 require_once 'src/response.php';
 require_once 'src/database.php';
