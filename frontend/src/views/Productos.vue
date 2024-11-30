@@ -78,7 +78,7 @@ import apiClient from '../scripts/axios.js';
 import ModalCreate from '../components/modal/modalCreateProductos.vue';
 import ModalEditar from '../components/modal/modalEditarProductos.vue';
 import ModalDelete from '../components/modal/modalDeleteProductos.vue';
-import { onMounted } from 'vue';
+
 
 export default {
   components: {

@@ -10,11 +10,11 @@
           <button @click="searchReservas" class="boton-claro"> Buscar</button>
         </div>
         <div v-if="hasSearched">
-          <div v-if="reservas.length" class="overflow-x-auto text-xs">
-            <table class="min-w-80 divide-y divide-gray-200 text-xs">
+          <div v-if="reservas.length" class="overflow-x-auto">
+            <table class="min-w-80 divide-y divide-gray-200 ">
               <thead class="bg-gray-50">
                 <tr>
-                  <th scope="col" >Farmacia origen</th>
+                  <th scope="col">Farmacia origen</th>
                   <th scope="col">Farmacia destino</th>
                   <th scope="col">Producto</th>
                   <th scope="col">Fecha</th>
@@ -28,7 +28,7 @@
                 </tr>
               </thead>
               <tbody class="bg-white divide-y divide-gray-200">
-                <tr v-for="reserva in reservas" :key="reserva.id"
+                <tr v-for="reserva in paginateReservas" :key="reserva.id"
                   :class="{ 'bg-primary-turquesa': isEditing(reserva.id) }">
                   <td><span>{{ getFarmaciaName(reserva.farm_origen) }}</span></td>
                   <td><span>{{ getFarmaciaName(reserva.id_farm) }}</span></td>
@@ -92,6 +92,16 @@
                 </tr>
               </tbody>
             </table>
+            <!-- Controles de paginación -->
+            <div class="flex justify-around items-center mt-4">
+              <button @click="prevPage" :disabled="currentPage === 1" class="boton-claro-fantasma">
+                Anterior
+              </button>
+              <span>Página {{ currentPage }} de {{ totalPages }}</span>
+              <button @click="nextPage" :disabled="currentPage === totalPages" class="boton-claro-fantasma">
+                Siguiente
+              </button>
+            </div>
           </div>
           <div v-else>
             <p>No se encontraron reservas.</p>
@@ -128,7 +138,9 @@ export default {
         otros_datos: '',
       }, // Datos de la reserva actualmente en edición
       role: sessionStorage.getItem('role'),
-      idFarm: sessionStorage.getItem('id_farm')
+      idFarm: sessionStorage.getItem('id_farm'),
+      currentPage: 1,
+      itemsPerPage: 5,
 
     };
   },
@@ -137,7 +149,29 @@ export default {
     this.checkExpiredReservas();
     this.$refs.searchInput.focus();
   },
+  computed:{
+    paginateReservas(){
+      const start = (this.currentPage - 1) * this.itemsPerPage;
+      const end = start + this.itemsPerPage;
+      return this.reservas.slice(start, end);
+    },
+    totalPages(){
+      return Math.ceil(this.reservas.length / this.itemsPerPage);
+    }
+  },
   methods: {
+    // Método para ir a la página siguiente
+    nextPage(){
+      if(this.currentPage < this.totalPages){
+        this.currentPage++;
+      }
+    },
+    // Método para ir a la página anterior
+    prevPage(){
+      if(this.currentPage > 1){
+        this.currentPage--;
+      }
+    },
 
     //Método para verificar si hay reservas pendientes y cancelarlas si ha pasado la fecha de fin
     async checkExpiredReservas() {
@@ -378,7 +412,7 @@ export default {
         return;
       }
       try {
-     
+
         // Hacer la llamada PUT a la API para guardar los cambios de la reserva
         const response = await apiClient.put(`/reserva?id=${this.currentReserva.id}`, {
           fecha: this.currentReserva.fecha,
@@ -402,7 +436,7 @@ export default {
             this.editingId = null;
             this.currentReserva = {};
           }
-    
+
           // Actualizar la lista de reservas después de la actualización
           await this.fetchAllReservas();
           this.editingId = null;
