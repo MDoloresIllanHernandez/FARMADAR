@@ -17,7 +17,6 @@
                 />
             </div>
         </div>
-
         <Footer />
     </div>
 </template>
@@ -47,8 +46,6 @@ export default {
         const userRole = sessionStorage.getItem('role');
        
         return {
-          
-            
             existingItemData: {},
             cantidadMaxima: 0,
             itemFields: [

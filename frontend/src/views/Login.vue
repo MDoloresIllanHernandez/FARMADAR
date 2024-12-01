@@ -7,11 +7,11 @@ import router from '../router';
 //Aquí cogemos el token del sessionStorage. Y si está, hacemos que en Login vaya directamente a Inicio, sin 
 //necesidad de volver a loguearse.
 const token = sessionStorage.getItem('farmaToken')
-//sessionStorage.removeItem('farmaToken')
 
 if(token){
     router.push('/inicio')
 }
+
 </script>
 
 <template>

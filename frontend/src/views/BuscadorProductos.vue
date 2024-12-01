@@ -17,7 +17,8 @@
         <div v-if="loading" class="loading-overlay">
           <div class="spinner"></div>
         </div>
-        <div v-if="hasSearched">
+        <div class="d-flex" style="display: flex; justify-content: space-between; align-items: flex-start;">
+          <div v-if="hasSearched" style="flex: 1; margin-right: 20px;">
           <div v-if="products.length">
             <CardReservas v-for="product in products" 
               :key="product.id" 
@@ -26,6 +27,10 @@
           </div>
           <div v-else>
             <p>No se encontraron productos.</p>
+          </div>
+          </div>
+          <div v-if="showMap" class="map-container" style="flex: 1;">
+            <div ref="map"  style="width: 100%; height: 500px;"></div>
           </div>
         </div>
       </div>
@@ -39,17 +44,22 @@ import Navbar from './../components/Navbar.vue';
 import Footer from './../components/Footer.vue';
 import CardReservas from '../components/CardReservas.vue';
 import apiClient from '../scripts/axios.js';
+import maplibregl from "maplibre-gl";
+import "maplibre-gl/dist/maplibre-gl.css";
 
 export default {
   components: { Navbar, Footer, CardReservas },
-
+ 
   data() {
     return {
+      map: null,
       searchQuery: '',
       products: [],
       farmacias: [],
+      coordenadas: [],
       hasSearched: false,
       loading: false,
+      showMap: false,
       role: sessionStorage.getItem('role'),
       idFarm: sessionStorage.getItem('id_farm')
     };
@@ -57,10 +67,54 @@ export default {
   mounted() {
     //Poner el foco en el input de búsqueda al cargar la página
     this.$refs.searchInput.focus();
+    
   },
   methods: {
+    // Método para obtener las coordenadas usando la API de geocodificación de Nominatim (OpenStreetMap)
+    async getCoordenadas(address) {
+      const encodedAddress = encodeURIComponent(address);
+      try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodedAddress}`);
+        const data = await response.json();
+        if (data && data[0]) {
+          return [parseFloat(data[0].lon), parseFloat(data[0].lat)];
+        } else {
+          console.error("No se pudieron obtener las coordenadas para la dirección:", address);
+          return null;
+        }
+      } catch (error) {
+        console.error("Error al obtener las coordenadas:", error);
+        return null;
+      }
+    },
+
+    // Método para mostrar el mapa cuando el botón sea presionado
+    showMapHandler() {
+      this.showMap = true; // Hace visible el div con el mapa
+      this.$nextTick(() => {
+        this.initMap(); // Inicializa el mapa después de que el contenedor esté disponible
+      });
+    },
+    // Método para inicializar el mapa
+    initMap() {
+      this.map = new maplibregl.Map({
+        container: this.$refs.map, // Div donde se renderizará el mapa
+        style: "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json", // Estilo compatible con OpenStreetMap
+        center: [-1.1307, 37.9835], // Coordenadas del centro de Murcia
+        zoom: 14, // Nivel de zoom
+      });
+
+      // Añadir marcador en el centro del mapa
+      // new maplibregl.Marker()
+      //   .setLngLat([-1.1307, 37.9835]) // Coordenadas del marcador
+      //   .addTo(this.map);
+
+      // Añadir los controles de navegación
+      this.map.addControl(new maplibregl.NavigationControl(), "top-right"); // Controles en la esquina superior derecha
+    },
     async searchProducts() {
       this.loading = true;
+      this.products = []; // Limpiar productos
       try {
         // Consultar productos
         const productsResponse = await apiClient.get('/buscadorProductos');
@@ -79,8 +133,10 @@ export default {
             const userRole = sessionStorage.getItem('role');
 
             // Asociar el nombre de la farmacia al producto correspondiente
+            let farmaciasProducto = [];
             this.products = this.products.map(product => {
               const farmacia = farmacias.find(f => f.id === product.id_farm);
+              farmaciasProducto.push(farmacia);
               return {
                 ...product,
                 nombre_farmacia: farmacia ? farmacia.nombre : 'Desconocido'
@@ -90,7 +146,32 @@ export default {
             if (userRole !== 'superadmin') {
               this.products = this.products.filter(product => product.id_farm !== idFarm);
             }
+            //quitar duplicados 
+            farmaciasProducto = Array.from(
+              new Set(farmaciasProducto.map((farmacia) => farmacia.cif))
+            ).map((cif) => {
+              return farmaciasProducto.find((farmacia) => farmacia.cif === cif);
+            });
+            let farmaciasApintar = [];
+            if (farmaciasProducto.length) {
+              farmaciasApintar = farmaciasProducto;
+            } else {
+              farmaciasApintar = farmacias;
+            }
+            this.showMapHandler();
+            // Añadir los marcadores para las farmacias
+            for (const farmacia of farmaciasApintar) {
+              const coords = await this.getCoordenadas(farmacia.direccion);
+              if (coords) {
+                new maplibregl.Marker()
+                  .setLngLat(coords)
+                  .setPopup(new maplibregl.Popup().setHTML(`<h3>${farmacia.nombre}</h3><p>${farmacia.direccion}</p>`))
+                  .addTo(this.map);
+              }
+            }
           }
+      
+         
           this.hasSearched = true;
         }
       } catch (error) {
@@ -130,7 +211,12 @@ export default {
     transform: rotate(360deg);
   }
 }
-
+.map-container {
+  position: sticky; /* El contenedor será sticky */
+  top: 0; /* Se pegará en la parte superior */
+  height: 100vh; /* Ocupa el 100% de la altura del viewport */
+  width: 100%; /* Ocupa el 100% del ancho del contenedor */
+}
 /* Overlay styles */
 .loading-overlay {
   position: fixed;
