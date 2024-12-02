@@ -55,13 +55,6 @@ export default {
           responseData.id_farm &&
           responseData.id
         ) {
-          this.$swal.fire({
-            icon: "success",
-            title: "Acceso válido.",
-            showConfirmButton: false,
-            timer: 2000,
-          });
-
           // Guardar datos en sessionStorage
           sessionStorage.setItem("farmaToken", responseData.token);
           sessionStorage.setItem("role", responseData.role);
