@@ -5,6 +5,7 @@
     <p class="text-gray-600">Stock: {{ product.stock }}</p>
     <p class="text-lg text-primary-azul font-semibold mt-2">Precio: {{ currency(product.precio) }}</p>
 
+    <!-- Campos ocultos con la información del producto -->
     <p hidden>Product ID: {{ product.id }}</p>
     <p hidden>Farm ID: {{ product.id_farm }}</p>
 
@@ -28,13 +29,14 @@ export default {
     },
   },
   methods: {
+    // Método para formatear el precio a moneda
     currency(value) {
       if (!value || isNaN(value)) return '0.00€';
       return `${parseFloat(value).toFixed(2)}€`;
     },
+    // Método para redirigir a la vista de reservas
     reserveProduct() {
-       // Redirigir a la vista de reservas
-       this.$router.push({ name: 'Reserva', params: { productId: this.product.id, farmId: this.product.id_farm } });
+      this.$router.push({ name: 'Reserva', params: { productId: this.product.id, farmId: this.product.id_farm } });
     }
   }
 };

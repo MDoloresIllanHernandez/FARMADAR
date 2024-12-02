@@ -55,53 +55,16 @@ export default {
       };
   },
   methods: {
+    // Método para cerrar el modal
     closeModal() {
       this.$emit('close'); // Emitir el evento para cerrar el modal
     },
+    // Método para guardar los cambios en el usuario
     handleItemSubmit(formData) {
       if (formData.id) {
-        this.$emit('save', formData); // Emitir el evento para guardar cambios
+        this.$emit('save', formData); // Emitir el evento para guardar los cambios
       }
     },
   },
 };
 </script>
-
-<style>
-.modal-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5); /* Fondo semitransparente */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000; /* Asegura que esté encima de otros elementos */
-}
-
-.modal-content {
-  background: white;
-  padding: 20px;
-  border-radius: 8px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  max-width: 600px;
-  width: 100%;
-  max-height: 100%; /* Limita el alto al 80% del viewport */
-  overflow-y: auto; /* Habilita el scroll si el contenido supera el alto */
-  display: flex;
-  flex-direction: column; /* Asegura que el contenido respete la estructura */
-  justify-content: space-between; /* Distribuye los elementos adecuadamente */
-}
-
-.close-button {
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-size: 20px;
-  position: absolute; /* Cambia a posición absoluta */
-  right: 10px; /* Posición desde la derecha */
-  top: 10px; /* Posición desde la parte superior */
-}
-</style>

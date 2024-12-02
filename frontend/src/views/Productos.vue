@@ -6,7 +6,7 @@
         <h1>Lista de productos</h1>
         <div class="mt-6 flex gap-x-4 pb-8">
           <label for="productos" class="sr-only">Productos</label>
-          <input id="productos" v-model="searchQuery" @keyup.enter="searchProducts" type="text"
+          <input id="productos" v-model="searchQuery" @keyup.enter="searchProducts" type="text" ref="searchInput"
             placeholder="Introduce el nombre del producto..." />
           <button @click="searchProducts" class="boton-claro"> Buscar</button>
           <button v-if="showAdd()" @click="openCreateModal" class="boton-oscuro"> Añadir Producto </button>
@@ -37,6 +37,7 @@
       </div>
     </div>
     <Footer />
+
     <!-- Modal para crear producto -->
     <ModalCreate
       v-if="isModalCreateVisible"
@@ -45,8 +46,8 @@
       @save="addProduct"
       @close="closeModalCreate"
       @errorForm="mostrarError"
-     
     />
+
     <!-- Modal para editar producto -->
     <ModalEditar
       v-if="isModalEditarVisible"
@@ -56,8 +57,8 @@
       @save="editProduct"
       @close="isModalEditarVisible = false"
       @errorForm="mostrarError"
-      
     />
+
     <!-- Modal para eliminar producto -->
     <ModalDelete
       v-if="isModalDeleteVisible"
@@ -65,7 +66,6 @@
       :product="selectedProduct"
       @confirm="deleteProduct"
       @cancel="isModalDeleteVisible = false"
-    
     />  
   </div>
 </template>
@@ -79,9 +79,9 @@ import ModalCreate from '../components/modal/modalCreateProductos.vue';
 import ModalEditar from '../components/modal/modalEditarProductos.vue';
 import ModalDelete from '../components/modal/modalDeleteProductos.vue';
 
+
 export default {
-  components: {
-    Navbar, Footer, GenericCard, ModalEditar, ModalCreate, ModalDelete },
+  components: { Navbar, Footer, GenericCard, ModalEditar, ModalCreate, ModalDelete },
 
   data() {
     return {
@@ -97,44 +97,58 @@ export default {
       selectedProduct: null, // Almacena el producto seleccionado para editar
     };
   },
+
+  mounted() {
+    this.$refs.searchInput.focus();
+  },
+
   methods: {
-    showAdd(){
-     
+    // Método para mostrar el botón de añadir producto
+    showAdd() {
       return true;
     },
+
+    // Método para abrir el modal de crear
     async openCreateModal() {
       // Consultar las farmacias 
-      await this.searchFarmacias(); 
+      await this.searchFarmacias();
       // Mostrar el modal
-      this.isModalCreateVisible = true; 
+      this.isModalCreateVisible = true;
     },
+
+    // Método para abrir el modal de editar
     async openEditModal(product) {
       // Copiar el producto para no modificar la referencia original
-      this.selectedProduct = { ...product }; 
+      this.selectedProduct = { ...product };
       // Consultar las farmacias 
-      await this.searchFarmacias(); 
+      await this.searchFarmacias();
       this.farmacias = this.farmacias.map(farmacia => ({ ...farmacia, selected: farmacia.id === product.id_farm }));
       // Mostrar el modal
-      this.isModalEditarVisible = true; 
+      this.isModalEditarVisible = true;
     },
+
+    // Método para abrir el modal de eliminar
     async openDeleteModal(product) {
       // Copiar el producto para no modificar la referencia original
-      this.selectedProduct = { ...product }; 
+      this.selectedProduct = { ...product };
       // Mostrar el modal
-      this.isModalDeleteVisible = true; 
+      this.isModalDeleteVisible = true;
     },
+
     // Método para cerrar el modal de crear
     closeModalCreate() {
-      this.isModalCreateVisible = false; 
+      this.isModalCreateVisible = false;
     },
+
     // Método para mostrar un error
     mostrarError(errorField) {
       this.$swal.fire({
-          icon: "error",
-          title: `El campo ${errorField} es obligatorio`,
-          showConfirmButton: true,
-          });
+        icon: "error",
+        title: `El campo ${errorField} es obligatorio`,
+        showConfirmButton: true,
+      });
     },
+
     // Método para buscar farmacias
     async searchFarmacias() {
       try {
@@ -146,6 +160,7 @@ export default {
         console.error('Error al obtener las farmacias:', error);
       }
     },
+
     // Método para buscar productos
     async searchProducts() {
       this.loading = true;
@@ -160,7 +175,7 @@ export default {
           params: { role, id_farm: idFarm, source: 'producto' },
         });
         if (response.data.result == 'ok' && response.data.productos) {
-          this.products = response.data.productos.filter(product => 
+          this.products = response.data.productos.filter(product =>
             product.nombre.toLowerCase().includes(this.searchQuery.toLowerCase())
           );
           // Mostrar un mensaje si hay productos sin stock
@@ -173,8 +188,8 @@ export default {
               showConfirmButton: true,
             });
           }
-        //Consultar farmacias
-        await this.searchFarmacias(); 
+          //Consultar farmacias
+          await this.searchFarmacias();
           // Asociar el nombre de la farmacia al producto correspondiente
           this.products = this.products.map(product => {
             const farmacia = this.farmacias.find(f => f.id === product.id_farm);
@@ -184,13 +199,14 @@ export default {
             };
           });
         }
-          this.hasSearched = true;
+        this.hasSearched = true;
       } catch (error) {
         console.error('Error al obtener los productos', error);
       } finally {
         this.loading = false; // Stop loading
       }
-    },      
+    },
+
     // Método para añadir un producto
     async addProduct(formData) {
       this.loading = true;
@@ -205,11 +221,11 @@ export default {
         if (response.data.result === 'ok') {
           this.isModalCreateVisible = false;
           this.$swal.fire({
-              icon: "success",
-              title: "Producto añadido correctamente",
-              showConfirmButton: false,
-              timer: 2000
-            });
+            icon: "success",
+            title: "Producto añadido correctamente",
+            showConfirmButton: false,
+            timer: 2000
+          });
           await this.searchProducts();
         }
       } catch (error) {
@@ -217,13 +233,14 @@ export default {
           icon: "error",
           title: `Error al añadir el producto: ${error.response?.data?.details}`,
           showConfirmButton: true,
-          });   
+        });
         await this.searchProducts();
       } finally {
         this.loading = false; // Stop loading
       }
       //this.isModalCreateVisible = false;
     },
+
     // Método para editar un producto
     async editProduct(product) {
       this.loading = true;
@@ -237,25 +254,26 @@ export default {
         if (response.data.result === 'ok') {
           this.isModalEditarVisible = false;
           this.$swal.fire({
-              icon: "success",
-              title: "Producto editado correctamente",
-              showConfirmButton: false,
-              timer: 2000
-            });
+            icon: "success",
+            title: "Producto editado correctamente",
+            showConfirmButton: false,
+            timer: 2000
+          });
           await this.searchProducts(); // Actualizar la lista de productos
-        } 
+        }
       } catch (error) {
         this.$swal.fire({
           icon: "error",
           title: `Error al editar el producto: ${error.response?.data?.details}`,
           showConfirmButton: true,
-          });
-        await this.searchProducts();  
+        });
+        await this.searchProducts();
       } finally {
         this.loading = false; // Stop loading
       }
       //this.isModalEditarVisible = false 
     },
+
     // Método para eliminar un producto
     async deleteProduct() {
       this.loading = true;
@@ -264,11 +282,11 @@ export default {
         if (response.data.result === 'ok') {
           this.isModalDeleteVisible = false;
           this.$swal.fire({
-              icon: "success",
-              title: "Producto eliminado correctamente",
-              showConfirmButton: false,
-              //timer: 2000
-            });
+            icon: "success",
+            title: "Producto eliminado correctamente",
+            showConfirmButton: false,
+            //timer: 2000
+          });
           await this.searchProducts(); // Actualizar la lista de productos
         }
       } catch (error) {
@@ -276,13 +294,14 @@ export default {
           icon: "error",
           title: `Error al eliminar el producto: ${error.response?.data?.details}`,
           showConfirmButton: true,
-          });
-        await this.searchProducts();   
+        });
+        await this.searchProducts();
       } finally {
         this.loading = false; // Stop loading
       }
-        //this.isModalDeleteVisible = false;  
+      //this.isModalDeleteVisible = false;  
     },
+
     // Método para formatear el precio como moneda
     currency(value) {
       if (!value || isNaN(value)) return '0.00€';
@@ -291,34 +310,3 @@ export default {
   },
 }
 </script>
-<style>
-/* Spinner styles */
-.spinner {
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  border-top: 4px solid #3498db;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Overlay styles */
-.loading-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(255, 255, 255, 0.8); /* Slight overlay background */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000; /* Ensure it’s above other elements */
-}
-</style>

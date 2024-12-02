@@ -64,11 +64,13 @@ export default {
       idFarm: sessionStorage.getItem('id_farm')
     };
   },
+
   mounted() {
     //Poner el foco en el input de búsqueda al cargar la página
     this.$refs.searchInput.focus();
     
   },
+
   methods: {
     // Método para obtener las coordenadas usando la API de geocodificación de Nominatim (OpenStreetMap)
     async getCoordenadas(address) {
@@ -180,11 +182,13 @@ export default {
         this.loading = false; // Stop loading
       }
     },
+
     // Método para formatear el precio a moneda
     currency(value) {
       if (!value || isNaN(value)) return '0.00€';
       return `${parseFloat(value).toFixed(2)}€`;
     },
+
     // Método para gestionar la reserva de un producto
     handleReserve(product) {
       // Lógica para realizar la reserva

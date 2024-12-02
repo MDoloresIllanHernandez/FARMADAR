@@ -13,10 +13,8 @@
     </div>
   </div>
 </template>
+
 <script>
-
-
-
 export default {
   data() {
     return {
@@ -25,8 +23,8 @@ export default {
       id: sessionStorage.getItem('id')
     };
   },
+
   props: {
-   
     calledFrom: {
       type: String,
       required: true
@@ -51,58 +49,63 @@ export default {
       type: String,
       required: true
     },
-  
     data: {
       type: Object,
       required: false
     }
   },
+
   methods: {
-    showEdit(){
-      if(this.calledFrom =='Farmacias' && this.role=='usu' ){
+    //Método para mostrar el botón de editar
+    showEdit() {
+      if (this.calledFrom == 'Farmacias' && this.role == 'usu') {
         return false;
       }
-      if(this.calledFrom =='Farmacias' && this.data?.id!=this.idFarm){
-        if (this.role == 'superadmin'){
+      if (this.calledFrom == 'Farmacias' && this.data?.id != this.idFarm) {
+        if (this.role == 'superadmin') {
           return true;
         }
         return false;
       }
-      if(this.calledFrom =='Usuarios' ){
-        if(this.data?.id==this.id){
+      if (this.calledFrom == 'Usuarios') {
+        if (this.data?.id == this.id) {
           return false;
         }
-        if(this.role=='usu'){
+        if (this.role == 'usu') {
           return false;
         }
-        if (this.role == 'superadmin'){
+        if (this.role == 'superadmin') {
           return true;
         }
-       
       }
       return true;
     },
-    showDelete(){
-      if(this.calledFrom =='Farmacias' && (this.role=='usu' || this.role=='admin')){
+
+    //Método para mostrar el botón de eliminar
+    showDelete() {
+      if (this.calledFrom == 'Farmacias' && (this.role == 'usu' || this.role == 'admin')) {
         return false;
       }
-      if(this.calledFrom =='Usuarios' ){
-        if(this.data?.id==this.id){
+      if (this.calledFrom == 'Usuarios') {
+        if (this.data?.id == this.id) {
           return false;
         }
-        if(this.role=='usu'){
+        if (this.role == 'usu') {
           return false;
         }
-        if (this.role == 'superadmin'){
+        if (this.role == 'superadmin') {
           return true;
         }
-     
       }
       return true;
     },
+
+    //Método para emitir el evento de edición
     editItem() {
       this.$emit('edit', this.data);
     },
+
+    //Método para emitir el evento de eliminación
     deleteItem() {
       this.$emit('delete', this.data);
     }
@@ -111,7 +114,6 @@ export default {
 </script>
 
 <style scoped>
-
 .boton-oscuro:hover{
   background-color: darkred;
   color: white;

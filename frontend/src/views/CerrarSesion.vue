@@ -7,6 +7,7 @@ sessionStorage.removeItem('user')
 sessionStorage.removeItem('id_farm')
 sessionStorage.removeItem('role')
 sessionStorage.removeItem('id')
+
 //Y volvemos a la pantalla de Login
 router.push('/login')
 </script>
