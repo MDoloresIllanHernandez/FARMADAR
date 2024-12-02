@@ -5,7 +5,7 @@
       <div class="flex lg:flex-1">
         <a :href="buscadorProductos.href" class="-m-1.5 p-1.5">
           <span class="sr-only">FARMADAR</span>
-          <img class="h-8 w-auto rounded-full hover:bg-white" src="/icono.png" alt="Icono FARMADAR" />
+          <img class="h-8 w-auto rounded-full hover:bg-white" src="/icono.png" alt="Icono FARMADAR" title="Buscador FARMADAR"/>
         </a>
       </div>
       <div class="flex lg:hidden">
