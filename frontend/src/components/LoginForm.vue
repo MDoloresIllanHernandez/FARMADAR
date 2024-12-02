@@ -28,28 +28,9 @@
 </template>
 
 <script>
-// Importa la lógica del formulario desde el archivo externo
 import { authUser } from '../scripts/auth.js';
-import maplibregl from "maplibre-gl";
-import "maplibre-gl/dist/maplibre-gl.css";
-export default {
-  mounted() {
-    // Inicializa el mapa
-    const map = new maplibregl.Map({
-      container: this.$refs.map, // Div donde se renderizará el mapa
-      style: "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json", // URL del estilo compatible con OpenStreetMap
-      center: [-3.7038, 40.4168], // Coordenadas de la Puerta del Sol, Madrid
-      zoom: 15, // Nivel de zoom para ver detalles de la calle
-    });
 
-    // Añade un marcador en el centro del mapa
-    new maplibregl.Marker()
-      .setLngLat([-3.7038, 40.4168]) // Coordenadas del marcador
-      .addTo(map);
-      // Añade los controles de navegación (+, -, rotación)
-    map.addControl(new maplibregl.NavigationControl(), "top-right"); // Posición: esquina superior derecha
-  
-  },
+export default {
   data() {
     return {
       username: '',

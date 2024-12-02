@@ -341,7 +341,8 @@ export default {
           this.$swal.fire({
             icon: 'success',
             title: 'Reserva confirmada',
-            showConfirmButton: true,
+            showConfirmButton: false,
+            timer: 2000,
           });
           // Actualizar la lista de reservas después de la confirmación
           await this.fetchAllReservas();
@@ -366,8 +367,9 @@ export default {
           if (stockActualizado) {
             this.$swal.fire({
               icon: 'success',
-              title: 'Reserva cancelada y stock actualizado correctamente',
-              showConfirmButton: true,
+              title: 'Reserva cancelada y stock actualizado',
+              showConfirmButton: false,
+              timer: 2000,
             });
           } else {
             console.error('Error al actualizar el stock');
@@ -426,7 +428,8 @@ export default {
           this.$swal.fire({
             icon: 'success',
             title: 'Reserva actualizada correctamente',
-            showConfirmButton: true,
+            showConfirmButton: false,
+            timer: 2000,
           });
           //// Actualiza localmente si la operación fue exitosa
           const index = this.reservas.findIndex(r => r.id === this.currentReserva.id);
@@ -457,7 +460,8 @@ export default {
           this.$swal.fire({
             icon: 'success',
             title: 'Reserva eliminada correctamente',
-            showConfirmButton: true,
+            showConfirmButton: false,
+            timer: 2000,
           });
 
           // Actualizar la lista de reservas después de la eliminación

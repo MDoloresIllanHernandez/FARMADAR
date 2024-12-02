@@ -199,7 +199,6 @@ export default {
       } finally {
         this.loading = false;
       }
-      // this.isModalCreateVisible = false;
     },
 
     // Método para editar una farmacia
@@ -233,7 +232,6 @@ export default {
       } finally {
         this.loading = false;
       }
-      //this.isModalEditarVisible = false;
     },
 
     // Método para eliminar una farmacia

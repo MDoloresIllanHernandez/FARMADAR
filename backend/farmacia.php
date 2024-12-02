@@ -118,11 +118,11 @@ switch ($_SERVER['REQUEST_METHOD']) {
 
 		$farmacia->delete($_GET['cif']);
 
-		$response = array(
-			'result' => 'ok'
-		);
+		// $response = array(
+		// 	'result' => 'ok'
+		// );
 
-		Response::result(200, $response);
+		// Response::result(200, $response);
 		break;
 
 	/**

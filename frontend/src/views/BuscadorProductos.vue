@@ -23,7 +23,8 @@
             <CardReservas v-for="product in products" 
               :key="product.id" 
               :product="product" 
-              @reserve="handleReserve" />
+              @reserve="handleReserve" 
+            />
           </div>
           <div v-else>
             <p>No se encontraron productos.</p>
@@ -97,11 +98,12 @@ export default {
         this.initMap(); // Inicializa el mapa después de que el contenedor esté disponible
       });
     },
+
     // Método para inicializar el mapa
     initMap() {
       this.map = new maplibregl.Map({
         container: this.$refs.map, // Div donde se renderizará el mapa
-        style: "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json", // Estilo compatible con OpenStreetMap
+        style: "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json", // Estilo del mapa
         center: [-1.1307, 37.9835], // Coordenadas del centro de Murcia
         zoom: 14, // Nivel de zoom
       });
@@ -114,6 +116,8 @@ export default {
       // Añadir los controles de navegación
       this.map.addControl(new maplibregl.NavigationControl(), "top-right"); // Controles en la esquina superior derecha
     },
+
+    // Método para buscar productos
     async searchProducts() {
       this.loading = true;
       this.products = []; // Limpiar productos
@@ -148,7 +152,7 @@ export default {
             if (userRole !== 'superadmin') {
               this.products = this.products.filter(product => product.id_farm !== idFarm);
             }
-            //quitar duplicados 
+            // Quitar duplicados 
             farmaciasProducto = Array.from(
               new Set(farmaciasProducto.map((farmacia) => farmacia.cif))
             ).map((cif) => {
@@ -172,8 +176,6 @@ export default {
               }
             }
           }
-      
-         
           this.hasSearched = true;
         }
       } catch (error) {
@@ -193,7 +195,6 @@ export default {
     handleReserve(product) {
       // Lógica para realizar la reserva
       console.log(`Reserva realizada para el producto: ${product.nombre}`);
-      // Aquí se podría realizar una llamada API o cualquier lógica adicional para gestionar la reserva
     }
   },
 

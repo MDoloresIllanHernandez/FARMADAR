@@ -285,7 +285,7 @@ export default {
             icon: "success",
             title: "Producto eliminado correctamente",
             showConfirmButton: false,
-            //timer: 2000
+            timer: 2000
           });
           await this.searchProducts(); // Actualizar la lista de productos
         }

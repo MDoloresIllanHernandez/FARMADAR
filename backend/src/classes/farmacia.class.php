@@ -30,7 +30,6 @@ class Farmacia extends Database
 		'direccion',
 		'telefono',
 		'email',
-		
 	);
 
 	/**
@@ -237,71 +236,82 @@ class Farmacia extends Database
 	 */
 	public function delete($cif)
 	{
-		//Recuperamos el id de la farmacia
-		$id = $this->getByParams('cif', $cif)[0]['id'];
-		//Si no existe la farmacia
-		if($id == null){
-			$response = array(
-				'result' => 'error',
-				'details' => 'Esa farmacia no existe'
-			);
+    // Recuperamos el ID de la farmacia
+    $farmacia = $this->getByParams('cif', $cif);
+    if (empty($farmacia)) {
+        $response = [
+            'result' => 'error',
+            'details' => 'La farmacia con el CIF proporcionado no existe.'
+        ];
+        Response::result(400, $response);
+        exit;
+    }
 
-			Response::result(400, $response);
-			exit;
-		}
-		//Comprobar si tiene reservas asociadas
-		$deleteReservas = parent::deleteByIdFarm('reservas', $id);
+    $id = $farmacia[0]['id'];
 
-		if($deleteReservas == 0){
-			$response = array(
-				'result' => 'error',
-				'details' => 'Error al eliminar las reservas asociadas a la farmacia'
-			);
+    try {
+        // Iniciar una transacción
+        $this->beginTransaction();
 
-			Response::result(200, $response);
-			exit;
-		}
+        // Eliminar reservas asociadas
+        $deleteReservas = parent::deleteByIdFarm('reservas', $id);
+        if ($deleteReservas === false) {
+            throw new Exception('Error al eliminar las reservas asociadas a la farmacia.');
+        }
 
-
-		//Eliminar los productos asociados a la farmacia
-		$deleteProductos  = parent::deleteByIdFarm('productos', $id);
+        // Eliminar productos asociados
+        $deleteProductos = parent::deleteByIdFarm('productos', $id);
+        if ($deleteProductos === false) {
+            throw new Exception('Error al eliminar los productos asociados a la farmacia.');
+        }
 		
-		if($deleteProductos == 0){
-			$response = array(
-				'result' => 'error',
-				'details' => 'Error al eliminar los productos asociados a la farmacia'
-			);
+        // Eliminar usuarios asociados
+        $deleteUsuarios = parent::deleteByIdFarm('usuario', $id);
+        if ($deleteUsuarios === false) {
+            throw new Exception('Error al eliminar los usuarios asociados a la farmacia.');
+        }
+		
+        // Eliminar la farmacia
+        $deleteFarmacia = parent::deleteDB($this->table, $id);
+        if ($deleteFarmacia === 0) {
+            throw new Exception('No se realizaron cambios. La farmacia no pudo ser eliminada.');
+        }
+		
+        // Confirmar la transacción
+        $this->commitTransaction();
 
-			Response::result(200, $response);
-			exit;
-		}
+       	$response = array(
+			'result' => 'ok'
+		);
 
-		//Eliminar los usuarios asociados a la farmacia
-		$deleteUsuarios = parent::deleteByIdFarm('usuario', $id);
+        Response::result(200, $response);
 
-		if($deleteUsuarios == 0){
-			$response = array(
-				'result' => 'error',
-				'details' => 'Error al eliminar los usuarios asociados a la farmacia'
-			);
+    } catch (Exception $e) {
+        // Revertir la transacción en caso de error
+        $this->rollbackTransaction();
 
-			Response::result(200, $response);
-			exit;
-		}
+        $response = [
+            'result' => 'error',
+            'details' => $e->getMessage()
+        ];
+        Response::result(500, $response);
+    }
 
-		//Eliminar la farmacia
-		$affected_rows = parent::deleteDB($this->table, $id);
-
-		if($affected_rows == 0){
-			$response = array(
-				'result' => 'ok',
-				'details' => 'No hubo cambios'
-			);
-
-			Response::result(200, $response);
-			exit;
-		}
 	}
-}
+	protected function beginTransaction()
+	{
+		$this->connection->begin_transaction(); // Suponiendo que uses PDO
+	}
 
+	protected function commitTransaction()
+	{
+		$this->connection->commit();
+	}
+
+	protected function rollbackTransaction()
+	{
+		$this->connection->rollBack();
+	}
+}	
+	
 ?>

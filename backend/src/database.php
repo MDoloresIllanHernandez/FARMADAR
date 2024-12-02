@@ -5,7 +5,7 @@
  */
 class Database
 {
-	private $connection;
+	protected $connection;
 	/**
 	 * Atributo que indica la cantidad de registros por página a la hora de recuperar datos
 	 */
