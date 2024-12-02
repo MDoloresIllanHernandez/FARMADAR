@@ -113,7 +113,6 @@ export default {
     handleReserve(product) {
       // Lógica para realizar la reserva
       console.log(`Reserva realizada para el producto: ${product.nombre}`);
-      // Aquí se podría realizar una llamada API o cualquier lógica adicional para gestionar la reserva
     }
   },
 
