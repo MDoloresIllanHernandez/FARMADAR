@@ -53,7 +53,6 @@ export default {
       console.log("error", error);
     },
     closeModal() {
-      console.log("cerrar modal");
       this.$emit('close'); // Emitir el evento para cerrar el modal
     },
     saveChanges(formData) {
