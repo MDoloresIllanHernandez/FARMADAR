@@ -5,7 +5,7 @@
       <div class="flex lg:flex-1">
         <a :href="buscadorProductos.href" class="-m-1.5 p-1.5">
           <span class="sr-only">FARMADAR</span>
-          <img class="h-8 w-auto rounded-full hover:bg-white" src="/icono.png" alt="Icono FARMADAR" />
+          <img class="h-8 w-auto rounded-full hover:bg-white" src="/icono.png" alt="Icono FARMADAR" title="Buscador FARMADAR"/>
         </a>
       </div>
       <div class="flex lg:hidden">
@@ -64,14 +64,14 @@
             <div class="space-y-2 py-6">
               <!-- Ícono y Nombre del Usuario en Móvil -->
               <div class="flex items-center space-y-2 py-6">
-                <img src="../assets/logo_user.png" alt="Icono Usuario" class="h-6 w-6 rounded-full mr-2" />
+                <img src="../assets/user.png" alt="Icono Usuario" class="h-6 w-6 rounded-full mr-2" />
                 <span class="text-sm font-semibold text-gray-900">
                   <small>{{ usuarioNombre }}</small>
                 </span>
               </div>
               <!-- Cerrar Sesión en Móvil -->
               <a :href="cerrarSesion.href" class="flex text-sm font-semibold leading-6 text-gray-900">
-                <img src="../assets/logo_cerrarSesion.png" alt="Icono Cerrar Sesión"
+                <img src="../assets/shutdown.png" alt="Icono Cerrar Sesión"
                   class="h-6 w-6 rounded-full mr-2" /> Cerrar Sesion</a>
             </div>
           </div>
