@@ -22,10 +22,11 @@
           <div v-if="products.length">
             <CardReservas v-for="product in products" 
               :key="product.id" 
-              :product="product" />
+              :product="product" 
+            />
           </div>
           <div v-else>
-            <p>No se encontraron productos.</p>
+            <p>{{ noProductMessage || 'No se encontró ese producto.' }}</p>
           </div>
           </div>
           <div v-if="showMap" class="map-container" style="flex: 1;">
@@ -51,6 +52,7 @@ export default {
  
   data() {
     return {
+      noProductMessage: null,
       map: null,
       searchQuery: '',
       products: [],
@@ -89,30 +91,67 @@ export default {
       }
     },
 
-    // Método para mostrar el mapa cuando el botón sea presionado
-    showMapHandler() {
-      this.showMap = true; // Hace visible el div con el mapa
-      this.$nextTick(() => {
-        this.initMap(); // Inicializa el mapa después de que el contenedor esté disponible
-      });
-    },
 
     // Método para inicializar el mapa
-    initMap() {
-      this.map = new maplibregl.Map({
-        container: this.$refs.map, // Div donde se renderizará el mapa
-        style: "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json", // Estilo del mapa
-        center: [-1.1307, 37.9835], // Coordenadas del centro de Murcia
-        zoom: 14, // Nivel de zoom
-      });
+    async initMap() {
+      const userRole = this.role;
+      let coords;
 
-      // Añadir marcador en el centro del mapa
-      // new maplibregl.Marker()
-      //   .setLngLat([-1.1307, 37.9835]) // Coordenadas del marcador
-      //   .addTo(this.map);
+      if (userRole === 'superadmin') {
+        // Mostrar Murcia Centro para superUsuario
+        coords = [-1.1307, 37.9835]; // Coordenadas de Murcia Centro
+      } else {
+        // Obtener la dirección de la farmacia asociada al usuario
+        const farmacia = this.farmacias.find(f => f.id === this.idFarm);
+        if (farmacia) {
+          coords = await this.getCoordenadas(farmacia.direccion);
+        }
+        if (!coords) {
+          // Si no se encuentra dirección, usar Murcia Centro como fallback
+          coords = [-1.1307, 37.9835];
+        }
+      }
+
+      this.map = new maplibregl.Map({
+        container: this.$refs.map,
+        style: "https://basemaps.cartocdn.com/gl/voyager-gl-style/style.json",
+        center: coords,
+        zoom: 14
+      });
 
       // Añadir los controles de navegación
       this.map.addControl(new maplibregl.NavigationControl(), "top-right"); // Controles en la esquina superior derecha
+
+      // Añadir marcador central según el rol
+      new maplibregl.Marker({
+        color: 'red'
+      })
+        .setLngLat(coords)
+        .setPopup(new maplibregl.Popup().setHTML(`<h3>${userRole === 'superadmin' ? 'Murcia Centro' : 'Mi Farmacia'}</h3>`))
+        .addTo(this.map);
+    },
+
+
+    // Método para mostrar el mapa
+    async showMapHandler() {
+      this.showMap = true;
+
+      // Obtener farmacias si aún no se han cargado
+      if (!this.farmacias.length) {
+        try {
+          const pharmaciesResponse = await apiClient.get('/farmacia');
+          if (pharmaciesResponse.data.result === 'ok' && pharmaciesResponse.data.farmacias) {
+            this.farmacias = pharmaciesResponse.data.farmacias;
+          }
+        } catch (error) {
+          console.error("Error al cargar farmacias:", error);
+        }
+      }
+
+      // Inicializar el mapa después de cargar las farmacias
+      this.$nextTick(async () => {
+        await this.initMap();
+      });
     },
 
     // Método para buscar productos
@@ -124,9 +163,19 @@ export default {
         const productsResponse = await apiClient.get('/buscadorProductos');
         if (productsResponse.data.result === 'ok' && productsResponse.data.productos) {
           this.products = productsResponse.data.productos.filter(product =>
-            product.nombre.toLowerCase().includes(this.searchQuery.toLowerCase()) && product.stock > 0
+            product.nombre.toLowerCase().includes(this.searchQuery.toLowerCase()) 
           );
-
+        //Comprobamos si hay productos con stock 0
+        const productosConStockCero = this.products.filter(product => product.stock == '0');
+        // Si no existe el producto buscado
+        if(this.products.length == 0) {
+          this.noProductMessage = null;
+        }
+        // Si hay productos con stock 0
+        if(this.products.length != 0 && this.products.length == productosConStockCero.length) {
+          this.noProductMessage = 'No hay stock disponible en ninguna farmacia';
+          this.products = [];
+        }
           // Consultar farmacias
           const pharmaciesResponse = await apiClient.get('/farmacia');
           if (pharmaciesResponse.data.result === 'ok' && pharmaciesResponse.data.farmacias) {
@@ -162,17 +211,19 @@ export default {
             } else {
               farmaciasApintar = farmacias;
             }
-            this.showMapHandler();
+            await this.showMapHandler();
             // Añadir los marcadores para las farmacias
             for (const farmacia of farmaciasApintar) {
-              const coords = await this.getCoordenadas(farmacia.direccion);
-              if (coords) {
-                new maplibregl.Marker()
-                  .setLngLat(coords)
-                  .setPopup(new maplibregl.Popup().setHTML(`<h3>${farmacia.nombre}</h3><p>${farmacia.direccion}</p>`))
-                  .addTo(this.map);
-              }
-            }
+                  const coords = await this.getCoordenadas(farmacia.direccion);
+                  if (coords) {
+                    new maplibregl.Marker({
+                      color: farmacia.id == this.idFarm ? 'red' : '#3FB1CE'
+                    })
+                      .setLngLat(coords)
+                      .setPopup(new maplibregl.Popup().setHTML(`<h3>${farmacia.nombre}</h3><p>${farmacia.direccion}</p>`))
+                      .addTo(this.map);
+                  }
+                }     
           }
           this.hasSearched = true;
         }
