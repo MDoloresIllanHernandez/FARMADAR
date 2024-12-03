@@ -107,5 +107,11 @@ td {
     justify-content: space-between; /* Distribuye los elementos adecuadamente */
   }
 
-  
+  /*Estilos del mapa*/
+  .map-container {
+    position: sticky; /* El contenedor será sticky */
+    top: 0; /* Se pegará en la parte superior */
+    height: 100vh; /* Ocupa el 100% de la altura del viewport */
+    width: 100%; /* Ocupa el 100% del ancho del contenedor */
+  }
   
