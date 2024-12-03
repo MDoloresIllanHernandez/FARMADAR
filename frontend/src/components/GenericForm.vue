@@ -3,6 +3,7 @@
     <form @submit.prevent="handleSubmit">
       <div v-for="field in fields" :key="field.name" class="mb-4">
         <label :for="field.name" class="block text-sm font-medium text-gray-700">{{ field.label }}</label>
+       
         <input
           v-if="field.type !== 'textarea'"
           :hidden="field.label=='Producto' && productSelect"
@@ -112,6 +113,7 @@ export default {
     },
   },
   data() {
+
     const formData = {};
     this.fields.forEach(field => {
       formData[field.name] = this.initialData[field.name] || '';

@@ -44,6 +44,7 @@ export default {
     data() {
 
         return {
+            productoSeleccionado: null, // Almacena el producto seleccionado
             existingItemData: {},
             cantidadMaxima: 0,
             itemFields: [
@@ -62,10 +63,7 @@ export default {
 
     },
     computed: {
-        productoSeleccionado() {
-            return this.productos.find(producto => producto.id === this.$route.params.productId);
-
-        },
+      
         farmaciasOrigen() {
             const idFarm = sessionStorage.getItem('id_farm');
             return this.farmacias.filter(it => it.id != this.$route.params.farmId).map(farmacia => ({
@@ -109,7 +107,7 @@ export default {
         // Obtener los parámetros de la URL
         this.productId = this.$route.params.productId;
         this.farmId = this.$route.params.farmId;
-
+        
         // Crear un objeto con los datos de la reserva
         this.existingItemData = {
             id_prod: this.productId,
@@ -142,9 +140,26 @@ export default {
         } catch (error) {
             console.error("Error al obtener la cantidad máxima en stock:", error);
         }
+        // Obtener el producto seleccionado al montar el componente
+        await this.loadProductoSeleccionado();
 
     },
     methods: {
+        async loadProductoSeleccionado() {
+            try {
+                const idFarm = sessionStorage.getItem('id_farm');
+                const role = sessionStorage.getItem('role');
+                const response = await apiClient.get('/producto', {
+                    params: { role, id_farm: idFarm, source: 'producto', id_product: this.$route.params.productId },
+                });
+                // Asigna el producto encontrado al valor de data
+                this.productoSeleccionado = [...this.productos, ...response.data.productos].find(
+                    producto => producto.id == this.$route.params.productId
+                );
+            } catch (error) {
+                console.error("Error al cargar el producto seleccionado:", error);
+            }
+        },
         filterFarmacias(role, userFarm) {
 
             if (role === 'admin' || role === 'usu') {
@@ -188,6 +203,14 @@ export default {
                 this.$swal.fire({
                     icon: "error",
                     title: `El campo ${errorField} es obligatorio`,
+                    showConfirmButton: true,
+                });
+                return;
+            }
+            if (Number(formData['cantidad']) < 0){
+                this.$swal.fire({
+                    icon: "error",
+                    title: `El campo cantidad no puede negativo`,
                     showConfirmButton: true,
                 });
                 return;

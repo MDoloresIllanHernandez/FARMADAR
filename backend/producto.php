@@ -45,14 +45,18 @@ switch ($_SERVER['REQUEST_METHOD']) {
 		// Verificar si el rol y el id_farm vienen como parámetros
 		$role = isset($params['role']) ? $params['role'] : null;
 		$id_farm = isset($params['id_farm']) ? $params['id_farm'] : null;
-	
+		$id_product = isset($params['id_product']) ? $params['id_product'] : null;
+
 		// Filtrar usuarios según el rol
 		if ($role === 'superadmin') {
 			$productos = $producto->get([]); // Obtener todos los productos
-		} elseif ($role && $id_farm) {
+		} elseif ($role && $id_farm && !$id_product) {
 			// Filtrar productos de la misma farmacia
 			$productos = $producto->get(['id_farm' => $id_farm]);
-		} else {
+		} elseif ($role && $id_farm && $id_product) {
+			$productos = $producto->get(['id' => $id_product]);
+
+		}else {
 			// Si no hay rol válido, devolver error
 			$response = array(
 				'result' => 'error',
