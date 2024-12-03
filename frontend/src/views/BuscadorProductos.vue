@@ -176,6 +176,7 @@ export default {
           this.noProductMessage = 'No hay stock disponible en ninguna farmacia';
           this.products = [];
         }
+        this.products=this.products.filter(product => product.stock != '0');
           // Consultar farmacias
           const pharmaciesResponse = await apiClient.get('/farmacia');
           if (pharmaciesResponse.data.result === 'ok' && pharmaciesResponse.data.farmacias) {
