@@ -22,9 +22,13 @@
           <div v-if="products.length">
             <CardReservas v-for="product in products" 
               :key="product.id" 
+<<<<<<< HEAD
               :product="product" 
               @reserve="handleReserve" 
             />
+=======
+              :product="product" />
+>>>>>>> development
           </div>
           <div v-else>
             <p>No se encontraron productos.</p>
@@ -185,6 +189,7 @@ export default {
       }
     },
 
+<<<<<<< HEAD
     // Método para formatear el precio a moneda
     currency(value) {
       if (!value || isNaN(value)) return '0.00€';
@@ -196,6 +201,8 @@ export default {
       // Lógica para realizar la reserva
       console.log(`Reserva realizada para el producto: ${product.nombre}`);
     }
+=======
+>>>>>>> development
   },
 
 }
