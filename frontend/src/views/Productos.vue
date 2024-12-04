@@ -20,7 +20,7 @@
               :calledFrom="'Productos'"
               :key="product.id"
               :title="product.nombre"
-              :detail1="'Id: ' + product.id"
+              :detail1="'CN: ' + product.id"
               :detail2="'Stock: ' + product.stock"
               :detail3="'Farmacia: ' + product.nombre_farmacia"
               :detail4="'Precio: ' + currency(product.precio)"
