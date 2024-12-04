@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: 127.0.0.1
--- Tiempo de generación: 23-11-2024 a las 14:30:49
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Host: 127.0.0.1
+-- Generation Time: Dec 04, 2024 at 02:49 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,13 +18,13 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `farmadardb`
+-- Database: `farmadardb`
 --
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `farmacias`
+-- Table structure for table `farmacias`
 --
 
 CREATE TABLE `farmacias` (
@@ -37,19 +37,19 @@ CREATE TABLE `farmacias` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `farmacias`
+-- Dumping data for table `farmacias`
 --
 
 INSERT INTO `farmacias` (`cif`, `nombre`, `direccion`, `telefono`, `email`, `id`) VALUES
-('B30785629', 'Farmacia La Merced', 'Calle Ceuta, 2, 30003 Murcia', '968239428', 'farmacialamerced@gmail.com', 1),
+('B30785629', 'Farmacia La Merced', 'Calle de Ceuta, 2, 30003 Murcia', '968239428', 'farmacialamerced@gmail.com', 1),
 ('B73669911', 'Farmacia Catedral', 'Calle Traperia, 1, 30001 Murcia', '968212829', 'catedral@gmail.com', 2),
-('B30884526', 'Farmacia Vistabella', 'Plz. de los Patos, 5, 30003 Murcia', '968258523', 'vistabella@gmail.com', 3),
+('B30884526', 'Farmacia Vistabella', 'Plaza de los Patos, 5, 30003 Murcia', '968258523', 'vistabella@gmail.com', 3),
 ('B74962244', 'Farmacia Puxmarina', 'Plaza Puxmarina, 5, 30004 Murcia', '968213226', 'puxmarina@gmail.com', 4);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `productos`
+-- Table structure for table `productos`
 --
 
 CREATE TABLE `productos` (
@@ -61,22 +61,31 @@ CREATE TABLE `productos` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `productos`
+-- Dumping data for table `productos`
 --
 
 INSERT INTO `productos` (`id`, `id_farm`, `nombre`, `precio`, `stock`) VALUES
-('300009585', 1, 'Clorazepam', 2.50, 20),
-('30001234', 1, 'Paracetamol', 2.36, 5),
-('30001234', 3, 'Paracetamol', 1.50, 2),
-('3000551515', 4, 'Clorazepam', 4.00, 20),
-('30005678', 2, 'Aspirina', 3.50, 8),
-('30005678', 4, 'Aspirina', 3.40, 7),
-('30007732', 3, 'Ibuprofeno', 4.70, 20);
+('651024', 1, 'SERTRALINA MABO 50 mg COMPRIMIDOS RECUBIERTOS CON PELICULA EFG , 60 comprimidos', 5.84, 17),
+('651024', 2, 'SERTRALINA MABO 50 mg COMPRIMIDOS RECUBIERTOS CON PELICULA EFG , 60 comprimidos', 5.84, 0),
+('651024', 3, 'SERTRALINA MABO 50 mg COMPRIMIDOS RECUBIERTOS CON PELICULA EFG , 60 comprimidos', 5.84, 19),
+('651024', 4, 'SERTRALINA MABO 50 mg COMPRIMIDOS RECUBIERTOS CON PELICULA EFG , 60 comprimidos', 5.84, 0),
+('656129', 1, 'PARACETAMOL CINFA 650 mg COMPRIMIDOS RECUBIERTOS CON PELICULA EFG, 40 comprimidos', 1.31, 0),
+('656129', 2, 'PARACETAMOL CINFA 650 mg COMPRIMIDOS RECUBIERTOS CON PELICULA EFG, 40 comprimidos', 1.31, 20),
+('656129', 3, 'PARACETAMOL CINFA 650 mg COMPRIMIDOS RECUBIERTOS CON PELICULA EFG, 40 comprimidos', 1.31, 0),
+('656129', 4, 'PARACETAMOL CINFA 650 mg COMPRIMIDOS RECUBIERTOS CON PELICULA EFG, 40 comprimidos', 1.31, 20),
+('659730', 1, 'DIAZEPAN LEO 2 mg COMPRIMIDOS, 30 comprimidos', 2.50, 20),
+('659730', 2, 'DIAZEPAN LEO 2 mg COMPRIMIDOS, 30 comprimidos', 2.50, 18),
+('659730', 3, 'DIAZEPAN LEO 2 mg COMPRIMIDOS, 30 comprimidos', 2.50, 0),
+('659730', 4, 'DIAZEPAN LEO 2 mg COMPRIMIDOS, 30 comprimidos', 2.50, 0),
+('662879', 1, 'ENANTYUM 25 mg SOLUCIÓN ORAL, 20 sobres de 10 ml', 6.68, 0),
+('662879', 2, 'ENANTYUM 25 mg SOLUCIÓN ORAL, 20 sobres de 10 ml', 6.68, 0),
+('662879', 3, 'ENANTYUM 25 mg SOLUCIÓN ORAL, 20 sobres de 10 ml', 6.68, 20),
+('662879', 4, 'ENANTYUM 25 mg SOLUCIÓN ORAL, 20 sobres de 10 ml', 6.68, 19);
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `reservas`
+-- Table structure for table `reservas`
 --
 
 CREATE TABLE `reservas` (
@@ -94,20 +103,22 @@ CREATE TABLE `reservas` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Volcado de datos para la tabla `reservas`
+-- Dumping data for table `reservas`
 --
 
 INSERT INTO `reservas` (`id`, `id_prod`, `id_farm`, `farm_origen`, `fecha`, `hora_inicio`, `hora_fin`, `cantidad`, `nombre`, `otros_datos`, `estado`) VALUES
-(1, '30001234', 1, 2, '2024-11-10', '10:00:00', '12:00:00', 5, 'Pepito', 'Teléfono: 666 666 666', 'Confirmada'),
-(2, '30001234', 1, 1, '2024-11-10', '10:00:00', '12:00:00', 5, 'Marga', 'Teléfono: 666 666 666', 'Confirmada'),
-(6, '30005678', 2, 1, '2024-11-18', '13:01:00', '15:01:00', 2, 'Miriam', '666 666 666 ', 'Cancelada'),
-(25, '30007732', 3, 1, '2024-11-23', '12:04:00', '14:04:00', 10, 'Miguel', 'Teléfono; 690666952, email: miguel@gmail.com', 'Confirmada'),
-(26, '300009585', 1, 2, '2024-11-23', '14:26:00', '16:26:00', 2, 'Manuel', 'manuel@gmail.com, 669250045', 'Pendiente');
+(61, '656129', 2, 1, '2024-12-04', '12:20:00', '14:21:00', 2, 'María González ', 'Teléfono- 654123456', 'Cancelada'),
+(62, '659730', 2, 1, '2024-12-04', '14:28:00', '16:28:00', 2, 'Carlos Pérez ', 'Teléfono:  600456789', 'Confirmada'),
+(63, '662879', 4, 2, '2024-12-04', '14:33:00', '16:33:00', 1, 'Ana Martínez', ' 612789123, ana.martinez@gmail.com', 'Confirmada'),
+(64, '651024', 1, 2, '2024-12-06', '14:34:00', '16:34:00', 3, 'Javier Sánchez', 'Teléfono  625654987', 'Confirmada'),
+(65, '651024', 3, 1, '2024-12-06', '14:36:00', '16:36:00', 1, 'Elena Ramírez', 'elena.ramirez@gmail.com', 'Confirmada'),
+(66, '656129', 2, 3, '2024-12-06', '14:38:00', '16:38:00', 2, 'Miguel Torres ', '622876543', 'Cancelada'),
+(67, '651024', 3, 4, '2024-12-04', '14:40:00', '16:40:00', 1, 'Luis Fernández', 'Tlfn. 612789123', 'Cancelada');
 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `usuario`
+-- Table structure for table `usuario`
 --
 
 CREATE TABLE `usuario` (
@@ -121,28 +132,32 @@ CREATE TABLE `usuario` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
 
 --
--- Volcado de datos para la tabla `usuario`
+-- Dumping data for table `usuario`
 --
 
 INSERT INTO `usuario` (`id`, `id_farm`, `username`, `password`, `token`, `nombre`, `role`) VALUES
-(100, 0, 'prueba', '655e786674d9d3e77bc05ed1de37b4b6bc89f788829f9f3c679e7687b410c89b', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzIzNTgzNjUsImRhdGEiOnsiaWQiOiIxMDAiLCJub21icmUiOiJVc3VhcmlvIGRlIFBydWViYSJ9fQ.R8Y09IAYjFCATRj5tYwaCqcAmT6ogVFpHiUJ-cT0xYA', 'Usuario de Prueba', 'superadmin'),
-(200, 1, 'adminmerced', '5003f9b63ba86a823794c26e0b6ba90be1340968091fa40b5e0ff1c729ed4637', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzIzNTc4OTYsImRhdGEiOnsiaWQiOiIyMDAiLCJub21icmUiOiJGYXJtYWNcdTAwZTl1dGljbyBNZXJjZWQifX0.n4GbHP8J5b1aDq8sg8JJVjKtQAt65H8uBI2sejbImkU', 'Farmacéutico Merced', 'admin'),
-(201, 1, 'usumerced', '5003f9b63ba86a823794c26e0b6ba90be1340968091fa40b5e0ff1c729ed4637', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzIzNTI2MjcsImRhdGEiOnsiaWQiOiIyMDEiLCJub21icmUiOiJEZXBlbmRpZW50ZSBNZXJjZWQifX0.5AQ--UsqGg8m8q0wEcsLrXC1DB15gsXdGtMotd_IUUU', 'Dependiente Merced', 'usu'),
-(207, 2, 'admincatedral', '5003f9b63ba86a823794c26e0b6ba90be1340968091fa40b5e0ff1c729ed4637', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzE2ODYyMTMsImRhdGEiOnsidXNlcm5hbWUiOiJhZG1pbmNhdGVkcmFsIiwibm9tYnJlIjoiRmFybWFjXHUwMGU5dXRpY28gQ2F0ZWRyYWwifX0.wfcbjFSUjPzMmKiXKOpZATnI-REK7Uk_iYTUDhb', 'Farmacéutico Catedral', 'admin'),
-(208, 2, 'usucatedral', '5003f9b63ba86a823794c26e0b6ba90be1340968091fa40b5e0ff1c729ed4637', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzE2ODYyMzgsImRhdGEiOnsidXNlcm5hbWUiOiJ1c3VjYXRlZHJhbCIsIm5vbWJyZSI6IkRlcGVuZGllbnRlIENhdGVkcmFsIn19.EgTpA1XiuRv9hywoNNfxZFtk0N41ywhmW53TOPPzsfM', 'Dependiente Catedral', 'usu');
+(100, 0, 'superadmin', '5003f9b63ba86a823794c26e0b6ba90be1340968091fa40b5e0ff1c729ed4637', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzMzMjAwNDQsImRhdGEiOnsiaWQiOiIxMDAiLCJub21icmUiOiJTXHUwMGZhcGVyIEFkbWluaXN0cmFkb3IifX0.1CDe5YKN85oNC4WtakzpmnZGVcWFobvzOY5M7kdzIVM', 'Súper Administrador', 'superadmin'),
+(200, 1, 'adminmerced', '5003f9b63ba86a823794c26e0b6ba90be1340968091fa40b5e0ff1c729ed4637', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzMzMTkzNjEsImRhdGEiOnsiaWQiOiIyMDAiLCJub21icmUiOiJGYXJtYWNcdTAwZTl1dGljbyBNZXJjZWQifX0.G1JSW4ET1Bfu6TLqW-zVKsnoYWwtdYJOqGzgwBqpCho', 'Administrador Merced', 'admin'),
+(201, 1, 'usumerced', '5003f9b63ba86a823794c26e0b6ba90be1340968091fa40b5e0ff1c729ed4637', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzMyNDQzMzQsImRhdGEiOnsiaWQiOiIyMDEiLCJub21icmUiOiJEZXBlbmRpZW50ZSBNZXJjZWQifX0.LYMlBBULgK_GHhIrjuP2dnU0ubz5FzjQilLM923pvbI', 'Auxiliar Merced', 'usu'),
+(207, 2, 'admincatedral', '5003f9b63ba86a823794c26e0b6ba90be1340968091fa40b5e0ff1c729ed4637', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzMzMTk3MDEsImRhdGEiOnsiaWQiOiIyMDciLCJub21icmUiOiJGYXJtYWNcdTAwZTl1dGljbyBDYXRlZHJhbCJ9fQ.CWosfFWXi4N8kk6ya4JzBa5S8UaVcz8F8EDK_lYJvbk', 'Administrador Catedral', 'admin'),
+(208, 2, 'usucatedral', '5003f9b63ba86a823794c26e0b6ba90be1340968091fa40b5e0ff1c729ed4637', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzE2ODYyMzgsImRhdGEiOnsidXNlcm5hbWUiOiJ1c3VjYXRlZHJhbCIsIm5vbWJyZSI6IkRlcGVuZGllbnRlIENhdGVkcmFsIn19.EgTpA1XiuRv9hywoNNfxZFtk0N41ywhmW53TOPPzsfM', 'Auxiliar Catedral', 'usu'),
+(209, 3, 'adminvistabella', '5003f9b63ba86a823794c26e0b6ba90be1340968091fa40b5e0ff1c729ed4637', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzMzMTk4NTcsImRhdGEiOnsiaWQiOiIyMDkiLCJub21icmUiOiJBZG1pbmlzdHJhZG9yIFZpc3RhYmVsbGEifX0.JyRIajWutjfS9DC-gd3I0VOc1AJe_4T7XszDwMVtaBM', 'Administrador Vistabella', 'admin'),
+(210, 3, 'usuvistabella', '5003f9b63ba86a823794c26e0b6ba90be1340968091fa40b5e0ff1c729ed4637', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzMzMDcyNDcsImRhdGEiOnsidXNlcm5hbWUiOiJ1c3V2aXN0YWJlbGxhIiwibm9tYnJlIjoiQXV4aWxpYXIgVmlzdGFiZWxsYSJ9fQ.hJ4cxI37gejP8PrLWrGreWNpdukG-xj07XIUwIxf9N0', 'Auxiliar Vistabella', 'usu'),
+(211, 4, 'adminpuxmarina', '5003f9b63ba86a823794c26e0b6ba90be1340968091fa40b5e0ff1c729ed4637', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzMzMTk1NjcsImRhdGEiOnsiaWQiOiIyMTEiLCJub21icmUiOiJGYXJtYWNcdTAwZTl1dGljbyBQdXhtYXJpbmEifX0.sQGMFvfXURtMv_q8S7v1tkuNHpzNZblGL4lKG7pebEM', 'Administrador Puxmarina', 'admin'),
+(212, 4, 'usupuxmarina', '5003f9b63ba86a823794c26e0b6ba90be1340968091fa40b5e0ff1c729ed4637', 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpYXQiOjE3MzMzMDc2NzMsImRhdGEiOnsiaWQiOiIyMTIiLCJub21icmUiOiJBdXhpbGlhciBQdXhtYXJpbmEifX0.JH9kFj3enZGw0cGHSx8hF2OJujVIo6BI7B8mb6DnowM', 'Auxiliar Puxmarina', 'usu');
 
 --
--- Índices para tablas volcadas
+-- Indexes for dumped tables
 --
 
 --
--- Indices de la tabla `farmacias`
+-- Indexes for table `farmacias`
 --
 ALTER TABLE `farmacias`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indices de la tabla `productos`
+-- Indexes for table `productos`
 --
 ALTER TABLE `productos`
   ADD PRIMARY KEY (`id`,`id_farm`),
@@ -150,7 +165,7 @@ ALTER TABLE `productos`
   ADD KEY `idx_productos_id_idfarm` (`id`,`id_farm`);
 
 --
--- Indices de la tabla `reservas`
+-- Indexes for table `reservas`
 --
 ALTER TABLE `reservas`
   ADD PRIMARY KEY (`id`),
@@ -158,45 +173,45 @@ ALTER TABLE `reservas`
   ADD KEY `fk_farm_origen` (`farm_origen`);
 
 --
--- Indices de la tabla `usuario`
+-- Indexes for table `usuario`
 --
 ALTER TABLE `usuario`
   ADD PRIMARY KEY (`id`);
 
 --
--- AUTO_INCREMENT de las tablas volcadas
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT de la tabla `farmacias`
+-- AUTO_INCREMENT for table `farmacias`
 --
 ALTER TABLE `farmacias`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
--- AUTO_INCREMENT de la tabla `reservas`
+-- AUTO_INCREMENT for table `reservas`
 --
 ALTER TABLE `reservas`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=68;
 
 --
--- AUTO_INCREMENT de la tabla `usuario`
+-- AUTO_INCREMENT for table `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=209;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=213;
 
 --
--- Restricciones para tablas volcadas
+-- Constraints for dumped tables
 --
 
 --
--- Filtros para la tabla `productos`
+-- Constraints for table `productos`
 --
 ALTER TABLE `productos`
   ADD CONSTRAINT `productos_ibfk_1` FOREIGN KEY (`id_farm`) REFERENCES `farmacias` (`id`);
 
 --
--- Filtros para la tabla `reservas`
+-- Constraints for table `reservas`
 --
 ALTER TABLE `reservas`
   ADD CONSTRAINT `fk_farm_origen` FOREIGN KEY (`farm_origen`) REFERENCES `farmacias` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
