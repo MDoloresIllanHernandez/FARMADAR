@@ -180,7 +180,7 @@ export default {
           );
           // Mostrar un mensaje si hay productos sin stock
           const outOfStockProducts = this.products.filter(product => Number(product.stock) == 0);
-          if (outOfStockProducts.length > 0) {
+          if (role !== 'superadmin' && outOfStockProducts.length > 0) {
             this.$swal.fire({
               icon: "warning",
               title: `Tiene ${outOfStockProducts.length} productos sin stock`,
@@ -238,7 +238,7 @@ export default {
       } finally {
         this.loading = false; // Stop loading
       }
-      //this.isModalCreateVisible = false;
+      
     },
 
     // Método para editar un producto
@@ -271,7 +271,7 @@ export default {
       } finally {
         this.loading = false; // Stop loading
       }
-      //this.isModalEditarVisible = false 
+     
     },
 
     // Método para eliminar un producto
@@ -299,7 +299,7 @@ export default {
       } finally {
         this.loading = false; // Stop loading
       }
-      //this.isModalDeleteVisible = false;  
+        
     },
 
     // Método para formatear el precio como moneda
