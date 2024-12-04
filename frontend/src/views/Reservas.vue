@@ -405,14 +405,14 @@ export default {
 
     // Método para guardar los cambios de una reserva
     async saveReserva() {
-      if (!this.currentReserva.fecha || !this.currentReserva.hora_inicio || !this.currentReserva.hora_fin || !this.currentReserva.cantidad || !this.currentReserva.nombre) {
-        this.$swal.fire({
-          icon: 'error',
-          title: 'Por favor, rellene todos los campos',
-          showConfirmButton: true,
-        });
-        return;
-      }
+      // if (!this.currentReserva.fecha || !this.currentReserva.hora_inicio || !this.currentReserva.hora_fin || !this.currentReserva.cantidad || !this.currentReserva.nombre) {
+      //   this.$swal.fire({
+      //     icon: 'error',
+      //     title: 'Por favor, rellene todos los campos',
+      //     showConfirmButton: true,
+      //   });
+      //   return;
+      // }
       try {
         // Hacer la llamada PUT a la API para guardar los cambios de la reserva
         const response = await apiClient.put(`/reserva?id=${this.currentReserva.id}`, {
