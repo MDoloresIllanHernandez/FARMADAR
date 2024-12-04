@@ -71,7 +71,7 @@
                       </button>
                     </div>
                     <div v-else>
-                      <button v-if="reserva.estado === 'Pendiente' || showButton()" @click="confirmReserva(reserva)"
+                      <button v-if="reserva.farm_origen !== idFarm && (reserva.estado === 'Pendiente' || showButton())" @click="confirmReserva(reserva)"
                         class="p-0 rounded hover:bg-primary-verde">
                         <img src="../assets/check.png" alt="Confirmar" class="h-6 w-6" title="Confirmar reserva" />
                       </button>
@@ -92,19 +92,19 @@
                 </tr>
               </tbody>
             </table>
-            <!-- Controles de paginación -->
-            <div class="flex justify-around items-center mt-4">
-              <button @click="prevPage" :disabled="currentPage === 1" class="boton-claro-fantasma">
-                Anterior
-              </button>
-              <span>Página {{ currentPage }} de {{ totalPages }}</span>
-              <button @click="nextPage" :disabled="currentPage === totalPages" class="boton-claro-fantasma">
-                Siguiente
-              </button>
-            </div>
           </div>
           <div v-else>
             <p>No se encontraron reservas.</p>
+          </div>
+          <!-- Controles de paginación -->
+          <div class="flex justify-around items-center mt-4">
+            <button @click="prevPage" :disabled="currentPage === 1" class="boton-claro-fantasma">
+              Anterior
+            </button>
+            <span>Página {{ currentPage }} de {{ totalPages }}</span>
+            <button @click="nextPage" :disabled="currentPage === totalPages" class="boton-claro-fantasma">
+              Siguiente
+            </button>
           </div>
         </div>
       </div>
@@ -481,6 +481,7 @@ export default {
       }
       return false;
     },
+
   }
 }
 </script>
