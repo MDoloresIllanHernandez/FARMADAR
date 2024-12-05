@@ -122,6 +122,7 @@ export default {
   components: { Navbar, Footer },
   data() {
     return {
+      intervalId: null, // ID del intervalo para verificar las reservas expiradas
       searchQuery: '',
       reservas: [],
       farmacias: [],
@@ -144,10 +145,18 @@ export default {
 
     };
   },
-  mounted() {
-    this.fetchAllReservas();
-    this.checkExpiredReservas();
+ async mounted() {
+    await this.fetchAllReservas();
+    await this.checkExpiredReservas();
+    // Crear un intervalo para verificar las reservas expiradas cada minuto
+    this.intervalId = setInterval(async () => {
+      await this.checkExpiredReservas();
+    }, 60000);
     this.$refs.searchInput.focus();
+  },
+  beforeUnmount() {
+    // Limpiar intervalo
+    clearInterval(this.intervalId);
   },
   computed: {
     paginateReservas() {
@@ -175,21 +184,23 @@ export default {
 
     //Método para verificar si hay reservas pendientes y cancelarlas si ha pasado la fecha de fin
     async checkExpiredReservas() {
+      console.warn('Verificando reservas pendientes expiradas...');
+      
       // Obtener la fecha y hora actual
       const now = new Date();
-
+      let reservasExpiradas=0
       for (let reserva of this.reservas) {
         // Construir la fecha y hora fin completa
         const fechaHoraFin = new Date(`${reserva.fecha}T${reserva.hora_fin}`);
 
         // Verificar si la reserva está vencida y pendiente
-        if (reserva.estado === "Pendiente" && fechaHoraFin < now) {
+        if (reserva.estado?.toLowerCase() === "pendiente" && fechaHoraFin < now) {
           try {
             // Cambiar estado a "Cancelada" en la base de datos
             const response = await apiClient.patch(`/reserva?id=${reserva.id}`, { estado: "Cancelada" });
 
             if (response.data.result === "ok") {
-
+              reservasExpiradas++
               // Actualizar el stock del producto
               await this.updateStock(reserva.id_prod, reserva.id_farm, reserva.cantidad);
 
@@ -201,9 +212,11 @@ export default {
           }
         }
       }
-
-      // Refrescar la lista de reservas para reflejar los cambios
-      this.fetchAllReservas();
+      if(reservasExpiradas>0){
+        // Refrescar la lista de reservas para reflejar los cambios
+        await this.fetchAllReservas();
+      }
+      
     },
 
     // Método para actualizar el stock de un producto en una farmacia
@@ -288,8 +301,7 @@ export default {
         // Marcar que ya se ha realizado una búsqueda
         this.hasSearched = true;
 
-        //Validar si hay reservas pendientes y cancelarlas
-        this.checkExpiredReservas();
+     
 
       } catch (error) {
         console.error('Error al obtener los datos:', error);
@@ -297,9 +309,9 @@ export default {
     },
 
     // Filtrar las reservas basadas en la búsqueda
-    searchReservas() {
+   async searchReservas() {
       if (this.searchQuery.trim() === '') {
-        this.fetchAllReservas(); // Si no hay búsqueda, cargar todas las reservas
+        await this.fetchAllReservas(); // Si no hay búsqueda, cargar todas las reservas
       } else {
         // Filtrar las reservas que coincidan con el nombre del cliente o el nombre del producto
         this.reservas = this.reservas.filter(reserva => {
@@ -461,7 +473,7 @@ export default {
             icon: 'success',
             title: 'Reserva eliminada correctamente',
             showConfirmButton: false,
-            timer: 2000,
+            timer: 1500,
           });
 
           // Actualizar la lista de reservas después de la eliminación
