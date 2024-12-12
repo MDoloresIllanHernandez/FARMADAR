@@ -17,7 +17,7 @@
         <div v-if="loading" class="loading-overlay">
           <div class="spinner"></div>
         </div>
-        <div class="d-flex" style="display: flex; justify-content: space-between; align-items: flex-start;">
+        <div class="d-flex-mapa">
           <div v-if="hasSearched" style="flex: 1; margin-right: 20px;">
           <div v-if="products.length">
             <CardReservas v-for="product in products" 

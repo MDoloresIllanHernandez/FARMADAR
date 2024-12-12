@@ -114,4 +114,16 @@ td {
     height: 100vh; /* Ocupa el 100% de la altura del viewport */
     width: 100%; /* Ocupa el 100% del ancho del contenedor */
   }
+
+  .d-flex-mapa {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  
+  @media (max-width: 500px) {
+    .d-flex-mapa {
+      flex-direction: column-reverse; /* Cambia la dirección a column-reverse */
+    }
+  }
   

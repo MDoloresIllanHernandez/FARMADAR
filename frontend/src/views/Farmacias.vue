@@ -259,7 +259,6 @@ export default {
       } finally {
         this.loading = false; // Stop loading
       }
-      //this.isModalDeleteVisible = false;
     },
   },
 }

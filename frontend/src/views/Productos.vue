@@ -234,11 +234,10 @@ export default {
           title: `Error al añadir el producto: ${error.response?.data?.details}`,
           showConfirmButton: true,
         });
-        await this.searchProducts();
+        await this.searchProducts(); // Actualizar la lista de productos
       } finally {
         this.loading = false; // Stop loading
       }
-      
     },
 
     // Método para editar un producto
@@ -271,7 +270,6 @@ export default {
       } finally {
         this.loading = false; // Stop loading
       }
-     
     },
 
     // Método para eliminar un producto
@@ -299,7 +297,6 @@ export default {
       } finally {
         this.loading = false; // Stop loading
       }
-        
     },
 
     // Método para formatear el precio como moneda

@@ -142,10 +142,10 @@ export default {
       idFarm: sessionStorage.getItem('id_farm'),
       currentPage: 1,
       itemsPerPage: 5,
-
     };
   },
- async mounted() {
+  // Método para cargar las reservas y verificar las expiradas al montar el componente
+  async mounted() {
     await this.fetchAllReservas();
     await this.checkExpiredReservas();
     // Crear un intervalo para verificar las reservas expiradas cada minuto
@@ -212,15 +212,14 @@ export default {
           }
         }
       }
-      if(reservasExpiradas>0){
+      if (reservasExpiradas>0) {
         // Refrescar la lista de reservas para reflejar los cambios
         await this.fetchAllReservas();
       }
-      
     },
 
     // Método para actualizar el stock de un producto en una farmacia
-    async updateStock(productId, pharmacyId, quantityToAdd) {
+    async updateStock (productId, pharmacyId, quantityToAdd) {
       try {
         // Obtener el stock actual
         const stockResponse = await apiClient.get(`/stock?id=${productId}&id_farm=${pharmacyId}`);
@@ -242,17 +241,17 @@ export default {
             return false;
           }
         } else {
-          console.error(`Error al obtener el stock del producto ${productId}:`, stockResponse.data.message);
+          console.error (`Error al obtener el stock del producto ${productId}:`, stockResponse.data.message);
           return false;
         }
       } catch (error) {
-        console.error(`Error al actualizar el stock para el producto ${productId} en la farmacia ${pharmacyId}:`, error);
+        console.error (`Error al actualizar el stock para el producto ${productId} en la farmacia ${pharmacyId}:`, error);
         return false;
       }
     },
 
     // Método para obtener todas las reservas
-    async fetchAllReservas() {
+    async fetchAllReservas () {
       try {
 
         // Obtener todas los datos que necesitamos de la api
@@ -300,9 +299,6 @@ export default {
 
         // Marcar que ya se ha realizado una búsqueda
         this.hasSearched = true;
-
-     
-
       } catch (error) {
         console.error('Error al obtener los datos:', error);
       }
