@@ -48,7 +48,7 @@ export default {
         ],
         dataSelect: [
         { name: "id_farm", label: "Farmacia", type: "select", error: "*Farmacia requerida", data:this.filterFarmacias(userRole, userFarm) },
-        { name: "role", label: "Rol", type: "select", error: "*Rol requerido", data:this.filterRoles()},
+        { name: "role", label: "Rol", type: "select", error: "*Rol requerido", data:this.filterRoles(userRole)},
         ],
         requiredFields: ["nombre", "username", "password", "role", "id_farm"],
       };
@@ -60,11 +60,20 @@ export default {
       }
       return this.farmacias;
     },
-    filterRoles() {
+    filterRoles(role) {
+      if(role === 'superadmin'){
+        return [
+          { id: 'admin', nombre: 'Administrador' },
+          { id: 'usu', nombre: 'Usuario' },
+        ];
+      }
       return [
-        { id: 'admin', nombre: 'Administrador' },
         { id: 'usu', nombre: 'Usuario' },
       ];
+      //return [
+      //  { id: 'admin', nombre: 'Administrador' },
+      //  { id: 'usu', nombre: 'Usuario' },
+      //];
     },
     errorForm(error) {
       console.log("error", error);
