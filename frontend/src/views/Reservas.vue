@@ -79,7 +79,7 @@
                         class="p-0 rounded hover:bg-primary-darkred">
                         <img src="../assets/cancel.png" alt="Cancelar" class="h-6 w-6" title="Cancelar reserva" />
                       </button>
-                      <button v-if="reserva.farm_origen === idFarm && (reserva.estado === 'Pendiente' || showButton())" @click="editReserva(reserva)"
+                      <button v-if="reserva.id_farm !== idFarm && (reserva.estado === 'Pendiente' || showButton())" @click="editReserva(reserva)"
                         class="p-0 rounded hover:bg-primary-verde">
                         <img src="../assets/edit.png" alt="Editar" class="h-6 w-6" title="Editar reserva" />
                       </button>
